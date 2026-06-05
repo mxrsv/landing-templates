@@ -1,9 +1,30 @@
 import Link from "next/link";
+import { PixelBlast } from "@/components/pixel-blast";
 
 export function ExampleTemplate() {
     return (
         <div className="relative min-h-screen overflow-hidden bg-zinc-950 text-zinc-50">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(180,151,207,0.25),transparent_55%)]" />
+            <div className="pointer-events-none absolute inset-0 z-0">
+                <PixelBlast
+                    variant="circle"
+                    pixelSize={6}
+                    color="#B497CF"
+                    patternScale={3}
+                    patternDensity={1.2}
+                    pixelSizeJitter={0.5}
+                    enableRipples
+                    rippleSpeed={0.4}
+                    rippleThickness={0.12}
+                    rippleIntensityScale={1.5}
+                    liquid
+                    liquidStrength={0.12}
+                    liquidRadius={1.2}
+                    liquidWobbleSpeed={5}
+                    speed={0.6}
+                    edgeFade={0.25}
+                    transparent
+                />
+            </div>
 
             <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6">
                 <span className="text-sm font-semibold tracking-[0.2em] uppercase">Landing Templates</span>
