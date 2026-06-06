@@ -1,0 +1,182 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e3]: Ternus
+    - generic [ref=e5]:
+      - link "Technology" [ref=e6] [cursor=pointer]:
+        - /url: "#"
+      - link "Token" [ref=e7] [cursor=pointer]:
+        - /url: "#"
+      - link "Airdrop" [ref=e8] [cursor=pointer]:
+        - /url: "#"
+      - link "Launchpad" [ref=e9] [cursor=pointer]:
+        - /url: "#"
+      - link "Docs" [ref=e10] [cursor=pointer]:
+        - /url: "#"
+    - button "Connect Wallet" [ref=e11] [cursor=pointer]
+  - main [ref=e12]:
+    - generic [ref=e15]:
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - generic [ref=e20]: TERNUS
+          - generic [ref=e21]: Testnet Live
+          - generic [ref=e23]: Audited
+        - heading "The Layer 2 built for speed." [level=1] [ref=e24]
+        - paragraph [ref=e25]: Near-zero fees, Ethereum-grade security, and thousands of transactions per second.
+        - generic [ref=e26]:
+          - button "Start building" [ref=e27] [cursor=pointer]
+          - button "Read docs →" [ref=e28] [cursor=pointer]
+        - generic [ref=e29]:
+          - generic [ref=e30]:
+            - generic [ref=e31]: TPS
+            - generic [ref=e33]: "0"
+          - generic [ref=e35]:
+            - generic [ref=e36]: Gas (gwei)
+            - generic [ref=e37]: "0.00"
+          - generic [ref=e39]:
+            - generic [ref=e40]: Blocks
+            - generic [ref=e41]: "0"
+      - generic [ref=e44]:
+        - generic [ref=e45]:
+          - generic [ref=e46]: ⚡
+          - generic [ref=e47]:
+            - generic [ref=e48]: Speed
+            - generic [ref=e49]: 9,400 TPS · 1.2s finality.
+        - generic [ref=e50]:
+          - generic [ref=e51]: ⛨
+          - generic [ref=e52]:
+            - generic [ref=e53]: Security
+            - generic [ref=e54]: Settled & secured on Ethereum.
+        - generic [ref=e55]:
+          - generic [ref=e56]: ◈
+          - generic [ref=e57]:
+            - generic [ref=e58]: $TERN token
+            - generic [ref=e59]: Gas, staking & governance.
+        - generic [ref=e60]:
+          - generic [ref=e61]: ✦
+          - generic [ref=e62]:
+            - generic [ref=e63]: Airdrop
+            - generic [ref=e64]: Rewards for early users.
+        - generic [ref=e65]:
+          - generic [ref=e66]: ▲
+          - generic [ref=e67]:
+            - generic [ref=e68]: Launchpad
+            - generic [ref=e69]: Ship new projects on Ternus.
+    - generic [ref=e71]:
+      - generic [ref=e72]:
+        - generic [ref=e73]:
+          - generic [ref=e74]: Proof of Speed
+          - heading "Thousands of transactions, batched into one." [level=2] [ref=e75]
+          - paragraph [ref=e76]: Ternus rolls up the network's activity and settles it on Ethereum — so you get mainnet security at a fraction of the cost.
+        - generic [ref=e79]: Scattered transactions → compressed into a single rollup batch
+      - generic [ref=e80]:
+        - generic [ref=e81]:
+          - generic [ref=e82]: "0"
+          - generic [ref=e83]: Transactions / sec
+          - generic [ref=e84]: Sustained throughput across the network.
+        - generic [ref=e85]:
+          - generic [ref=e86]: $0
+          - generic [ref=e87]: Average fee
+          - generic [ref=e88]: Predictable, near-zero gas for every action.
+        - generic [ref=e89]:
+          - generic [ref=e90]: 0s
+          - generic [ref=e91]: Time to finality
+          - generic [ref=e92]: From submitted to settled, almost instantly.
+    - generic [ref=e95]:
+      - generic [ref=e97]:
+        - generic [ref=e98]:
+          - generic [ref=e99]: Apps & Users
+          - generic [ref=e100]: Your transactions
+          - generic [ref=e101]: Wallets · dApps · DeFi
+        - generic [ref=e104]:
+          - generic [ref=e105]: Ternus · Layer 2
+          - generic [ref=e106]: Execute & roll up
+          - generic [ref=e107]: 9,400 TPS · EVM-equivalent
+        - generic [ref=e110]:
+          - generic [ref=e111]: Ethereum · Layer 1
+          - generic [ref=e112]: Settle & secure
+          - generic [ref=e113]: Proof verified · finalized
+      - generic [ref=e114]:
+        - generic [ref=e115]: Technology
+        - heading "Built as a rollup. Secured by Ethereum." [level=2] [ref=e116]
+        - paragraph [ref=e117]: Ternus executes transactions off-chain at high speed, then settles proofs on Ethereum L1 — you inherit mainnet-grade security with none of the congestion.
+        - generic [ref=e118]:
+          - generic [ref=e119]:
+            - generic [ref=e120]: ◳
+            - generic [ref=e121]: Fully EVM-equivalent
+            - generic [ref=e122]: Deploy existing Solidity contracts unchanged — same tools, same tx.
+          - generic [ref=e123]:
+            - generic [ref=e124]: ⛨
+            - generic [ref=e125]: Trustless bridging
+            - generic [ref=e126]: Move assets in and out with proofs, not custodians.
+          - generic [ref=e127]:
+            - generic [ref=e128]: ◇
+            - generic [ref=e129]: Open-source & audited
+            - generic [ref=e130]: Every contract public and independently reviewed.
+          - generic [ref=e131]:
+            - generic [ref=e132]: ⊞
+            - generic [ref=e133]: Decentralized sequencer
+            - generic [ref=e134]: Roadmap to a permissionless, censorship-resistant sequencer set.
+    - generic [ref=e136]:
+      - generic [ref=e137]: Backed by
+      - heading "Builders and capital betting on Ternus." [level=2] [ref=e138]
+      - generic [ref=e139]:
+        - generic [ref=e140]: ◆ Northwind
+        - generic [ref=e141]: ▲ Helix VC
+        - generic [ref=e142]: ● Orbit Labs
+        - generic [ref=e143]: ◇ Meridian
+        - generic [ref=e144]: ✦ Catalyst
+        - generic [ref=e145]: ⬡ Lattice
+      - generic [ref=e146]:
+        - generic [ref=e147]:
+          - generic [ref=e148]: $40M
+          - generic [ref=e149]: Raised to date
+        - generic [ref=e150]:
+          - generic [ref=e151]: 60+
+          - generic [ref=e152]: Ecosystem projects
+        - generic [ref=e153]:
+          - generic [ref=e154]: "3"
+          - generic [ref=e155]: Independent audits
+      - generic [ref=e156]: "* Logos & figures are placeholders."
+    - generic [ref=e159]:
+      - generic [ref=e160]:
+        - generic [ref=e161]: Token
+        - heading "One token securing the whole network." [level=2] [ref=e162]
+        - paragraph [ref=e163]: $TERN powers gas, secures the sequencer, and governs the protocol — aligning everyone who builds on Ternus.
+        - generic [ref=e164]:
+          - generic [ref=e165]:
+            - generic [ref=e166]: ⛽
+            - generic [ref=e167]:
+              - generic [ref=e168]: Gas & fees
+              - generic [ref=e169]: Pay for every transaction on Ternus.
+          - generic [ref=e170]:
+            - generic [ref=e171]: ⛓
+            - generic [ref=e172]:
+              - generic [ref=e173]: Staking & security
+              - generic [ref=e174]: Stake to help run and secure the sequencer.
+          - generic [ref=e175]:
+            - generic [ref=e176]: ⚖
+            - generic [ref=e177]:
+              - generic [ref=e178]: Governance
+              - generic [ref=e179]: Vote on upgrades and treasury decisions.
+          - generic [ref=e180]:
+            - generic [ref=e181]: ✦
+            - generic [ref=e182]:
+              - generic [ref=e183]: Ecosystem incentives
+              - generic [ref=e184]: Reward builders, LPs, and early users.
+      - generic [ref=e187]:
+        - generic [ref=e188]:
+          - generic [ref=e190]: Community & Airdrop
+          - generic [ref=e191]: 40%
+        - generic [ref=e192]:
+          - generic [ref=e194]: Ecosystem
+          - generic [ref=e195]: 25%
+        - generic [ref=e196]:
+          - generic [ref=e198]: Team
+          - generic [ref=e199]: 15%
+        - generic [ref=e200]:
+          - generic [ref=e202]: Investors
+          - generic [ref=e203]: 15%
+        - generic [ref=e204]:
+          - generic [ref=e206]: Treasury
+          - generic [ref=e207]: 5%
+  - generic [ref=e208]: Demo v18 · Neon-inspired (đã biến đổi) — headline lớn + status badges + feature strip + light section "Backed by" logo wall

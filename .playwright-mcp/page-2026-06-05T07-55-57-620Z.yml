@@ -1,0 +1,17 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic:
+      - generic "PixelBlast interactive background"
+    - banner [ref=e3]:
+      - generic [ref=e4]: Landing Templates
+      - link "Back to catalog" [ref=e5] [cursor=pointer]:
+        - /url: /
+    - main [ref=e6]:
+      - paragraph [ref=e7]: Template / Example
+      - heading "Build landing pages faster with reusable templates." [level=1] [ref=e8]
+      - paragraph [ref=e9]: Drop templates and components into this repo, preview them locally, then copy what you need into client projects.
+      - generic [ref=e10]:
+        - button "Get started" [ref=e11]
+        - button "View components" [ref=e12]
+  - button "Open Next.js Dev Tools" [ref=e18] [cursor=pointer]:
+    - img [ref=e19]

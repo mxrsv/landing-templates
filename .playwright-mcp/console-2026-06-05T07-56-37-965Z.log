@@ -1,0 +1,16 @@
+[      90ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/12vl_next_dist_10f6buc._.js:2477
+[      98ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/12vl_next_dist_10f6buc._.js:2477
+[     127ms] [WARNING] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead. @ http://localhost:3000/_next/static/chunks/12vl_next_dist_10f6buc._.js:2477
+[    3171ms] [WARNING] The resource http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/example:0
+[    3171ms] [WARNING] The resource http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0w5z4e7s8jfe5.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/example:0
+[   26693ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/12vl_next_dist_10f6buc._.js:2477
+[   26732ms] [LOG] [Fast Refresh] done in 11ms @ http://localhost:3000/_next/static/chunks/12vl_next_dist_10f6buc._.js:2477
+[   26774ms] [WARNING] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead. @ http://localhost:3000/_next/static/chunks/12vl_next_dist_10f6buc._.js:2477
+[   27363ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/12vl_next_dist_10f6buc._.js:2477
+[   27417ms] [LOG] [Fast Refresh] done in 683ms @ http://localhost:3000/_next/static/chunks/12vl_next_dist_10f6buc._.js:2477
+[   30447ms] [WARNING] The resource http://localhost:3000/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/example:0
+[   30447ms] [WARNING] The resource http://localhost:3000/_next/static/media/797e433ab948586e-s.p.0w5z4e7s8jfe5.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/example:0
+[   32793ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/12vl_next_dist_10f6buc._.js:2477
+[   32817ms] [LOG] [Fast Refresh] done in 25ms @ http://localhost:3000/_next/static/chunks/12vl_next_dist_10f6buc._.js:2477
+[   33320ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/12vl_next_dist_10f6buc._.js:2477
+[   33337ms] [LOG] [Fast Refresh] done in 39ms @ http://localhost:3000/_next/static/chunks/12vl_next_dist_10f6buc._.js:2477

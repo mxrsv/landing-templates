@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ternus — Wireframe (structure only)</title>
+    <style>
+      /* WIREFRAME: cố tình low-fidelity — grayscale, không brand color, không animation */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #f4f4f5;
+        color: #3f3f46;
+        font-family: ui-monospace, "SF Mono", Menlo, monospace;
+        font-size: 13px;
+        line-height: 1.5;
+        padding: 0 0 80px;
+      }
+      .banner {
+        background: #18181b;
+        color: #fafafa;
+        padding: 10px 20px;
+        font-size: 12px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      .page {
+        max-width: 1100px;
+        margin: 24px auto;
+        padding: 0 20px;
+      }
+      /* a wireframe block = dashed box + label */
+      .sec {
+        border: 2px dashed #a1a1aa;
+        background: #fff;
+        margin: 16px 0;
+        padding: 18px;
+        position: relative;
+      }
+      .sec > .tag {
+        position: absolute;
+        top: -11px;
+        left: 14px;
+        background: #18181b;
+        color: #fff;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 2px 9px;
+        border-radius: 3px;
+      }
+      .note {
+        color: #71717a;
+        font-style: italic;
+        font-size: 11px;
+        margin-top: 6px;
+      }
+      .box {
+        border: 1px solid #d4d4d8;
+        background: #fafafa;
+        padding: 12px;
+        border-radius: 4px;
+      }
+      .row {
+        display: flex;
+        gap: 12px;
+        align-items: stretch;
+        flex-wrap: wrap;
+      }
+      .row > * {
+        flex: 1;
+        min-width: 120px;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        align-items: center;
+      }
+      .grid3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .grid5 {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+      }
+      .ph {
+        /* placeholder visual (ảnh/canvas) = ô gạch chéo */
+        background: repeating-linear-gradient(
+          45deg,
+          #e4e4e7,
+          #e4e4e7 8px,
+          #f4f4f5 8px,
+          #f4f4f5 16px
+        );
+        border: 1px solid #d4d4d8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #71717a;
+        text-align: center;
+        min-height: 120px;
+        border-radius: 4px;
+      }
+      .t-xl {
+        font-size: 26px;
+        font-weight: 700;
+        color: #18181b;
+      }
+      .t-lg {
+        font-size: 18px;
+        font-weight: 700;
+        color: #27272a;
+      }
+      .muted {
+        color: #a1a1aa;
+      }
+      .pill {
+        display: inline-block;
+        border: 1px solid #d4d4d8;
+        border-radius: 999px;
+        padding: 3px 10px;
+        font-size: 11px;
+        margin-right: 6px;
+        color: #52525b;
+      }
+      .btn {
+        display: inline-block;
+        border: 1.5px solid #52525b;
+        border-radius: 5px;
+        padding: 8px 16px;
+        font-size: 12px;
+        margin-right: 8px;
+        color: #27272a;
+      }
+      .btn.solid {
+        background: #27272a;
+        color: #fff;
+      }
+      .bar {
+        height: 10px;
+        background: #e4e4e7;
+        border-radius: 3px;
+        margin: 4px 0;
+      }
+      .bar.s {
+        width: 40%;
+      }
+      .bar.m {
+        width: 70%;
+      }
+      .stack-row {
+        border: 1px solid #d4d4d8;
+        border-radius: 4px;
+        padding: 10px 12px;
+        margin: 6px 0;
+        display: flex;
+        justify-content: space-between;
+        background: #fafafa;
+      }
+      .arrow {
+        text-align: center;
+        color: #a1a1aa;
+        font-size: 14px;
+      }
+      .cross {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border: 1px solid #d4d4d8;
+        border-radius: 4px;
+      }
+      .cross > div {
+        padding: 16px;
+        border-right: 1px solid #e4e4e7;
+        border-bottom: 1px solid #e4e4e7;
+      }
+      .cross > div:nth-child(even) {
+        border-right: none;
+      }
+      .cross > div:nth-child(3),
+      .cross > div:nth-child(4) {
+        border-bottom: none;
+      }
+      .center {
+        text-align: center;
+      }
+      .legend-row {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px dashed #e4e4e7;
+        padding: 4px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="banner">
+      ⬛ WIREFRAME · chỉ cấu trúc — KHÔNG màu, KHÔNG font đẹp, KHÔNG animation.
+      Mục tiêu: chốt "có gì, ở đâu, thứ tự nào". Đẹp tính sau.
+    </div>
+
+    <div class="page">
+      <!-- NAV -->
+      <div class="sec">
+        <span class="tag">Nav (sticky)</span>
+        <div class="row" style="align-items: center">
+          <div class="box" style="flex: 0 0 140px">◧ Logo + Ternus</div>
+          <div class="box center">
+            Technology · Token · Ecosystem · Build · Docs
+          </div>
+          <div class="box" style="flex: 0 0 150px; text-align: right">
+            [ Connect Wallet ]
+          </div>
+        </div>
+      </div>
+
+      <!-- HERO -->
+      <div class="sec">
+        <span class="tag">1 · Hero (100vh)</span>
+        <div class="grid2">
+          <div>
+            <div>
+              <span class="pill">● Testnet Live</span
+              ><span class="pill">Audited</span><span class="pill">EVM</span>
+            </div>
+            <div class="t-xl" style="margin: 14px 0">Headline lớn (2 dòng)</div>
+            <div class="muted">Sub-headline 1–2 dòng giải thích giá trị</div>
+            <div style="margin: 16px 0">
+              <span class="btn solid">Start building</span
+              ><span class="btn">Read docs</span>
+            </div>
+            <div class="box">
+              Stat strip: Throughput · Avg fee · Block height
+            </div>
+          </div>
+          <div class="ph">Visual chính<br />(logo / 3D / animation)</div>
+        </div>
+        <div class="box" style="margin-top: 14px">
+          Dải "process" 3 bước: ① Transactions → ② Rollup → ③ Settle
+        </div>
+        <div class="note">
+          ? Câu hỏi: visual bên phải là gì — logo Ethereum / mark Ternus /
+          animation khác? Headline nói điều gì là "đinh"?
+        </div>
+      </div>
+
+      <!-- PROOF -->
+      <div class="sec">
+        <span class="tag">2 · Proof / Số liệu</span>
+        <div class="t-lg">Heading: vì sao nhanh &amp; rẻ</div>
+        <div class="bar m"></div>
+        <div class="grid3" style="margin-top: 14px">
+          <div class="box center">
+            <div class="t-lg">9,400</div>
+            TPS
+          </div>
+          <div class="box center">
+            <div class="t-lg">$0.001</div>
+            Fee
+          </div>
+          <div class="box center">
+            <div class="t-lg">1.2s</div>
+            Finality
+          </div>
+        </div>
+        <div class="note">
+          ? Giữ 3 số này hay cần thêm/bớt? Số nào quan trọng nhất?
+        </div>
+      </div>
+
+      <!-- TECHNOLOGY -->
+      <div class="sec">
+        <span class="tag">3 · Technology (cách hoạt động)</span>
+        <div class="grid2">
+          <div>
+            <div class="muted" style="margin-bottom: 6px">Diagram 3 lớp:</div>
+            <div class="stack-row">
+              <span>01 · Apps &amp; Users</span
+              ><span class="muted">wallets/dApps</span>
+            </div>
+            <div class="arrow">↓</div>
+            <div class="stack-row">
+              <span>02 · Ternus L2</span
+              ><span class="muted">execute/rollup</span>
+            </div>
+            <div class="arrow">↓</div>
+            <div class="stack-row">
+              <span>03 · Ethereum L1</span
+              ><span class="muted">settle/secure</span>
+            </div>
+          </div>
+          <div>
+            <div class="t-lg">Heading kiến trúc</div>
+            <div class="bar m"></div>
+            <div class="muted" style="margin: 10px 0">
+              4 đặc điểm (grid 2×2):
+            </div>
+            <div class="cross">
+              <div>
+                ◻ EVM-equivalent
+                <div class="bar s"></div>
+              </div>
+              <div>
+                ◻ Trustless bridge
+                <div class="bar s"></div>
+              </div>
+              <div>
+                ◻ Audited
+                <div class="bar s"></div>
+              </div>
+              <div>
+                ◻ Decentralized seq.
+                <div class="bar s"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ECOSYSTEM -->
+      <div class="sec">
+        <span class="tag">4 · Ecosystem / Trust</span>
+        <div class="t-lg">Builders &amp; backers</div>
+        <div class="row" style="margin: 12px 0">
+          <div class="box center">◻ Logo</div>
+          <div class="box center">◻ Logo</div>
+          <div class="box center">◻ Logo</div>
+          <div class="box center">◻ Logo</div>
+          <div class="box center">◻ Logo</div>
+          <div class="box center">◻ Logo</div>
+        </div>
+        <div class="grid3">
+          <div class="box center">
+            <div class="t-lg">60+</div>
+            Projects
+          </div>
+          <div class="box center">
+            <div class="t-lg">3</div>
+            Audits
+          </div>
+          <div class="box center">
+            <div class="t-lg">100%</div>
+            Open-source
+          </div>
+        </div>
+        <div class="note">
+          ? Có logo backer/partner thật không? Nếu chưa → giữ section này hay
+          bỏ?
+        </div>
+      </div>
+
+      <!-- TOKEN -->
+      <div class="sec">
+        <span class="tag">5 · Token</span>
+        <div class="grid2">
+          <div>
+            <div class="t-lg">$TERN — token làm gì</div>
+            <div class="bar m"></div>
+            <div style="margin-top: 12px">
+              <div class="legend-row">
+                <span>◻ Gas &amp; fees</span><span class="muted">→</span>
+              </div>
+              <div class="legend-row">
+                <span>◻ Staking</span><span class="muted">→</span>
+              </div>
+              <div class="legend-row">
+                <span>◻ Governance</span><span class="muted">→</span>
+              </div>
+              <div class="legend-row">
+                <span>◻ Incentives</span><span class="muted">→</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="ph" style="min-height: 160px">
+              Biểu đồ phân bổ (donut)
+            </div>
+            <div class="muted center" style="margin-top: 6px">+ legend %</div>
+          </div>
+        </div>
+        <div class="note">
+          ? Tokenomics thật chưa? Có cần section riêng cho Airdrop không?
+        </div>
+      </div>
+
+      <!-- CLOSING CTA -->
+      <div class="sec">
+        <span class="tag">6 · Closing CTA</span>
+        <div class="center">
+          <div class="t-lg">Lời kêu gọi cuối: "Deploy / Start building"</div>
+          <div style="margin: 14px 0">
+            <span class="btn solid">Start building</span
+            ><span class="btn">Add to wallet</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="sec">
+        <span class="tag">Footer</span>
+        <div class="row">
+          <div class="box">◧ Logo + tagline</div>
+          <div class="box">Docs · GitHub · Discord · X</div>
+          <div class="box">Bridge · Explorer · Status</div>
+        </div>
+      </div>
+
+      <div class="note" style="margin-top: 20px">
+        ← Đây là khung đang có. Bạn cứ nói: thêm/bớt/đổi thứ tự section nào, mỗi
+        phần thiếu gì hay thừa gì. Chốt khung xong mới tới phần "đẹp".
+      </div>
+    </div>
+  </body>
+</html>
