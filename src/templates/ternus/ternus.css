@@ -286,11 +286,17 @@ html:has(.tn) {
   grid-template-columns: 1fr;
 }
 .tn .hero-grid.no-visual .hero-left {
-  max-width: 50%;
+  max-width: 88%;
 }
-.tn .hero-grid.no-visual .headline,
 .tn .hero-grid.no-visual .hero-sub {
+  max-width: 52ch;
+}
+/* keep the ~10-word headline to 2 balanced lines, ~15px larger */
+.tn .hero-grid.no-visual .headline {
   max-width: none;
+  font-size: clamp(44px, calc(2.4vw + 16px), 52px);
+  line-height: 1.12;
+  text-wrap: balance;
 }
 .tn .hero-left {
   display: flex;
