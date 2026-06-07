@@ -45,6 +45,8 @@
   /* spacing */
   --pad-section: clamp(96px, 12vh, 168px);
   --wrap: 1140px;
+  /* mono — threefold index + terminal */
+  --tn-mono: var(--tn-font-mono), ui-monospace, "SF Mono", Menlo, monospace;
 
   background: var(--bg);
   color: var(--ink);
@@ -91,6 +93,15 @@ html:has(.tn) {
   color: var(--ink-2);
   font-weight: var(--w-ui);
   margin-bottom: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+}
+/* threefold: eyebrow carries a 01/03 index in mono */
+.tn .eyebrow .idx {
+  font: 500 11px var(--tn-mono);
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
 }
 .tn h2 {
   font-size: var(--t-h2);

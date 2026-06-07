@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./ternus.css";
 import { ClosingCta } from "./components/closing-cta";
 import { Ecosystem } from "./components/ecosystem";
@@ -9,10 +9,17 @@ import { TernusNav } from "./components/ternus-nav";
 import { Token } from "./components/token";
 
 const inter = Inter({
-    subsets: ["latin"],
-    weight: ["400", "500", "600"],
-    variable: "--tn-font",
-    display: "swap",
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600"],
+  variable: "--tn-font",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--tn-font-mono",
+  display: "swap",
 });
 
 /**
@@ -21,17 +28,17 @@ const inter = Inter({
  * accent; calm scroll-triggered motion; WebGL pixel mesh in the hero.
  */
 export function TernusTemplate() {
-    return (
-        <div className={`tn ${inter.variable}`} id="top">
-            <TernusNav />
-            <main>
-                <TernusHero />
-                <HowItWorks />
-                <Ecosystem />
-                <Token />
-                <ClosingCta />
-            </main>
-            <TernusFooter />
-        </div>
-    );
+  return (
+    <div className={`tn ${inter.variable} ${jetbrainsMono.variable}`} id="top">
+      <TernusNav />
+      <main>
+        <TernusHero />
+        <HowItWorks />
+        <Ecosystem />
+        <Token />
+        <ClosingCta />
+      </main>
+      <TernusFooter />
+    </div>
+  );
 }
