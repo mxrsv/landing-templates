@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { PixelBlast } from "@/components/pixel-blast";
 import { useReducedMotion } from "../lib/use-reduced-motion";
 import { HeroCrystal } from "./hero-crystal";
-import { HeroPipeline } from "./hero-pipeline";
 
 const INITIAL_BLOCK = 18234567;
 
@@ -29,11 +28,11 @@ export function TernusHero() {
             color="#22d3ee"
             pixelSize={4}
             patternScale={2}
-            patternDensity={0.6}
+            patternDensity={0.5}
             edgeFade={0.6}
-            speed={0.3}
+            speed={0.15}
             enableRipples
-            rippleSpeed={0.3}
+            rippleSpeed={0.2}
             rippleThickness={0.1}
             liquid={false}
             noiseAmount={0}
@@ -96,8 +95,6 @@ export function TernusHero() {
             <HeroCrystal />
           </div>
         </div>
-
-        <HeroPipeline />
       </div>
     </section>
   );
