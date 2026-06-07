@@ -1,45 +1,65 @@
-import { Mark } from "./mark";
+interface Partner {
+  /** Each partner gets its OWN monogram letter — not the Ternus mark. */
+  mono: string;
+  name: string;
+  cat: string;
+}
 
-const PARTNERS = [
-  "Northwind",
-  "Helix",
-  "Orbit",
-  "Meridian",
-  "Catalyst",
-  "Lattice",
+const PARTNERS: Partner[] = [
+  { mono: "N", name: "Northwind", cat: "Perps & derivatives" },
+  { mono: "H", name: "Helix", cat: "DEX & liquidity" },
+  { mono: "O", name: "Orbit", cat: "Cross-chain bridge" },
+  { mono: "M", name: "Meridian", cat: "Lending & money market" },
+  { mono: "C", name: "Catalyst", cat: "Launchpad" },
+  { mono: "L", name: "Lattice", cat: "RPC & infra" },
 ];
 
-const STATS: { value: string; label: string }[] = [
-  { value: "60+", label: "Projects building" },
-  { value: "3", label: "Independent audits" },
-  { value: "100%", label: "Open-source contracts" },
+const STATS: { en: string; el: string }[] = [
+  { en: "60+", el: "Projects building" },
+  { en: "3", el: "Audits" },
+  { en: "100%", el: "Open-source" },
 ];
 
 export function Ecosystem() {
   return (
     <section id="ecosystem">
       <div className="wrap">
-        <div className="panel">
-          <div className="eyebrow">Ecosystem</div>
-          <h2>
-            Builders are shipping on <span className="ac">Ternus</span>.
-          </h2>
-          <div className="logowall">
-            {PARTNERS.map((name) => (
-              <span className="plogo" key={name}>
-                <Mark />
-                {name}
-              </span>
-            ))}
+        <div className="eco-head">
+          <div>
+            {/* eyebrow mark inlined (the partner monograms below replace the
+                old duplicated Ternus marks) */}
+            <div className="eyebrow">
+              <span className="mark" aria-hidden>
+                <i />
+                <i />
+                <i />
+              </span>{" "}
+              Ecosystem
+            </div>
+            <h2>
+              Builders are shipping on <span className="ac">Ternus</span>.
+            </h2>
           </div>
-          <div className="ecostats">
+          <div className="eco-stats">
             {STATS.map((stat) => (
-              <div className="es" key={stat.label}>
-                <div className="en">{stat.value}</div>
-                <div className="el">{stat.label}</div>
+              <div className="es" key={stat.el}>
+                <div className="en">{stat.en}</div>
+                <div className="el">{stat.el}</div>
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="eco-grid">
+          {PARTNERS.map((partner) => (
+            <div className="eco-card" key={partner.name}>
+              <span className="eco-mono">{partner.mono}</span>
+              <div>
+                <div className="eco-name">{partner.name}</div>
+                <div className="eco-cat">{partner.cat}</div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
