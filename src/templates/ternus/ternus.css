@@ -767,11 +767,9 @@ html:has(.tn) {
 }
 
 /* section background textures (subtle, static) */
-.tn #how,
 .tn #token {
   position: relative;
 }
-.tn #how::before,
 .tn #token::before {
   content: "";
   position: absolute;
@@ -784,19 +782,274 @@ html:has(.tn) {
     transparent 82%
   );
   mask-image: radial-gradient(120% 75% at 50% 50%, #000 25%, transparent 82%);
-}
-.tn #how::before {
-  background-image:
-    linear-gradient(var(--line-1) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line-1) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-.tn #token::before {
   background-image: repeating-radial-gradient(
     circle at 78% 50%,
     transparent 0 30px,
     var(--line-1) 30px 31px
   );
+}
+
+/* ============ HOW IT WORKS — scrollytelling (v20) ============ */
+.tn .scrolly {
+  position: relative;
+  padding: 0;
+  /* tall track; sticky stage pins inside */
+  height: 360vh;
+}
+.tn .scrolly-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.tn .scrolly-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--line-1) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-1) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(
+    120% 75% at 50% 50%,
+    #000 25%,
+    transparent 82%
+  );
+  mask-image: radial-gradient(120% 75% at 50% 50%, #000 25%, transparent 82%);
+}
+.tn .scrolly-grid {
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: 56px;
+  align-items: center;
+  width: 100%;
+}
+.tn .scrolly-copy {
+  position: relative;
+  min-height: 220px;
+}
+.tn .scrolly-copy .phase {
+  position: absolute;
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.5s,
+    transform 0.5s;
+  max-width: 42ch;
+  pointer-events: none;
+}
+.tn .scrolly-copy .phase.active {
+  opacity: 1;
+  transform: translateY(0);
+  position: relative;
+  pointer-events: auto;
+}
+.tn .phase .ph-k {
+  font: 500 12px var(--tn-mono);
+  letter-spacing: 0.12em;
+  color: var(--cy);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.tn .phase .ph-k .ring {
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--line-3);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  color: var(--cy-soft);
+}
+.tn .phase h3 {
+  font-size: clamp(26px, 3.4vw, 40px);
+  font-weight: var(--w-h2);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+.tn .phase p {
+  margin-top: 16px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  font-size: var(--t-body);
+}
+/* the rail of 3 layers */
+.tn .rail {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 6px 0;
+}
+.tn .rail-line {
+  position: absolute;
+  left: 27px;
+  top: 18px;
+  bottom: 18px;
+  width: 1px;
+  background: var(--line-1);
+  overflow: hidden;
+}
+.tn .rail-line i {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 0%;
+  background: linear-gradient(var(--cy-bright), var(--cy));
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+}
+.tn .rl {
+  position: relative;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  padding: 18px 22px;
+  border: 1px solid var(--line-1);
+  border-radius: var(--r);
+  background: rgba(12, 13, 20, 0.55);
+  transition:
+    border-color 0.35s,
+    background 0.35s,
+    transform 0.35s;
+}
+.tn .rl .dot {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--line-3);
+  position: relative;
+  z-index: 2;
+  background: var(--bg);
+  transition:
+    border-color 0.35s,
+    box-shadow 0.35s;
+}
+.tn .rl.on {
+  border-color: var(--line-3);
+  background: rgba(34, 211, 238, 0.06);
+  transform: translateX(4px);
+}
+.tn .rl.on .dot {
+  border-color: var(--cy-bright);
+  box-shadow:
+    0 0 0 4px rgba(34, 211, 238, 0.12),
+    0 0 16px rgba(34, 211, 238, 0.6);
+}
+.tn .rl .rl-k {
+  font-size: 11px;
+  letter-spacing: var(--tr-cap);
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.tn .rl .rl-t {
+  font-size: var(--t-h3);
+  font-weight: 300;
+  margin-top: 4px;
+}
+.tn .rl.on .rl-t {
+  color: var(--cy-bright);
+}
+.tn .rl .rl-side {
+  margin-left: auto;
+  font: 500 12px var(--tn-mono);
+  color: var(--ink-3);
+  text-align: right;
+}
+/* the travelling transaction pulse */
+.tn .txpulse {
+  position: absolute;
+  left: 21px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--cy-bright);
+  box-shadow: 0 0 14px rgba(127, 233, 255, 0.9);
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tn .txpulse.settled {
+  background: var(--orange);
+  box-shadow: 0 0 16px rgba(251, 146, 60, 0.9);
+}
+/* count-up proof stats fold into bottom of stage */
+.tn .scrolly-stats {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6vh;
+  display: flex;
+  justify-content: center;
+  gap: 52px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.6s,
+    transform 0.6s;
+}
+.tn .scrolly-stats.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+.tn .ss {
+  text-align: center;
+}
+.tn .ss .num {
+  font-size: clamp(30px, 3.6vw, 44px);
+  font-weight: var(--w-display);
+  font-variant-numeric: tabular-nums;
+  color: var(--cy-soft);
+  line-height: 1;
+}
+.tn .ss .unit {
+  font-size: 0.5em;
+  color: var(--ink-3);
+}
+.tn .ss .cap {
+  margin-top: 10px;
+  font-size: var(--t-cap);
+  color: var(--ink-2);
+}
+@media (max-width: 860px) {
+  .tn .scrolly-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .tn .scrolly-stats {
+    gap: 28px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* collapse the scroll track so the diagram is readable without scrubbing */
+  .tn .scrolly {
+    height: auto;
+  }
+  .tn .scrolly-stage {
+    position: relative;
+    height: auto;
+    padding: var(--pad-section) 24px;
+  }
+  .tn .scrolly-copy {
+    min-height: 0;
+  }
+  .tn .scrolly-copy .phase {
+    position: relative;
+    opacity: 1;
+    transform: none;
+    margin-bottom: 28px;
+  }
+  .tn .scrolly-stats {
+    position: relative;
+    opacity: 1;
+    transform: none;
+    margin-top: 40px;
+  }
 }
 
 /* ============ HOW IT WORKS — three layers stack ============ */

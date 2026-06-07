@@ -1,120 +1,168 @@
 "use client";
 
-import { Reveal } from "./reveal";
+import { useRef } from "react";
+import { useReducedMotion } from "../lib/use-reduced-motion";
+import { useScrollProgress } from "../lib/use-scroll-progress";
+import { Mark } from "./mark";
 import { StatNumber } from "./stat-number";
 
+interface Phase {
+  ring: string;
+  kicker: string;
+  heading: string;
+  body: string;
+}
+
+interface Layer {
+  k: string;
+  t: string;
+  side: [string, string];
+}
+
+const PHASES: Phase[] = [
+  {
+    ring: "1",
+    kicker: "APPS & USERS",
+    heading: "Your transaction starts here.",
+    body: "Wallets, dApps and DeFi submit transactions to Ternus exactly like they would to Ethereum — same Solidity, same tooling, no rewrite.",
+  },
+  {
+    ring: "2",
+    kicker: "TERNUS · LAYER 2",
+    heading: "Executed off-chain, rolled into one batch.",
+    body: "Ternus runs thousands of transactions per second off-chain, then compresses them into a single proof — fast and near-zero cost.",
+  },
+  {
+    ring: "3",
+    kicker: "ETHEREUM · LAYER 1",
+    heading: "Settled and secured on mainnet.",
+    body: "The proof is verified on Ethereum L1 — your transaction inherits mainnet-grade security, with none of the congestion.",
+  },
+];
+
+const LAYERS: Layer[] = [
+  {
+    k: "Layer · Apps",
+    t: "Your transactions",
+    side: ["wallets · dApps", "DeFi"],
+  },
+  {
+    k: "Layer · Ternus L2",
+    t: "Execute & roll up",
+    side: ["9,400 TPS", "EVM"],
+  },
+  {
+    k: "Layer · Ethereum L1",
+    t: "Settle & secure",
+    side: ["proof", "verified"],
+  },
+];
+
 /**
- * Merged "How it works" — folds the old Proof-of-Speed + Technology sections
- * into one flow: intro → mechanism (3-layer stack) + properties (pillars) →
- * proof (metrics). Removes the duplicated rollup narrative.
+ * Scrollytelling "How it works": a tall track with a sticky stage. As the user
+ * scrolls, a transaction pulse travels down a 3-layer rail, the active layer
+ * highlights, the copy swaps phase, and three proof stats count up at the end.
+ * Driven by {@link useScrollProgress}; collapses to a static, fully-revealed
+ * diagram under `prefers-reduced-motion`.
  */
 export function HowItWorks() {
+  const reduced = useReducedMotion();
+  const ref = useRef<HTMLElement>(null);
+  const p = useScrollProgress(ref);
+
+  const phase = p < 0.36 ? 0 : p < 0.72 ? 1 : 2;
+  const isActive = (i: number) => reduced || i === phase;
+  const showStats = reduced || p > 0.8;
+  const settled = !reduced && p > 0.82;
+
+  const fillHeight = reduced ? "100%" : `${(p * 100).toFixed(1)}%`;
+  const pulseStyle = reduced
+    ? { opacity: 0 }
+    : {
+        top: `calc(18px + (100% - 36px) * ${p} - 6px)`,
+        opacity: p > 0.01 && p < 0.99 ? 1 : 0,
+      };
+  const idx = reduced ? "01 / 03" : `0${phase + 1} / 03`;
+
   return (
-    <section id="how">
-      <div className="wrap">
-        <div className="eyebrow">How it works</div>
-        <h2>
-          Three layers, <span className="ac">settled as one</span>.
-        </h2>
-        <p className="lead">
-          Ternus executes off-chain at high speed, then proves every batch to
-          Ethereum L1 — mainnet-grade security, none of the congestion.
-        </p>
-
-        <div className="split" style={{ marginTop: 56 }}>
-          <div style={{ paddingLeft: 28 }}>
-            <div className="stack">
-              <Reveal className="layer">
-                <span className="layer-idx">01</span>
-                <div className="layer-tag">Apps &amp; users</div>
-                <div className="layer-main">Your transactions</div>
-                <div className="layer-side">Wallets · dApps · DeFi</div>
-              </Reveal>
-              <div className="flow">
-                <i />
+    <section className="scrolly" id="how" ref={ref}>
+      <div className="scrolly-stage">
+        <div className="wrap">
+          <div className="scrolly-grid">
+            {/* left: phase copy that swaps with scroll */}
+            <div className="scrolly-copy">
+              <div className="eyebrow">
+                <Mark /> How it works
+                <span className="idx">{idx}</span>
               </div>
-              <Reveal className="layer l2" delay={110}>
-                <span className="layer-idx">02</span>
-                <div className="layer-tag">Ternus · Layer 2</div>
-                <div className="layer-main">Execute &amp; roll up</div>
-                <div className="layer-side">9,400 TPS · EVM</div>
-              </Reveal>
-              <div className="flow">
-                <i />
-              </div>
-              <Reveal className="layer l1" delay={220}>
-                <span className="layer-idx">03</span>
-                <div className="layer-tag">Ethereum · Layer 1</div>
-                <div className="layer-main">Settle &amp; secure</div>
-                <div className="layer-side">Proof verified</div>
-              </Reveal>
-            </div>
-          </div>
-
-          <div>
-            <div className="pillars">
-              <Reveal className="pillar">
-                <svg className="ic" viewBox="0 0 24 24">
-                  <path d="M9 8l-4 4 4 4M15 8l4 4-4 4" />
-                </svg>
-                <div className="pt">Fully EVM-equivalent</div>
-                <div className="pd">Deploy existing Solidity unchanged.</div>
-              </Reveal>
-              <Reveal className="pillar" delay={110}>
-                <svg className="ic" viewBox="0 0 24 24">
-                  <path d="M12 3l7 3v5c0 4-3 7-7 8-4-1-7-4-7-8V6l7-3z" />
-                </svg>
-                <div className="pt">Trustless bridging</div>
-                <div className="pd">
-                  Move assets with proofs, not custodians.
+              {PHASES.map((ph, i) => (
+                <div
+                  className={`phase ${isActive(i) ? "active" : ""}`.trim()}
+                  key={ph.kicker}
+                >
+                  <div className="ph-k">
+                    <span className="ring">{ph.ring}</span> {ph.kicker}
+                  </div>
+                  <h3>{ph.heading}</h3>
+                  <p>{ph.body}</p>
                 </div>
-              </Reveal>
-              <Reveal className="pillar" delay={220}>
-                <svg className="ic" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="8" />
-                  <path d="M8.5 12l2.5 2.5 4.5-5" />
-                </svg>
-                <div className="pt">Open-source &amp; audited</div>
-                <div className="pd">Every contract public and reviewed.</div>
-              </Reveal>
-              <Reveal className="pillar" delay={330}>
-                <svg className="ic" viewBox="0 0 24 24">
-                  <circle cx="6" cy="6" r="2" />
-                  <circle cx="18" cy="6" r="2" />
-                  <circle cx="12" cy="18" r="2" />
-                  <path d="M7.5 7.5L11 16M16.5 7.5L13 16M8 6h8" />
-                </svg>
-                <div className="pt">Decentralized sequencer</div>
-                <div className="pd">Roadmap to a permissionless set.</div>
-              </Reveal>
+              ))}
+            </div>
+
+            {/* right: the 3-layer rail with a travelling pulse */}
+            <div className="rail">
+              <div className="rail-line">
+                <i style={{ height: fillHeight }} />
+              </div>
+              <div
+                className={`txpulse ${settled ? "settled" : ""}`.trim()}
+                style={pulseStyle}
+              />
+              {LAYERS.map((layer, i) => (
+                <div
+                  className={`rl ${isActive(i) ? "on" : ""}`.trim()}
+                  key={layer.k}
+                >
+                  <span className="dot" />
+                  <div>
+                    <div className="rl-k">{layer.k}</div>
+                    <div className="rl-t">{layer.t}</div>
+                  </div>
+                  <div className="rl-side">
+                    {layer.side[0]}
+                    <br />
+                    {layer.side[1]}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        <div className="stats">
-          <div className="stat">
-            <div className="num">
-              <StatNumber to={9400} />
+        {/* proof stats fold up at the end of the scroll */}
+        {showStats && (
+          <div className="scrolly-stats in">
+            <div className="ss">
+              <div className="num">
+                <StatNumber to={9400} />
+              </div>
+              <div className="cap">Transactions / sec</div>
             </div>
-            <div className="cap">Transactions / sec</div>
-            <div className="desc">Sustained testnet throughput.</div>
-          </div>
-          <div className="stat">
-            <div className="num">
-              $<StatNumber to={0.001} dec={3} />
+            <div className="ss">
+              <div className="num">
+                $<StatNumber to={0.001} dec={3} />
+              </div>
+              <div className="cap">Average fee</div>
             </div>
-            <div className="cap">Average fee</div>
-            <div className="desc">Predictable, near-zero gas.</div>
-          </div>
-          <div className="stat">
-            <div className="num">
-              <StatNumber to={1.2} dec={1} />
-              <span className="unit">s</span>
+            <div className="ss">
+              <div className="num">
+                <StatNumber to={1.2} dec={1} />
+                <span className="unit">s</span>
+              </div>
+              <div className="cap">Time to finality</div>
             </div>
-            <div className="cap">Time to finality</div>
-            <div className="desc">Submitted to settled, fast.</div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
