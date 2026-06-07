@@ -40,9 +40,12 @@ export function StatNumber({
     return () => cancelAnimationFrame(raf);
   }, [inView, reduced, to, durationMs]);
 
+  // Reduced motion: show the final value immediately, without waiting for the
+  // count-up (which is gated on scrolling into view) — no animation to play.
+  const display = reduced ? to : value;
   const text = dec
-    ? value.toFixed(dec)
-    : Math.round(value).toLocaleString("en-US");
+    ? display.toFixed(dec)
+    : Math.round(display).toLocaleString("en-US");
 
   return <span ref={ref}>{text}</span>;
 }

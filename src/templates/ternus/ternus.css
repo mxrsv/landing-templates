@@ -698,6 +698,9 @@ html:has(.tn) {
     position: relative;
     height: auto;
     padding: var(--pad-section) 24px;
+    /* leave flex row so the stats stack below the diagram instead of
+       squishing to its right */
+    display: block;
   }
   .tn .scrolly-copy {
     min-height: 0;
@@ -710,6 +713,9 @@ html:has(.tn) {
   }
   .tn .scrolly-stats {
     position: relative;
+    /* reset the absolute `bottom: 6vh` so relative flow doesn't shift it up
+       into the diagram */
+    bottom: auto;
     opacity: 1;
     transform: none;
     margin-top: 40px;
