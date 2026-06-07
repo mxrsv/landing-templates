@@ -1,5 +1,6 @@
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./ternus.css";
+import { BuildTerminal } from "./components/build-terminal";
 import { ClosingCta } from "./components/closing-cta";
 import { Ecosystem } from "./components/ecosystem";
 import { HowItWorks } from "./components/how-it-works";
@@ -34,6 +35,7 @@ export function TernusTemplate() {
       <main>
         <TernusHero />
         <HowItWorks />
+        <BuildTerminal />
         <Ecosystem />
         <Token />
         <ClosingCta />

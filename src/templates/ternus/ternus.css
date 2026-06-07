@@ -1166,6 +1166,104 @@ html:has(.tn) {
   }
 }
 
+/* ============ BUILD — dev terminal (v20) ============ */
+.tn #build .term {
+  border: 1px solid var(--line-2);
+  border-radius: var(--r);
+  background: #060a0e;
+  overflow: hidden;
+  box-shadow: 0 30px 80px -40px rgba(34, 211, 238, 0.25);
+}
+.tn .term-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line-1);
+  background: rgba(12, 13, 20, 0.6);
+}
+.tn .term-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--line-w);
+}
+.tn .term-tabs {
+  display: flex;
+  gap: 4px;
+  margin-left: 14px;
+}
+.tn .term-tab {
+  font: 500 12px var(--tn-mono);
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+  padding: 6px 13px;
+  border-radius: var(--r);
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+  transition:
+    color 0.15s,
+    background 0.15s,
+    border-color 0.15s;
+}
+.tn .term-tab:hover {
+  color: var(--ink-2);
+}
+.tn .term-tab.on {
+  color: var(--cy-soft);
+  background: rgba(34, 211, 238, 0.07);
+  border-color: var(--line-2);
+}
+.tn .term-copy {
+  margin-left: auto;
+  font: 500 11px var(--tn-mono);
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  background: transparent;
+  border: 1px solid var(--line-w);
+  border-radius: var(--r);
+  padding: 6px 12px;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+.tn .term-copy:hover {
+  color: var(--cy-soft);
+  border-color: var(--line-3);
+}
+.tn .term-body {
+  padding: 22px 22px 26px;
+  font: 400 13.5px/1.75 var(--tn-mono);
+  overflow-x: auto;
+}
+.tn .term-pane {
+  display: none;
+  white-space: pre;
+}
+.tn .term-pane.on {
+  display: block;
+}
+.tn .term-body .c {
+  color: var(--ink-3);
+}
+.tn .term-body .p {
+  color: var(--cy);
+}
+.tn .term-body .k {
+  color: var(--cy-bright);
+}
+.tn .term-body .s {
+  color: #9fe6c0;
+}
+.tn .term-body .o {
+  color: var(--orange);
+}
+.tn .term-body .d {
+  color: var(--ink);
+}
+
 /* ============ ECOSYSTEM (dark panel) ============ */
 .tn #ecosystem .panel {
   border: 1px solid var(--line-1);
