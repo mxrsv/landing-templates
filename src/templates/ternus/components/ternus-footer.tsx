@@ -8,11 +8,11 @@ export function TernusFooter() {
         Ternus
       </div>
       <div>
-        <a href="#how">Technology</a>
+        <a href="#how">How it works</a>
+        <a href="#build">Build</a>
         <a href="#token">Token</a>
-        <a href="#start">Docs</a>
-        <a href="#start">GitHub</a>
-        <a href="#start">Discord</a>
+        <a href="#">GitHub</a>
+        <a href="#">Discord</a>
       </div>
     </footer>
   );

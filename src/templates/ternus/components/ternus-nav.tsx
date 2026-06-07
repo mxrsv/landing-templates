@@ -21,11 +21,11 @@ export function TernusNav() {
         Ternus
       </a>
       <div className="navlinks">
-        <a href="#how">Technology</a>
-        <a href="#token">Token</a>
+        <a href="#how">How it works</a>
+        <a href="#build">Build</a>
         <a href="#ecosystem">Ecosystem</a>
-        <a href="#start">Build</a>
-        <a href="#start">Docs</a>
+        <a href="#token">Token</a>
+        <a href="#">Docs</a>
       </div>
       <button className="connect" type="button">
         Connect Wallet
