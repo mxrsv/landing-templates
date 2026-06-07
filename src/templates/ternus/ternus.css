@@ -84,7 +84,9 @@ html:has(.tn) {
 }
 .tn section {
   position: relative;
-  padding: var(--pad-section) 24px;
+  /* horizontal gutter is owned solely by `.wrap` (92vw); section keeps only
+     the vertical rhythm so the two gutter mechanisms never stack */
+  padding: var(--pad-section) 0;
 }
 .tn .eyebrow {
   font-size: var(--t-eye);
@@ -249,8 +251,9 @@ html:has(.tn) {
   display: flex;
   align-items: center;
   overflow: hidden;
-  padding-top: 120px;
-  padding-bottom: 64px;
+  /* hero overrides `.wrap` to width:100% (see `.tn .hero .wrap`), so its
+     horizontal gutter must live here rather than on the shared `.wrap` */
+  padding: 120px 24px 64px;
 }
 .tn .hero .mesh {
   position: absolute;
@@ -274,9 +277,20 @@ html:has(.tn) {
 }
 .tn .hero-grid {
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+  grid-template-columns: 1fr 1.05fr;
   gap: 40px;
   align-items: center;
+}
+/* crystal hidden: single column, copy stretches to the middle of the screen */
+.tn .hero-grid.no-visual {
+  grid-template-columns: 1fr;
+}
+.tn .hero-grid.no-visual .hero-left {
+  max-width: 50%;
+}
+.tn .hero-grid.no-visual .headline,
+.tn .hero-grid.no-visual .hero-sub {
+  max-width: none;
 }
 .tn .hero-left {
   display: flex;
@@ -286,7 +300,7 @@ html:has(.tn) {
 .tn .badges {
   display: flex;
   gap: 10px;
-  margin-bottom: 26px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
 }
 .tn .badge {
@@ -332,7 +346,7 @@ html:has(.tn) {
   line-height: 1.6;
 }
 .tn .cta {
-  margin-top: 34px;
+  margin-top: 32px;
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
@@ -372,7 +386,7 @@ html:has(.tn) {
   border-color: rgba(255, 255, 255, 0.34);
 }
 .tn .netstrip {
-  margin-top: 36px;
+  margin-top: 40px;
   padding-top: 20px;
   border-top: 1px solid var(--line-1);
   display: flex;
@@ -413,6 +427,9 @@ html:has(.tn) {
   position: relative;
   aspect-ratio: 1;
   min-height: 340px;
+  /* octahedron's visual mass sits below its geometric centre; nudge up so it
+     reads as vertically aligned with the text block */
+  transform: translateY(-40px);
 }
 .tn .hero-right .crystal {
   position: absolute;
@@ -423,6 +440,9 @@ html:has(.tn) {
 @media (max-width: 820px) {
   .tn .hero-grid {
     grid-template-columns: 1fr;
+  }
+  .tn .hero-grid.no-visual .hero-left {
+    max-width: 100%;
   }
   .tn .hero-right {
     order: -1;
@@ -697,7 +717,8 @@ html:has(.tn) {
   .tn .scrolly-stage {
     position: relative;
     height: auto;
-    padding: var(--pad-section) 24px;
+    /* match the section gutter model: `.wrap` owns horizontal spacing */
+    padding: var(--pad-section) 0;
     /* leave flex row so the stats stack below the diagram instead of
        squishing to its right */
     display: block;

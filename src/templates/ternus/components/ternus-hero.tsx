@@ -7,6 +7,9 @@ import { HeroCrystal } from "./hero-crystal";
 
 const INITIAL_BLOCK = 18234567;
 
+/** Tạm thời ẩn khối crystal (logo eth) ở nửa phải hero — bật lại = true. */
+const SHOW_CRYSTAL = false;
+
 export function TernusHero() {
   const reduced = useReducedMotion();
   const [block, setBlock] = useState(INITIAL_BLOCK);
@@ -44,7 +47,7 @@ export function TernusHero() {
       <div className="vignette" />
 
       <div className="wrap">
-        <div className="hero-grid">
+        <div className={`hero-grid ${SHOW_CRYSTAL ? "" : "no-visual"}`.trim()}>
           <div className="hero-left">
             <div className="badges">
               <span className="badge live">
@@ -55,9 +58,8 @@ export function TernusHero() {
               <span className="badge">EVM-equivalent</span>
             </div>
             <h1 className="headline">
-              Three layers,
-              <br />
-              <span className="ac">one network</span>.
+              Run your apps across three layers, settled as{" "}
+              <span className="ac">one fast, secure network</span>.
             </h1>
             <p className="hero-sub">
               Ternus is the Ethereum Layer 2 with threefold throughput — your
@@ -91,9 +93,11 @@ export function TernusHero() {
               </div>
             </div>
           </div>
-          <div className="hero-right">
-            <HeroCrystal />
-          </div>
+          {SHOW_CRYSTAL && (
+            <div className="hero-right">
+              <HeroCrystal />
+            </div>
+          )}
         </div>
       </div>
     </section>
