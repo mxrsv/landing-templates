@@ -25,7 +25,7 @@ export function TernusHero() {
         <div className="mesh">
           <PixelBlast
             variant="square"
-            color="#22d3ee"
+            color="#fb923c"
             pixelSize={4}
             patternScale={2}
             patternDensity={0.5}
