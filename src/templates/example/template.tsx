@@ -1,28 +1,21 @@
 import Link from "next/link";
-import { PixelBlast } from "@/components/pixel-blast";
+import { SoftAurora } from "@/components/soft-aurora";
 
 export function ExampleTemplate() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-zinc-950 text-zinc-50">
-      <div className="pointer-events-none absolute inset-0 z-0">
-        <PixelBlast
-          variant="circle"
-          pixelSize={6}
-          color="#22d3ee"
-          patternScale={3}
-          patternDensity={1.2}
-          pixelSizeJitter={0.5}
-          enableRipples
-          rippleSpeed={0.4}
-          rippleThickness={0.12}
-          rippleIntensityScale={1.5}
-          liquid
-          liquidStrength={0.12}
-          liquidRadius={1.2}
-          liquidWobbleSpeed={5}
+      <div className="absolute inset-0 z-0">
+        <SoftAurora
           speed={0.6}
-          edgeFade={0.25}
-          transparent
+          scale={1.5}
+          brightness={1.0}
+          color1="#22d3ee"
+          color2="#8b5cf6"
+          bandHeight={0.5}
+          bandSpread={1.0}
+          colorSpeed={1.0}
+          enableMouseInteraction
+          mouseInfluence={0.25}
         />
       </div>
 
