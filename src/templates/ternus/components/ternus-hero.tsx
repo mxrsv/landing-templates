@@ -1,26 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { PixelBlast } from "@/components/pixel-blast";
 import { useReducedMotion } from "../lib/use-reduced-motion";
 import { HeroCrystal } from "./hero-crystal";
-
-const INITIAL_BLOCK = 18234567;
+import { TernusNetstrip } from "./ternus-netstrip";
 
 /** Tạm thời ẩn khối crystal (logo eth) ở nửa phải hero — bật lại = true. */
 const SHOW_CRYSTAL = false;
 
 export function TernusHero() {
   const reduced = useReducedMotion();
-  const [block, setBlock] = useState(INITIAL_BLOCK);
-
-  useEffect(() => {
-    if (reduced) return;
-    const id = window.setInterval(() => {
-      setBlock((b) => b + 1 + Math.floor(Math.random() * 2));
-    }, 2400);
-    return () => window.clearInterval(id);
-  }, [reduced]);
 
   return (
     <section className="hero">
@@ -31,8 +20,8 @@ export function TernusHero() {
             color="#fb923c"
             pixelSize={4}
             patternScale={2}
-            patternDensity={0.5}
-            edgeFade={0.6}
+            patternDensity={0.65}
+            edgeFade={0.15}
             speed={0.15}
             enableRipples
             rippleSpeed={0.2}
@@ -41,10 +30,14 @@ export function TernusHero() {
             noiseAmount={0}
             transparent
             autoPauseOffscreen
+            cursorErase
+            eraseRadius={1.4}
+            eraseStrength={2}
           />
         </div>
       )}
       <div className="vignette" />
+      <div className="hero-scrim" />
 
       <div className="wrap">
         <div className={`hero-grid ${SHOW_CRYSTAL ? "" : "no-visual"}`.trim()}>
@@ -73,25 +66,7 @@ export function TernusHero() {
                 Read the docs →
               </button>
             </div>
-            <div className="netstrip">
-              <div className="nstat">
-                <span className="nk">
-                  Throughput
-                  <span className="net-tag">testnet</span>
-                </span>
-                <span className="nv">9,400</span>
-              </div>
-              <span className="nsep" />
-              <div className="nstat">
-                <span className="nk">Avg fee</span>
-                <span className="nv">$0.001</span>
-              </div>
-              <span className="nsep" />
-              <div className="nstat">
-                <span className="nk">Block height</span>
-                <span className="nv">{block.toLocaleString("en-US")}</span>
-              </div>
-            </div>
+            <TernusNetstrip />
           </div>
           {SHOW_CRYSTAL && (
             <div className="hero-right">

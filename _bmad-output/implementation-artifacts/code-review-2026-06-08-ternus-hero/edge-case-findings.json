@@ -1,0 +1,38 @@
+[
+  {
+    "location": "PixelBlast.tsx:638",
+    "trigger_condition": "liquid=true và cursorErase=true cùng lúc",
+    "guard_snippet": "erase: cursorErase && !liquid",
+    "potential_consequence": "Touch texture dùng force theo vận tốc (liquid mode) nhưng shader vẫn cut pixel qua uEraseStrength — vệt erase không đều hoặc méo"
+  },
+  {
+    "location": "PixelBlast.tsx:231-233",
+    "trigger_condition": "ResizeObserver đổi aspect → canvas.width thay đổi",
+    "guard_snippet": "if (w !== canvas.width) canvas.width = w; // gán width tự clear canvas",
+    "potential_consequence": "Trail array vẫn giữ điểm cũ nhưng canvas đã clear — frame đầu sau resize có thể flash hoặc vệt lệch tọa độ"
+  },
+  {
+    "location": "ternus-netstrip.tsx:12-18",
+    "trigger_condition": "Component mount với CSS display:none",
+    "guard_snippet": "không có guard trước setInterval",
+    "potential_consequence": "Timer chạy liên tục và setState mỗi 2.4s dù UI ẩn — lãng phí CPU, có thể gây re-render subtree không cần thiết"
+  },
+  {
+    "location": "ternus.css:416-423 + template.tsx:36",
+    "trigger_condition": "Bật lại netstrip (display:flex)",
+    "guard_snippet": "TernusNetstrip render giữa fixed nav và main, không có padding-top/position",
+    "potential_consequence": "Netstrip bị nav che hoặc xuất hiện sai vị trí so với hero bottom trong demo v20"
+  },
+  {
+    "location": "PixelBlast.tsx:714-718",
+    "trigger_condition": "pointermove khi e.buttons=0 (chỉ hover, không drag)",
+    "guard_snippet": "onPointerMove luôn gọi touch.addTouch không kiểm tra buttons",
+    "potential_consequence": "Erase trail vẽ khi hover — có thể intentional; nhưng mobile không có hover liên tục, trải nghiệm khác desktop"
+  },
+  {
+    "location": "ternus-hero.tsx:15-36",
+    "trigger_condition": "prefers-reduced-motion: reduce",
+    "guard_snippet": "!reduced && <PixelBlast ... cursorErase />",
+    "potential_consequence": "Hero mất hoàn toàn mesh + erase khi reduced motion — OK theo plan; nhưng scrim/vignette vẫn render, contrast có thể khác"
+  }
+]

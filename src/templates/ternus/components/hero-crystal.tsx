@@ -87,7 +87,7 @@ export function HeroCrystal() {
       const ox = w / 2;
       const oy = h / 2;
       const bob = reduced ? 0 : Math.sin(time * 0.0011) * 5;
-      const s = Math.min(w, h) * 0.34;
+      const s = Math.min(w, h) * 0.46;
       const ay = reduced ? 0.6 : time * 0.0003;
       const ax = 0.32;
 

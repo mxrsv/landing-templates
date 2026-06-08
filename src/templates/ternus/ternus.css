@@ -43,6 +43,7 @@
   --w-body: 400;
   --w-ui: 500;
   /* spacing */
+  --nav-h: 72px;
   --pad-section: clamp(96px, 12vh, 168px);
   --wrap: 1140px;
   /* mono — threefold index + terminal */
@@ -180,14 +181,18 @@ html:has(.tn) {
 }
 
 /* ============ NAV ============ */
+.tn main {
+  padding-top: var(--nav-h);
+}
 .tn .nav {
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 20;
+  height: var(--nav-h);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 40px;
+  padding: 0 40px;
   transition:
     background 0.3s,
     border-color 0.3s;
@@ -247,13 +252,14 @@ html:has(.tn) {
 
 /* ============ HERO ============ */
 .tn .hero {
-  min-height: 100vh;
+  min-height: calc(100vh - var(--nav-h));
+  min-height: calc(100dvh - var(--nav-h));
   display: flex;
   align-items: center;
   overflow: hidden;
   /* hero overrides `.wrap` to width:100% (see `.tn .hero .wrap`), so its
      horizontal gutter must live here rather than on the shared `.wrap` */
-  padding: 120px 24px 64px;
+  padding: 0 24px 64px;
 }
 .tn .hero .mesh {
   position: absolute;
@@ -267,8 +273,24 @@ html:has(.tn) {
   pointer-events: none;
   background: radial-gradient(
     120% 90% at 50% 30%,
-    transparent 45%,
-    var(--bg) 92%
+    transparent 78%,
+    var(--bg) 100%
+  );
+}
+/* scrim đậm ở mép trái (nơi text căn trái) → nhạt dần sang phải để
+   nửa phải mesh vẫn "thở". Tách riêng khỏi .vignette: vignette lo rìa,
+   scrim lo độ đọc của text. */
+.tn .hero .hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    rgba(7, 7, 12, 0.78) 0%,
+    rgba(7, 7, 12, 0.55) 28%,
+    rgba(7, 7, 12, 0.22) 55%,
+    transparent 75%
   );
 }
 .tn .hero .wrap {
@@ -294,7 +316,7 @@ html:has(.tn) {
 /* keep the ~10-word headline to 2 balanced lines, ~15px larger */
 .tn .hero-grid.no-visual .headline {
   max-width: none;
-  font-size: clamp(44px, calc(2.4vw + 16px), 52px);
+  font-size: clamp(46px, calc(2.4vw + 18px), 52px);
   line-height: 1.12;
   text-wrap: balance;
 }
@@ -335,7 +357,7 @@ html:has(.tn) {
 }
 .tn .headline {
   font-size: var(--t-display);
-  font-weight: var(--w-display);
+  font-weight: 500;
   line-height: 1.02;
   letter-spacing: -0.015em;
   color: var(--ink);
@@ -392,10 +414,10 @@ html:has(.tn) {
   border-color: rgba(255, 255, 255, 0.34);
 }
 .tn .netstrip {
+  display: flex;
   margin-top: 40px;
   padding-top: 20px;
   border-top: 1px solid var(--line-1);
-  display: flex;
   align-items: center;
   gap: 24px;
 }
