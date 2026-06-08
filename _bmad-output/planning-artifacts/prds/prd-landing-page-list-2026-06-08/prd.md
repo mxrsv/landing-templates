@@ -35,7 +35,7 @@ Phân phối v1: **gallery-first** — docs app với live preview, nút copy co
 
 - **JTBD-1 (Functional):** Tìm và lấy landing block/template Web3 chất lượng cao, plug vào Next.js mà không redesign từ zero.
 - **JTBD-2 (Emotional):** Tự tin landing của mình trông professional như infra L1, kể cả khi build memecoin hay GameFi — không "cheap hype".
-- **JTBD-3 (Social):** Showcase portfolio / open catalog để cộng đồng Web3 dev thấy craft level — builder được credit qua gallery công khai.
+- **JTBD-3 (Social):** Showcase portfolio / public gallery để cộng đồng Web3 dev thấy craft level — builder được credit qua catalog công khai. **[DECISION CONFIRMED 2026-06-08]** Căng có chủ đích với brainstorm Cat#7 "internal-first": _internal-first_ = chưa mở contribution workflow / governance; _public gallery_ = showcase read-only, không mời PR ngoài. Xem `.decision-log.md`.
 - **JTBD-4 (Contextual):** Ship landing trong 1–2 ngày với AI-assisted velocity; cần catalog curated, không 500 generic blocks.
 
 ### 2.2 Non-Users (v1)
@@ -63,13 +63,13 @@ Phân phối v1: **gallery-first** — docs app với live preview, nút copy co
 - **Piece** — Một đơn vị catalog: UI component, Section, hoặc Template. Có live preview, metadata tags, copy action.
 - **UI** — Layer thấp nhất: animation/interaction components (PixelBlast, LogoLoop, price-ticker modes). Thuộc `packages/ui`.
 - **Section** — Landing block ghép từ UI + layout (hero+ticker, stats strip, community marquee). Thuộc `packages/sections`.
-- **Template** — Full landing page theo một aesthetic mood (Ternus, Memecoin, GameFi, NFT). Thuộc `packages/templates`.
-- **design-tokens** — Package chứa CSS variables + Tailwind preset; định nghĩa quality floor (spacing, type scale, easing curves, color roles). Mọi Piece inherit.
+- **Template** — Full landing page theo một aesthetic mood (Ternus, Memecoin, GameFi, NFT). Thuộc `packages/templates-<slug>` (vd `packages/templates-ternus`).
+- **design-tokens** — Package chứa CSS variables + Tailwind 4 `@theme` block (supersedes brainstorm P3 "Tailwind preset" — xem `.decision-log.md`); định nghĩa quality floor (spacing, type scale, easing curves, color roles). Mọi Piece inherit.
 - **Theme variant** — Bộ token override cho aesthetic mood: `theme-infra`, `theme-neon`, `theme-game`. Tokens = floor; theme = ceiling (palette, mesh, motion personality).
 - **Aesthetic Trinity** — Ba mood v1: Infra (I), Neon (N), Game (G). NFT là aesthetic thứ 4 — skeleton v1, chưa chốt.
 - **Invariant Professional Bar** — Tiêu chí bắt buộc mọi Piece: spacing rhythm (grid 4/8px), motion easing có curve riêng (cấm `transition: all`). Typography và responsive flexible hơn ở v1.
 - **Gallery** — Docs app (`apps/docs`) với routes `/ui`, `/sections`, `/templates`, live preview + copy.
-- **Catalog** — Tập Piece đã publish trên Gallery, curated 8–15 piece v1 (depth over volume).
+- **Catalog** — Tập Piece đã publish trên Gallery. Curated depth v1: **UI + sections ≥ 8** (templates đếm riêng = 4) → tổng **12–16 piece** (depth over volume).
 
 ---
 
@@ -98,7 +98,7 @@ Code hiện tại (`src/templates/ternus`, `src/components/*`) được migrate 
 **Consequences (testable):**
 
 - Ternus preview tại gallery `/templates/ternus` render tương đương demo hiện tại.
-- Shared components nằm trong `packages/ui`; Ternus-specific trong `packages/templates/ternus`.
+- Shared components nằm trong `packages/ui`; Ternus-specific trong `packages/templates-ternus`.
 
 #### FR-0: Package manager switch (Day 1 Step 0)
 
@@ -118,13 +118,13 @@ Repo hiện dùng npm (`package-lock.json`). Trước scaffold monorepo, chuyể
 | -------------------------------------------------------- | ------------------------------------------------------ |
 | `src/app/`                                               | `apps/docs/app/`                                       |
 | `src/components/pixel-blast`, `logo-loop`, `soft-aurora` | `packages/ui/src/<name>/`                              |
-| `src/templates/ternus/`                                  | `packages/templates/ternus/src/`                       |
+| `src/templates/ternus/`                                  | `packages/templates-ternus/src/`                       |
 | `src/lib/types.ts`                                       | `packages/ui/src/lib/types.ts` hoặc `packages/shared/` |
 | `package.json` (root)                                    | Root workspace + `apps/docs/package.json`              |
 
 **Import aliases:**
 
-- `apps/docs/tsconfig.json`: `"@/*": ["./app/*"]`, `"@landing/ui": ["../../packages/ui/src"]`, `"@landing/templates/ternus": ["../../packages/templates/ternus/src"]`.
+- `apps/docs/tsconfig.json`: `"@/*": ["./app/*"]`, `"@landing/ui": ["../../packages/ui/src"]`, `"@landing/templates/ternus": ["../../packages/templates-ternus/src"]` (alias key giữ `/`, path là dir hyphen).
 - Packages dùng `exports` field trong `package.json` riêng.
 
 **Route preservation:**
@@ -138,13 +138,15 @@ Repo hiện dùng npm (`package-lock.json`). Trước scaffold monorepo, chuyể
 
 ### 4.2 Design Tokens & Quality Floor
 
-**Description:** Package `design-tokens` export CSS vars + Tailwind preset. Ba theme skeletons (`theme-infra`, `theme-neon`, `theme-game`). Invariant bar enforced trên mọi Piece mới. Realizes UJ-1, UJ-2, UJ-3.
+**Description:** Package `design-tokens` export CSS vars + Tailwind 4 `@theme` block. Ba theme skeletons (`theme-infra`, `theme-neon`, `theme-game`). Invariant bar enforced trên mọi Piece mới. Realizes UJ-1, UJ-2, UJ-3.
 
 **Functional Requirements:**
 
 #### FR-3: Token package
 
-Dev consuming Piece có thể import token preset và áp theme variant cho project. Realizes UJ-1.
+Dev consuming Piece có thể import token package và áp theme variant cho project. Realizes UJ-1.
+
+**Decision change (brainstorm P3 → PRD):** Brainstorm khóa "CSS vars + Tailwind preset" (v3 API). PRD/architecture supersede bằng **CSS vars + `@theme` block** (Tailwind 4). Cùng intent (quality floor + theme variants), mechanism mới — không cần revert.
 
 **Consequences (testable):**
 
@@ -194,7 +196,7 @@ User copy Memecoin landing hoặc từng section (hero+ticker, stats, community 
 **Consequences (testable):**
 
 - Memecoin shell dark refined (Fuel/Monad layout) với meme/ticker content layer bên trong.
-- Price-ticker UI hỗ trợ ≥2 modes qua prop `mode: 'marquee' | 'slot' | 'flash'`:
+- Price-ticker UI hỗ trợ ≥2 modes qua prop `mode: 'marquee' | 'slot' | 'flash'` (props API: `_bmad-output/planning-artifacts/ux-price-ticker-micro-spec.md`):
   - **marquee:** giá scroll ngang liên tục.
   - **slot:** digit roll animation khi giá đổi.
   - **flash:** nền flash đỏ/xanh theo delta. MVP ship marquee + slot; flash week 2 polish.
@@ -220,7 +222,7 @@ User xem/copy NFT landing skeleton — gallery grid + mint countdown section. Re
 
 #### FR-10: UI catalog expansion
 
-Gallery liệt kê ≥8 UI/sections tổng cộng, gồm polish PixelBlast, LogoLoop, SoftAurora + 2–3 UI mới. Realizes UJ-1.
+Gallery liệt kê ≥8 UI/sections tổng cộng (templates đếm RIÊNG — 4 templates ở FR-6→9, KHÔNG tính vào số ≥8 này), gồm polish PixelBlast, LogoLoop, SoftAurora + 2–3 UI mới. Realizes UJ-1.
 
 **Consequences (testable):**
 
@@ -345,7 +347,7 @@ User filter catalog theo use case (memecoin, infra, gamefi, nft), animation tag,
 
 **Counter-metrics (do not optimize)**
 
-- **SM-C1:** Số lượng pieces — không chase 50+; 10–15 curated đủ. Counterbalances pressure to inflate catalog.
+- **SM-C1:** Số lượng pieces — không chase 50+; tổng 12–16 curated đủ (UI+sections ≥8 + 4 templates). Counterbalances pressure to inflate catalog.
 - **SM-C2:** Page bundle size — không strip animation quality để đạt arbitrary Lighthouse 100. Counterbalances SM-1 nếu misread as "more effects = better".
 
 ---
@@ -363,8 +365,8 @@ User filter catalog theo use case (memecoin, infra, gamefi, nft), animation tag,
 
 ## 9. Assumptions Index
 
-- **§1 Vision — public portfolio launch:** Sản phẩm hướng tới gallery công khai showcase craft, không chỉ internal repo. _Cần confirm stakes._
-- **§2 JTBD-3 — social/showcase:** Builder muốn credit công khai qua catalog.
+- **§1 Vision — public portfolio launch:** Sản phẩm hướng tới gallery công khai showcase craft, không chỉ internal repo. **[DECISION CONFIRMED 2026-06-08]** — deploy Vercel (NFR-8, Story 9.5); domain custom TBD (§8 Q1).
+- **§2 JTBD-3 — social/showcase:** Builder muốn credit công khai qua catalog. **[DECISION CONFIRMED]** — không mâu thuẫn "internal-first" (contribution workflow); public read-only gallery OK.
 - **§4.3 FR-7 — price-ticker 2 modes MVP:** Mode thứ 3 (flash red-green) có thể week 2 polish.
 - **§4.4 FR-12 — desktop-primary copy:** Mobile copy nice-to-have.
 - **§4.4 FR-13 — shareable filter URLs:** Query params cho filter state.
@@ -419,6 +421,7 @@ Filter UI: sidebar hoặc top bar trên index pages; persistent across layer.
 - **Accessibility:** `prefers-reduced-motion` respected trên animated Pieces (đã có pattern trong Ternus `use-reduced-motion`).
 - **Compatibility:** Next.js 16+, React 19+, Tailwind 4 — align với repo hiện tại.
 - **Multi-library animation:** Mỗi Piece chọn lib phù hợp (FM, GSAP, Three.js, CSS); stack tag bắt buộc disclose dependency.
+- **Distribution (NFR-8):** Gallery deploy Vercel static hosting; CI `turbo run build lint`. Triển khai: `epics.md` Story 9.5 — closes SM-1 "gallery live".
 
 ---
 

@@ -5,10 +5,10 @@ lastStep: 8
 status: complete
 completedAt: "2026-06-08"
 inputDocuments:
-    - _bmad-output/planning-artifacts/prds/prd-landing-page-list-2026-06-08/prd.md
-    - _bmad-output/brainstorming/brainstorming-session-2026-06-08-1726.md
-    - _bmad-output/planning-artifacts/prds/prd-landing-page-list-2026-06-08/.decision-log.md
-    - _bmad-output/planning-artifacts/parallel-dev-strategy.md
+  - _bmad-output/planning-artifacts/prds/prd-landing-page-list-2026-06-08/prd.md
+  - _bmad-output/brainstorming/brainstorming-session-2026-06-08-1726.md
+  - _bmad-output/planning-artifacts/prds/prd-landing-page-list-2026-06-08/.decision-log.md
+  - _bmad-output/planning-artifacts/parallel-dev-strategy.md
 project_name: landing-page-list
 user_name: Kyantran
 date: "2026-06-08"
@@ -128,6 +128,8 @@ pnpm install
 **Language & Runtime:** TypeScript 5.x strict; Node.js 20.9+ (Next 16 requirement); React 19.2.4
 
 **Styling Solution:** Tailwind CSS 4 CSS-first (`@import "tailwindcss"`); `packages/design-tokens` export `@theme` block + CSS vars; `@source` directive scan classes từ workspace packages
+
+**Decision change (FR-3):** Brainstorm P3 chọn "Tailwind preset" (v3 API). Architecture + PRD supersede bằng `@theme` block — đúng Tailwind 4, cùng intent token floor. Ref: `brainstorming-session-2026-06-08-1726.md` §Decision supersessions, `prd.md` FR-3.
 
 **Build Tooling:** Turbopack default (Next 16); Turborepo 2.x pipeline (`dev`, `build`, `lint`); `transpilePackages` cho `@landing/*` workspace packages
 
@@ -268,7 +270,7 @@ pnpm install
 ### Structure Patterns
 
 ```
-packages/templates/<slug>/src/
+packages/templates-<slug>/src/
   components/     # section components
   lib/            # hooks only
   config.ts       # templateMeta + catalog entry
@@ -294,15 +296,15 @@ Hooks chỉ trong `lib/`. Mỗi section = 1 file, < 400 dòng.
 
 ```ts
 export const pieceMeta = {
-    slug: "pixel-blast",
-    name: "Pixel Blast",
-    layer: "ui" as const,
-    mood: ["infra"],
-    useCase: ["infra"],
-    stackTags: ["three.js", "webgl"],
-    animationTags: ["mesh"],
-    deps: ["three", "ogl"],
-    copyMode: "single" as const,
+  slug: "pixel-blast",
+  name: "Pixel Blast",
+  layer: "ui" as const,
+  mood: ["infra"],
+  useCase: ["infra"],
+  stackTags: ["three.js", "webgl"],
+  animationTags: ["mesh"],
+  deps: ["three", "ogl"],
+  copyMode: "single" as const,
 } as const;
 ```
 
@@ -367,10 +369,10 @@ landing-page-list/
 | ------------------- | ---------------------------------------------------------- |
 | FR-0→FR-2a Monorepo | root + `apps/docs` + `packages/*`                          |
 | FR-3→FR-5 Tokens    | `packages/design-tokens`                                   |
-| FR-6 Ternus         | `packages/templates/ternus`                                |
-| FR-7 Memecoin       | `packages/templates/memecoin` + `packages/ui/price-ticker` |
-| FR-8 GameFi         | `packages/templates/gamefi`                                |
-| FR-9 NFT            | `packages/templates/nft`                                   |
+| FR-6 Ternus         | `packages/templates-ternus`                                |
+| FR-7 Memecoin       | `packages/templates-memecoin` + `packages/ui/price-ticker` |
+| FR-8 GameFi         | `packages/templates-gamefi`                                |
+| FR-9 NFT            | `packages/templates-nft`                                   |
 | FR-10 UI            | `packages/ui/*`                                            |
 | FR-11→FR-13 Gallery | `apps/docs` routes + `lib/catalog`                         |
 

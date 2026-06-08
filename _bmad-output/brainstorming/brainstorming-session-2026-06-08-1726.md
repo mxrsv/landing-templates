@@ -75,6 +75,12 @@ landing-page-list/                    # pnpm + Turborepo
 | P3 design-tokens format | **Both** — CSS vars + Tailwind preset map vars ✓                         |
 | P4 CLI registry         | **Deferred** — ship sau khi catalog + gallery ổn ✓                       |
 
+### Decision supersessions (post-brainstorm)
+
+| Original (brainstorm)                       | Superseded by                                                     | Rationale                                                                                                                                                                                                                          |
+| ------------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| P3: CSS vars + **Tailwind preset** (v3 API) | PRD FR-3 + architecture: CSS vars + Tailwind 4 **`@theme` block** | Tailwind 4 bỏ preset API v3; `@theme` + CSS vars là equivalent đúng stack. **Không đổi ý định** (token floor + theme ceiling), chỉ đổi mechanism. Ref: `prd.md` §4.2 FR-3, `architecture.md` Styling Solution, `.decision-log.md`. |
+
 ## Phase 3 — First Principles Thinking (In Progress)
 
 ### First Principles Rebuild

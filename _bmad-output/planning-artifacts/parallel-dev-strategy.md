@@ -290,7 +290,7 @@ Quy tắc dispatch:
 - [ ] **Gate-0 commit** WIP v20 trên `src/` (PixelBlast, hero-crystal, ternus-hero, ternus.css, ternus-netstrip) — `git status` sạch trước khi tạo story.
 - [x] **Chốt npm Workspaces package name convention**: `@landing/templates-<slug>` — ghi vào architecture.
 - [x] **Chốt `theme-nft` placeholder name** (Patch 5).
-- [ ] **Viết UX micro-spec price-ticker** (resolve review M4): props API `{ mode, tokens, interval }`, mô tả 3 mode — đính kèm Epic C story.
+- [x] **Viết UX micro-spec price-ticker** — [`ux-price-ticker-micro-spec.md`](ux-price-ticker-micro-spec.md); đính kèm Story 5.1.
 - [x] **Epic G sau Epic C** — user confirmed 2026-06-08.
 - [x] **Catalog schema** (`pieceMeta` + `copyMode`) — ghi trong architecture.
 - [ ] **Dọn artifact rác**: `.playwright-mcp/*.log`, `*.png` preview ở root — quyết định gitignore hay xoá để không lẫn vào migration diff.
