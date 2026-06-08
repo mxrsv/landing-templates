@@ -1,0 +1,97 @@
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Mark epic as 'in-progress' when starting work on its first story
+# - Developer typically creates next story ONLY after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
+
+generated: 2026-06-08
+last_updated: 2026-06-08
+project: landing-page-list
+project_key: NOKEY
+tracking_system: file-system
+story_location: "_bmad-output/implementation-artifacts"
+
+development_status:
+  epic-1: in-progress
+  1-1-gate-0-wip-snapshot: ready-for-dev
+  1-2-pnpm-switch-turbo-scaffold: ready-for-dev
+  1-3-rename-repo-to-landing: ready-for-dev
+  1-3b-scaffold-empty-packages: ready-for-dev
+  1-4-migrate-legacy-source: ready-for-dev
+  1-5-wire-routes-redirect-smoke-test: ready-for-dev
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-base-token-package: backlog
+  2-2-four-theme-skeleton-files: backlog
+  2-3-invariant-checklist-doc: backlog
+  2-4-shared-errorboundary-reduced-motion: backlog
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-complete-ternus-v20-port: backlog
+  3-2-apply-theme-infra-invariant: backlog
+  3-3-export-ternus-piecemeta: backlog
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-gallery-layout-home: backlog
+  4-2-catalog-schema-types: backlog
+  4-3-dynamic-slug-routes: backlog
+  4-4-copybutton-single-multi: backlog
+  4-5-catalog-aggregator-registration: backlog
+  4-6-catalog-manifest-budget: backlog
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-price-ticker-ui: backlog
+  5-2-memecoin-hero-ticker: backlog
+  5-3-token-stats-strip: backlog
+  5-4-community-marquee: backlog
+  5-5-memecoin-template-composition: backlog
+  epic-5-retrospective: optional
+
+  epic-6: backlog
+  6-1-gamefi-hud-hero: backlog
+  6-2-character-showcase-skeleton: backlog
+  6-3-gamefi-template-composition: backlog
+  epic-6-retrospective: optional
+
+  epic-7: backlog
+  7-1-nft-gallery-grid: backlog
+  7-2-mint-countdown-skeleton: backlog
+  7-3-nft-template-composition: backlog
+  epic-7-retrospective: optional
+
+  epic-8: backlog
+  8-1-polish-pixelblast: backlog
+  8-2-polish-logoloop-softaurora: backlog
+  8-3-add-new-ui-pieces: backlog
+  8-4-register-ui-catalog: backlog
+  epic-8-retrospective: optional
+
+  epic-9: backlog
+  9-1-filterbar-multi-axis: backlog
+  9-2-url-searchparams-persistence: backlog
+  9-3-catalog-invariant-qa-audit: backlog
+  9-4-e2e-route-smoke-test: backlog
+  9-5-ci-pipeline-vercel-deploy: backlog
+  epic-9-retrospective: optional
