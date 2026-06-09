@@ -7,7 +7,9 @@
     ".": "./src/template.tsx"
   },
   "scripts": {
-    "build": "echo \"@landing/templates-ternus: no build (source package)\" && exit 0"
+    "build": "echo \"@landing/templates-ternus: no build (source package)\" && exit 0",
+    "lint": "eslint src --max-warnings 0",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@landing/ui": "workspace:*"
@@ -17,6 +19,11 @@
     "react": "^19"
   },
   "devDependencies": {
-    "@landing/typescript-config": "workspace:*"
+    "@landing/eslint-config": "workspace:*",
+    "@landing/typescript-config": "workspace:*",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "eslint": "^9.39.1",
+    "typescript": "5.9.2"
   }
 }

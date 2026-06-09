@@ -13,7 +13,6 @@
   "dependencies": {
     "@landing/templates-ternus": "workspace:*",
     "@landing/ui": "workspace:*",
-    "geist": "^1.7.1",
     "next": "16.2.7",
     "react": "19.2.4",
     "react-dom": "19.2.4"

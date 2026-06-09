@@ -94,7 +94,9 @@ export function HeroCrystal() {
       const screen: Record<string, { x: number; y: number; z: number }> = {};
       const rotated: Record<string, [number, number, number]> = {};
       for (const k in VERTS) {
-        const r = rotate(VERTS[k], ax, ay);
+        const vk = VERTS[k];
+        if (!vk) continue;
+        const r = rotate(vk, ax, ay);
         rotated[k] = r;
         const persp = 1 + r[2] * 0.18;
         screen[k] = {
@@ -104,20 +106,33 @@ export function HeroCrystal() {
         };
       }
 
-      const lightVec = [-0.38, -0.46, 0.8];
+      const lightVec: [number, number, number] = [-0.38, -0.46, 0.8];
       const lightLen = Math.hypot(lightVec[0], lightVec[1], lightVec[2]);
 
       const ordered = FACES.map((f) => ({
         f,
-        z: (screen[f[0]].z + screen[f[1]].z + screen[f[2]].z) / 3,
+        z:
+          ((screen[f[0]]?.z ?? 0) +
+            (screen[f[1]]?.z ?? 0) +
+            (screen[f[2]]?.z ?? 0)) /
+          3,
       })).sort((a, b) => a.z - b.z);
 
       for (const { f } of ordered) {
         const A = rotated[f[0]];
         const B = rotated[f[1]];
         const C = rotated[f[2]];
-        const u = [B[0] - A[0], B[1] - A[1], B[2] - A[2]];
-        const v = [C[0] - A[0], C[1] - A[1], C[2] - A[2]];
+        if (!A || !B || !C) continue;
+        const u: [number, number, number] = [
+          B[0] - A[0],
+          B[1] - A[1],
+          B[2] - A[2],
+        ];
+        const v: [number, number, number] = [
+          C[0] - A[0],
+          C[1] - A[1],
+          C[2] - A[2],
+        ];
         let nx = u[1] * v[2] - u[2] * v[1];
         let ny = u[2] * v[0] - u[0] * v[2];
         let nz = u[0] * v[1] - u[1] * v[0];
@@ -141,6 +156,7 @@ export function HeroCrystal() {
         const a = screen[f[0]];
         const bb = screen[f[1]];
         const cc = screen[f[2]];
+        if (!a || !bb || !cc) continue;
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(bb.x, bb.y);
@@ -157,6 +173,7 @@ export function HeroCrystal() {
       for (const e of EDGES) {
         const a = screen[e[0]];
         const b = screen[e[1]];
+        if (!a || !b) continue;
         const front = Math.max(0, ((a.z + b.z) / 2 + 0.6) / 1.2);
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);

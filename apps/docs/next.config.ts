@@ -1,13 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   // Explicit list — Next 16 KHÔNG hỗ trợ glob trong transpilePackages.
   // Mỗi package workspace mới phải được append vào list này (registration task).
-  // design-tokens / templates-ternus được khai báo trước (contract Epic 1);
-  // package thật xuất hiện ở Story 1.3b/1.4.
+  // Lưu ý: "@landing/design-tokens" được pre-register theo contract Epic 1 nhưng
+  // package CHƯA tồn tại — sẽ được tạo ở Epic 2 story 2-1-base-token-package.
+  // Build chỉ vỡ nếu có code import nó trước khi package được tạo.
   transpilePackages: [
     "@landing/ui",
     "@landing/design-tokens",
