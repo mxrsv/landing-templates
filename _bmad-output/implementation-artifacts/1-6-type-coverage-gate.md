@@ -1,10 +1,10 @@
 ---
-baseline_commit:
+baseline_commit: 778477fc513d4281c1a7d473ad120c3dbcbc8a45
 ---
 
 # Story 1.6: Type-Coverage Gate (Wave 0 tech-debt close)
 
-Status: ready-for-dev
+Status: review
 
 > **Nguồn gốc:** sinh từ "Senior Developer Review (AI)" cấp Epic 1 (story 1-5, ngày 2026-06-09). Đây là nợ kỹ thuật của Wave 0 migration — đóng lại quality gate mà migration lẽ ra phải có. **Phải hoàn tất TRƯỚC khi mở các wave song song dựng tiếp trên `@landing/ui` / `@landing/templates-ternus`** (kẻo lỗi type ẩn nhân lên qua các epic sau). Xếp lịch chạy đầu tiên trong khung Epic 2.
 
@@ -57,39 +57,39 @@ Sau migration Wave 0, **không tầng nào type-check/lint được source packa
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1 — Config fix: TS2835 + đưa templates-ternus vào coverage (AC: #2, #3)**
-  - [ ] Override `module: "ESNext"` + `moduleResolution: "Bundler"` trong `packages/typescript-config/react-library.json`; chạy `pnpm --filter @landing/ui check-types` xác nhận 6× `TS2835` biến mất.
-  - [ ] Tạo `packages/templates-ternus/tsconfig.json` (extends `@landing/typescript-config/react-library.json`, `include: ["src"]`).
-  - [ ] Tạo `packages/templates-ternus/eslint.config.mjs` (copy mẫu `packages/ui/eslint.config.mjs`).
-  - [ ] Thêm scripts `check-types` + `lint` vào `packages/templates-ternus/package.json`; khai báo devDependency eslint-config nếu cần (đối chiếu `packages/ui/package.json`).
+- [x] **Task 1 — Config fix: TS2835 + đưa templates-ternus vào coverage (AC: #2, #3)**
+  - [x] Override `module: "ESNext"` + `moduleResolution: "Bundler"` trong `packages/typescript-config/react-library.json`; chạy `pnpm --filter @landing/ui check-types` xác nhận 6× `TS2835` biến mất.
+  - [x] Tạo `packages/templates-ternus/tsconfig.json` (extends `@landing/typescript-config/react-library.json`, `include: ["src"]`). _(đã tồn tại từ Story 1.4 — verify đúng, giữ nguyên)_
+  - [x] Tạo `packages/templates-ternus/eslint.config.mjs` (copy mẫu `packages/ui/eslint.config.mjs`).
+  - [x] Thêm scripts `check-types` + `lint` vào `packages/templates-ternus/package.json`; khai báo devDependency eslint-config nếu cần (đối chiếu `packages/ui/package.json`).
 
-- [ ] **Task 2 — Fix strict-null PixelBlast.tsx (AC: #4)**
-  - [ ] Đọc 11 lỗi (`TS18048`×8 `'point' is possibly undefined`, `TS2532`×2, `TS2345`×1); thêm guard/narrow ở các điểm truy cập touch-point array. Ưu tiên sửa logic an toàn, không đổi behavior.
-  - [ ] `pnpm --filter @landing/ui check-types` cho PixelBlast = 0 lỗi.
+- [x] **Task 2 — Fix strict-null PixelBlast.tsx (AC: #4)**
+  - [x] Đọc 11 lỗi (`TS18048`×8 `'point' is possibly undefined`, `TS2532`×2, `TS2345`×1); thêm guard/narrow ở các điểm truy cập touch-point array. Ưu tiên sửa logic an toàn, không đổi behavior.
+  - [x] `pnpm --filter @landing/ui check-types` cho PixelBlast = 0 lỗi.
 
-- [ ] **Task 3 — Fix strict-null hero-crystal.tsx (AC: #4)**
-  - [ ] Đọc 44 lỗi (`TS18048`×24 / `TS2532`×18 / `TS2345`×2) trong `packages/templates-ternus/src/components/hero-crystal.tsx`; fix tương tự Task 2.
-  - [ ] `pnpm --filter @landing/templates-ternus check-types` = 0.
+- [x] **Task 3 — Fix strict-null hero-crystal.tsx (AC: #4)**
+  - [x] Đọc 44 lỗi (`TS18048`×24 / `TS2532`×18 / `TS2345`×2) trong `packages/templates-ternus/src/components/hero-crystal.tsx`; fix tương tự Task 2.
+  - [x] `pnpm --filter @landing/templates-ternus check-types` = 0.
 
-- [ ] **Task 4 — ogl type augmentation (AC: #5)**
-  - [ ] Verify runtime: `node -e "const o=require('ogl'); console.log(['Mesh','Program','Renderer','Triangle'].map(k=>typeof o[k]))"` (kỳ vọng 4× `function`).
-  - [ ] Tạo `packages/ui/src/types/ogl.d.ts` `declare module "ogl"` bổ sung `Mesh/Program/Renderer/Triangle` (+ member khác SoftAurora dùng nếu cần); đảm bảo nằm trong `include` của tsconfig ui.
-  - [ ] `pnpm --filter @landing/ui check-types` cho SoftAurora = 0; tổng ui = 0.
+- [x] **Task 4 — ogl type augmentation (AC: #5)** _(GIẢI QUYẾT KHÁC THIẾT KẾ — xem Completion Notes)_
+  - [x] Verify runtime: `node -e "const o=require('ogl'); console.log(['Mesh','Program','Renderer','Triangle'].map(k=>typeof o[k]))"` (kỳ vọng 4× `function`).
+  - [x] ~~Tạo `packages/ui/src/types/ogl.d.ts` shim~~ → **KHÔNG cần**: chuyển `react-library` sang `moduleResolution: Bundler` (Task 1) làm cả 4 `TS2305` ogl tự biến mất (Bundler chọn export condition khác của ogl `.d.ts`). Không tạo shim — đơn giản hơn, ít file hơn.
+  - [x] `pnpm --filter @landing/ui check-types` cho SoftAurora = 0; tổng ui = 0.
 
-- [ ] **Task 5 — Gỡ ignoreBuildErrors + wire gate (AC: #1, #6, #7)**
-  - [ ] Sau Task 1–4: `pnpm check-types` (root) exit 0 toàn workspace.
-  - [ ] Xoá block `typescript: { ignoreBuildErrors: true }` trong `apps/docs/next.config.ts`; chạy `pnpm build` xác nhận 7/7 xanh không cần flag.
-  - [ ] Wire `check-types` vào gate: cập nhật `turbo.json` `build.dependsOn` thêm `"check-types"` (hoặc tài liệu hoá CI gate) — chốt hướng + ghi Dev Notes.
+- [x] **Task 5 — Gỡ ignoreBuildErrors + wire gate (AC: #1, #6, #7)**
+  - [x] Sau Task 1–4: `pnpm check-types` (root) exit 0 toàn workspace.
+  - [x] Xoá block `typescript: { ignoreBuildErrors: true }` trong `apps/docs/next.config.ts`; chạy `pnpm build` xác nhận xanh không cần flag.
+  - [x] Wire `check-types` vào gate: cập nhật `turbo.json` `build.dependsOn` thêm `"check-types"` (cùng `^build`) — chốt hướng turbo-gate (không chỉ tài liệu CI).
 
-- [ ] **Task 6 — Dọn vụn (AC: #8)**
-  - [ ] Chốt số phận `build:components: tsc` trong `packages/ui/package.json` (xoá hoặc wire) + ghi lý do.
-  - [ ] Prune `geist` khỏi `apps/docs/package.json` deps; `grep -rn "geist" apps/docs` xác nhận 0 import runtime.
-  - [ ] Thêm comment liên kết Epic 2 `2-1` cho entry `@landing/design-tokens` trong `transpilePackages`.
+- [x] **Task 6 — Dọn vụn (AC: #8)**
+  - [x] Chốt số phận `build:components: tsc` trong `packages/ui/package.json`: **XOÁ** (chốt source-model — package không build `.d.ts`, được Turbopack transpile).
+  - [x] Prune `geist` khỏi `apps/docs/package.json` deps; `grep -rn "geist" apps/docs` xác nhận 0 import runtime (layout dùng `next/font/google`).
+  - [x] Thêm comment liên kết Epic 2 `2-1` cho entry `@landing/design-tokens` trong `transpilePackages`.
 
-- [ ] **Task 7 — Verify không regression (AC: #9)**
-  - [ ] `pnpm build` 7/7 + `pnpm check-types` + `pnpm lint` đều exit 0.
-  - [ ] `next dev` + browser load `/templates/ternus`: render đầy đủ, canvas WebGL mount, 0 console error (lặp AC #2 Story 1.5).
-  - [ ] Đánh dấu các mục `[ ] [AI-Review]` tương ứng trong story 1-5 "Review Follow-ups (AI)" thành `[x]` khi xong.
+- [x] **Task 7 — Verify không regression (AC: #9)**
+  - [x] `pnpm build` xanh + `pnpm check-types` + `pnpm lint` đều exit 0.
+  - [x] `next dev` + browser load `/templates/ternus`: render đầy đủ, canvas WebGL mount, 0 console error (lặp AC #2 Story 1.5).
+  - [x] Đánh dấu các mục `[ ] [AI-Review]` tương ứng trong story 1-5 "Review Follow-ups (AI)" thành `[x]` khi xong.
 
 ## Dev Notes
 
@@ -134,14 +134,46 @@ Task 1 (config) trước để loại 6 lỗi TS2835 + mở coverage cho templat
 
 ### Agent Model Used
 
+claude-opus-4-8 (1M context)
+
 ### Debug Log References
+
+- `tsc` KHÔNG ở root `node_modules/.bin/` do pnpm hoisting — phải gọi qua `packages/<pkg>/node_modules/.bin/tsc` hoặc `apps/docs/node_modules/.bin/tsc`. Lần đầu chạy nhầm `../../node_modules/.bin/tsc` (không tồn tại) → exit im lặng → grep đếm "0 lỗi" giả. Sửa bằng path đúng theo package.
+- Browser verify dùng Playwright MCP (Chrome extension không kết nối được trong phiên). `next dev` chạy port 3100 (port 3000 bị app khác chiếm — EADDRINUSE). Bật binary trực tiếp `./node_modules/.bin/next dev --port 3100` (KHÔNG `pnpm exec`).
 
 ### Completion Notes List
 
+- **Baseline đo lại (commit `6cbff95`)**: `@landing/ui` 21 lỗi, `apps/docs` 55 lỗi (trong đó 44 ở `hero-crystal.tsx` qua transpile + 11 `PixelBlast.tsx`). Sau story: cả 3 package (`@landing/ui`, `@landing/templates-ternus`, `apps/docs`) đều **0 lỗi** `tsc --noEmit`.
+- **Deviation lớn — Task 4 (ogl shim) trở nên không cần thiết**: chuyển `react-library.json` sang `moduleResolution: "Bundler"` (Task 1, để diệt 6× `TS2835`) đồng thời làm **cả 4× `TS2305` ogl tự biến mất** — Bundler chọn export condition khác trong `ogl/.d.ts` vốn CÓ khai báo `Mesh/Program/Renderer/Triangle`. Vì vậy KHÔNG tạo file `packages/ui/src/types/ogl.d.ts`. Một thay đổi config (react-library) đóng cả AC #3 lẫn AC #5 → ít bề mặt hơn shim thủ công. `SoftAurora` vẫn chưa render ở route nào (0 reference) nên thay đổi này chỉ là type-level, không ảnh hưởng runtime.
+- **AC #6/#9 ghi "7/7" theo dự toán lúc viết story**; sau khi wire `check-types` vào `build.dependsOn` (Task 5), graph build thực tế là **10 task** (7 build + 3 check-types được kéo vào). Số task tăng là HỆ QUẢ MONG MUỐN của gate, không phải regression — `pnpm build` exit 0.
+- **Strict-null fix giữ nguyên behavior**: tất cả fix `TS18048`/`TS2532`/`TS2345` ở `PixelBlast.tsx` (11) + `hero-crystal.tsx` (44) dùng guard/early-return (`if (!x) continue;`), `?? 0`, optional chaining `?.`, và tuple-typing (`const u: [number,number,number] = [...]`). KHÔNG dùng `@ts-expect-error`/`@ts-ignore`. Browser verify xác nhận WebGL render y hệt baseline.
+- **Task 6 cleanup**: xoá script mồ côi `build:components: tsc` (`@landing/ui`); prune dep `geist` thừa (`apps/docs` — layout đã dùng `next/font/google`); thêm comment liên kết Epic 2 `2-1-base-token-package` cho entry `@landing/design-tokens` trong `transpilePackages` (GIỮ entry, package tạo ở Epic 2).
+- **Story 1.5 follow-up**: 4 mục `[AI-Review]` nợ type-coverage trong "Review Follow-ups (AI)" của story 1-5 đã được tick `[x]` (story này giải quyết chúng).
+
 ### File List
+
+**Source / config (1 source commit):**
+
+- `packages/typescript-config/react-library.json` — override `module: ESNext` + `moduleResolution: Bundler` (diệt TS2835 + TS2305 ogl)
+- `packages/ui/src/pixel-blast/PixelBlast.tsx` — 11 strict-null fix
+- `packages/ui/package.json` — xoá script mồ côi `build:components`
+- `packages/templates-ternus/src/components/hero-crystal.tsx` — 44 strict-null fix
+- `packages/templates-ternus/package.json` — thêm scripts `check-types` + `lint` + devDependencies (eslint-config, @types/react(-dom), eslint, typescript)
+- `packages/templates-ternus/eslint.config.mjs` — **MỚI** (theo mẫu ui)
+- `apps/docs/next.config.ts` — gỡ `typescript.ignoreBuildErrors`; cập nhật comment design-tokens (link Epic 2 `2-1`)
+- `apps/docs/package.json` — prune dep `geist`
+- `turbo.json` — `build.dependsOn` thêm `"check-types"` (wire gate)
+- `pnpm-lock.yaml` — cập nhật do thay đổi deps
+
+**BMAD bookkeeping (commit riêng):**
+
+- `_bmad-output/implementation-artifacts/1-6-type-coverage-gate.md` — story này (tasks + Dev Agent Record + Status)
+- `_bmad-output/implementation-artifacts/1-5-wire-routes-redirect-smoke-test.md` — tick 4 mục `[AI-Review]`
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` — `1-6` → review
 
 ## Change Log
 
-| Date       | Version | Description                                                    | Author |
-| ---------- | ------- | -------------------------------------------------------------- | ------ |
-| 2026-06-09 | 0.1     | Tạo story tech-debt type-coverage gate từ Senior Dev Review E1 | Amelia |
+| Date       | Version | Description                                                                                                | Author |
+| ---------- | ------- | ---------------------------------------------------------------------------------------------------------- | ------ |
+| 2026-06-09 | 0.1     | Tạo story tech-debt type-coverage gate từ Senior Dev Review E1                                             | Amelia |
+| 2026-06-09 | 1.0     | Triển khai 7 task: type errors 21+55 → 0/0/0, gỡ ignoreBuildErrors, wire check-types gate; Status → review | Amelia |

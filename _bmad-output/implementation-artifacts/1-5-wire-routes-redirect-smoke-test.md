@@ -104,10 +104,10 @@ Sinh từ "Senior Developer Review (AI)" — review cấp Epic 1 (3 agent chuyê
 - [x] [AI-Review][Med] Xoá dead code boilerplate `create-turbo` (0 import, verify knip+grep): `packages/ui/src/{card,gradient,turborepo-logo}.tsx` + export tương ứng + `apps/docs/public/{next,turborepo,vercel,circles}.svg`; gỡ export `./styles.css` (file giữ — tailwind input). → commit `6cbff95`.
 - [x] [AI-Review][Low] Xoá path alias sai `@landing/templates/ternus` (lệch tên package `templates-ternus`, không dùng) trong `apps/docs/tsconfig.json`. → commit `6cbff95`.
 - [x] [AI-Review][Low] `apps/docs/app/page.tsx`: prose trỏ route canonical `/templates/ternus` thay vì legacy `/ternus`. → commit `6cbff95`.
-- [ ] [AI-Review][High] **Nợ type-coverage**: thêm `check-types` vào turbo build/CI gate; thêm script `lint` + `check-types` + eslint/tsconfig cho `@landing/templates-ternus` (code Ternus thật hiện không được type-check/lint). Defer — story riêng.
-- [ ] [AI-Review][High] Triage `typescript.ignoreBuildErrors: true` ở `apps/docs/next.config.ts` + ~21–55 lỗi strict-null pre-existing trong `PixelBlast.tsx`/`hero-crystal.tsx` (do `ignoreBuildErrors` che). Quyết định gỡ flag hay giữ làm nợ có chủ đích. Defer — story riêng.
-- [ ] [AI-Review][Med] `@landing/design-tokens` nằm trong `transpilePackages` nhưng package CHƯA tồn tại (vỡ build ngay khi có ai import). Sẽ tự giải quyết khi Epic 2 story 2-1 tạo package — theo dõi, không cần fix riêng.
-- [ ] [AI-Review][Low] Prune dependency `geist` thừa trong `apps/docs/package.json` (layout đã chuyển sang `next/font/google`). Defer.
+- [x] [AI-Review][High] **Nợ type-coverage**: thêm `check-types` vào turbo build/CI gate; thêm script `lint` + `check-types` + eslint/tsconfig cho `@landing/templates-ternus` (code Ternus thật hiện không được type-check/lint). → **giải quyết ở story `1-6-type-coverage-gate` (Task 1 + Task 5)**.
+- [x] [AI-Review][High] Triage `typescript.ignoreBuildErrors: true` ở `apps/docs/next.config.ts` + ~21–55 lỗi strict-null pre-existing trong `PixelBlast.tsx`/`hero-crystal.tsx` (do `ignoreBuildErrors` che). Quyết định gỡ flag hay giữ làm nợ có chủ đích. → **giải quyết ở story `1-6` (Task 2/3/4/5): gỡ flag, fix toàn bộ strict-null, errors 21+55 → 0**.
+- [x] [AI-Review][Med] `@landing/design-tokens` nằm trong `transpilePackages` nhưng package CHƯA tồn tại (vỡ build ngay khi có ai import). Sẽ tự giải quyết khi Epic 2 story 2-1 tạo package — theo dõi, không cần fix riêng. → **story `1-6` Task 6 thêm comment liên kết Epic 2 `2-1`; entry GIỮ NGUYÊN theo contract**.
+- [x] [AI-Review][Low] Prune dependency `geist` thừa trong `apps/docs/package.json` (layout đã chuyển sang `next/font/google`). → **giải quyết ở story `1-6` (Task 6)**.
 
 ## Dev Notes
 
@@ -264,3 +264,5 @@ Migration monorepo (pnpm + Turborepo) **vững về cấu trúc**: workspace con
 ### Hành động
 
 3 mục dead-code/cosmetic (Med/Low) đã xử lý ngay → commit `6cbff95`. 4 mục nợ kỹ thuật (2 High + 2 Med/Low) defer sang story dọn nợ, đề xuất xếp đầu Epic 2 (story 2-1 vốn tạo `design-tokens`) — nên hoàn tất TRƯỚC khi mở các wave song song dựng tiếp trên `@landing/ui`/`templates-ternus`, kẻo nợ nhân lên.
+
+**Cập nhật 2026-06-09:** cả 4 mục nợ kỹ thuật đã được giải quyết trọn vẹn ở story **`1-6-type-coverage-gate`** (xếp đầu Epic 2 nhưng giữ số `1-6` vì thuộc phạm vi Wave 0): type errors `21 (@landing/ui) + 55 (apps/docs scope) → 0/0/0`, gỡ `ignoreBuildErrors`, wire `check-types` vào `turbo build.dependsOn`. Xem checklist "Review Follow-ups (AI)" — tất cả `[x]`.
