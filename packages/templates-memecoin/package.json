@@ -1,0 +1,12 @@
+{
+  "name": "@landing/templates-memecoin",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo \"@landing/templates-memecoin: no build (skeleton)\" && exit 0"
+  },
+  "devDependencies": {
+    "@landing/typescript-config": "workspace:*"
+  }
+}

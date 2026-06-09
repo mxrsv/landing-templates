@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
     "@landing/ui",
     "@landing/design-tokens",
     "@landing/templates-ternus",
+    "@landing/sections",
+    "@landing/templates-memecoin",
+    "@landing/templates-gamefi",
+    "@landing/templates-nft",
   ],
 };
 

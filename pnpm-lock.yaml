@@ -112,6 +112,12 @@ importers:
         specifier: ^8.39.0
         version: 8.46.2(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.2)
 
+  packages/sections:
+    devDependencies:
+      '@landing/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+
   packages/tailwind-config:
     devDependencies:
       postcss:
@@ -120,6 +126,24 @@ importers:
       tailwindcss:
         specifier: ^4.1.5
         version: 4.1.16
+
+  packages/templates-gamefi:
+    devDependencies:
+      '@landing/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+
+  packages/templates-memecoin:
+    devDependencies:
+      '@landing/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+
+  packages/templates-nft:
+    devDependencies:
+      '@landing/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
 
   packages/typescript-config: {}
 
