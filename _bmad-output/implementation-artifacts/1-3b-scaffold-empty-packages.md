@@ -1,6 +1,10 @@
+---
+baseline_commit: 317604b
+---
+
 # Story 1.3b: Scaffold Empty Template & Section Packages
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -48,33 +52,33 @@ So that **Epic 5–7 agent chỉ cần tạo file source trong lane RIÊNG của
 
 ## Tasks / Subtasks
 
-- [ ] Task 1 — Đọc Next 16 docs trước khi sửa root config (AC: #4) [AGENTS.md]
-  - [ ] Đọc `node_modules/next/dist/docs/` phần liên quan `transpilePackages` (Next 16 KHÔNG hỗ trợ glob — phải explicit list); xác nhận vị trí key trong `next.config.ts`
-  - [ ] Xác nhận `apps/docs/next.config.ts` hiện có explicit list từ Story 1.3 (3 entry) trước khi append
+- [x] Task 1 — Đọc Next 16 docs trước khi sửa root config (AC: #4) [AGENTS.md]
+  - [x] Đọc `node_modules/next/dist/docs/` phần liên quan `transpilePackages` (Next 16 KHÔNG hỗ trợ glob — phải explicit list); xác nhận vị trí key trong `next.config.ts`
+  - [x] Xác nhận `apps/docs/next.config.ts` hiện có explicit list từ Story 1.3 (3 entry) trước khi append
 
-- [ ] Task 2 — Scaffold `packages/sections` (@landing/sections) (AC: #1, #2, #3, #5)
-  - [ ] Tạo `packages/sections/package.json`: `"name": "@landing/sections"`, `"private": true`, `"version": "0.0.0"`, `"type": "module"`, build script no-op (xem Dev Notes), và `"exports": { "./*": "./src/*/index.tsx" }`
-  - [ ] KHÔNG tạo `src/index.ts` (no barrel). KHÔNG đặt placeholder file trong `src/` (vì `./*` wildcard sẽ biến nó thành subpath thật)
-  - [ ] Tạo `packages/sections/tsconfig.json` (extends root/shared tsconfig — xem Dev Notes)
-  - [ ] Verify: `pnpm --filter @landing/sections build` exit 0
+- [x] Task 2 — Scaffold `packages/sections` (@landing/sections) (AC: #1, #2, #3, #5)
+  - [x] Tạo `packages/sections/package.json`: `"name": "@landing/sections"`, `"private": true`, `"version": "0.0.0"`, `"type": "module"`, build script no-op (xem Dev Notes), và `"exports": { "./*": "./src/*/index.tsx" }`
+  - [x] KHÔNG tạo `src/index.ts` (no barrel). KHÔNG đặt placeholder file trong `src/` (vì `./*` wildcard sẽ biến nó thành subpath thật)
+  - [x] Tạo `packages/sections/tsconfig.json` (extends root/shared tsconfig — xem Dev Notes)
+  - [x] Verify: `pnpm --filter @landing/sections build` exit 0
 
-- [ ] Task 3 — Scaffold 3 template packages (AC: #1, #2, #6)
-  - [ ] `packages/templates-memecoin/package.json`: `"name": "@landing/templates-memecoin"`, `"private": true`, build script no-op
-  - [ ] `packages/templates-gamefi/package.json`: `"name": "@landing/templates-gamefi"`, `"private": true`, build script no-op
-  - [ ] `packages/templates-nft/package.json`: `"name": "@landing/templates-nft"`, `"private": true`, build script no-op
-  - [ ] Tạo `tsconfig.json` cho mỗi package (extends shared)
-  - [ ] KHÔNG khai báo dep `@landing/design-tokens` (chưa là workspace member tới Epic 2.1)
-  - [ ] Verify: `pnpm --filter @landing/templates-memecoin build`, `... gamefi build`, `... nft build` đều exit 0
+- [x] Task 3 — Scaffold 3 template packages (AC: #1, #2, #6)
+  - [x] `packages/templates-memecoin/package.json`: `"name": "@landing/templates-memecoin"`, `"private": true`, build script no-op
+  - [x] `packages/templates-gamefi/package.json`: `"name": "@landing/templates-gamefi"`, `"private": true`, build script no-op
+  - [x] `packages/templates-nft/package.json`: `"name": "@landing/templates-nft"`, `"private": true`, build script no-op
+  - [x] Tạo `tsconfig.json` cho mỗi package (extends shared)
+  - [x] KHÔNG khai báo dep `@landing/design-tokens` (chưa là workspace member tới Epic 2.1)
+  - [x] Verify: `pnpm --filter @landing/templates-memecoin build`, `... gamefi build`, `... nft build` đều exit 0
 
-- [ ] Task 4 — Đăng ký vào root config (AC: #4) [chỉ Epic A — §4.2]
-  - [ ] Append 4 package vào `transpilePackages` trong `apps/docs/next.config.ts` → đúng 7 entry như AC #4
-  - [ ] Xác nhận `pnpm-workspace.yaml` đã cover `packages/*` (nếu là pattern glob thì 4 dir mới tự được nhận; nếu list tường minh thì thêm) — chạy `pnpm install` để register
+- [x] Task 4 — Đăng ký vào root config (AC: #4) [chỉ Epic A — §4.2]
+  - [x] Append 4 package vào `transpilePackages` trong `apps/docs/next.config.ts` → đúng 7 entry như AC #4
+  - [x] Xác nhận `pnpm-workspace.yaml` đã cover `packages/*` (nếu là pattern glob thì 4 dir mới tự được nhận; nếu list tường minh thì thêm) — chạy `pnpm install` để register
 
-- [ ] Task 5 — Verify toàn cục (AC: #5, #6)
-  - [ ] `pnpm install` exit 0 (không peer/workspace resolution error)
-  - [ ] `pnpm -r ls` / `pnpm list -r --depth -1` thấy đủ 4 package mới
-  - [ ] Cả 4 lệnh `pnpm --filter <pkg> build` exit 0
-  - [ ] `pnpm dev` (hoặc `pnpm --filter docs build`) không lỗi do `transpilePackages` sai
+- [x] Task 5 — Verify toàn cục (AC: #5, #6)
+  - [x] `pnpm install` exit 0 (không peer/workspace resolution error)
+  - [x] `pnpm -r ls` / `pnpm list -r --depth -1` thấy đủ 4 package mới
+  - [x] Cả 4 lệnh `pnpm --filter <pkg> build` exit 0
+  - [x] `pnpm dev` (hoặc `pnpm --filter docs build`) không lỗi do `transpilePackages` sai
 
 ## Dev Notes
 
@@ -134,8 +138,38 @@ grep -n "transpilePackages" -A 10 apps/docs/next.config.ts
 
 ### Agent Model Used
 
+claude-opus-4-8[1m] (BMAD Dev Story workflow)
+
 ### Debug Log References
+
+- `node_modules/next/dist/docs/` KHÔNG tồn tại trong next@16.2.7 (đã xác nhận từ Story 1.2/1.3) → không đọc được docs trực tiếp. Thay vào đó dùng evidence thực nghiệm: explicit-list `transpilePackages` build xanh ở Story 1.3 + AC ràng buộc "KHÔNG glob" → giữ explicit list, append 4 entry → 7.
+- 4 package skeleton build no-op (`echo ... && exit 0`) → tránh trap TS18003 (empty package + `tsc --noEmit` trần → "No inputs were found").
+- `pnpm install` re-register: glob `packages/*` trong `pnpm-workspace.yaml` tự nhận 4 dir mới, KHÔNG cần sửa workspace file.
 
 ### Completion Notes List
 
+- Tạo 4 skeleton package, mỗi cái `package.json` + `tsconfig.json`: `@landing/sections`, `@landing/templates-memecoin`, `@landing/templates-gamefi`, `@landing/templates-nft`. Tất cả `"private": true`, `"version": "0.0.0"`, `"type": "module"`, build no-op exit 0.
+- `@landing/sections` dùng **wildcard subpath exports** `"exports": { "./*": "./src/*/index.tsx" }` — KHÔNG barrel `src/index.ts`, KHÔNG placeholder trong `src/` (tránh tạo subpath rác). Consumer import `@landing/sections/<name>`. Mỗi Epic 5/6/7 tạo `src/<name>/index.tsx` riêng → parallel-safe.
+- **OMIT** dep `@landing/design-tokens` ở cả 4 (chưa là workspace member tới Epic 2.1 — khai báo bây giờ sẽ làm `pnpm install` fail). Chỉ khai báo `@landing/typescript-config: workspace:*` (đã tồn tại, resolvable) cho tsconfig `extends`. Skeleton rỗng không import gì → Epic 5–7 tự thêm dep trong lane riêng.
+- `pnpm-workspace.yaml` đã là glob `packages/*` → 4 dir mới tự register, không sửa file chung này.
+- `transpilePackages` trong `apps/docs/next.config.ts`: append 4 → đúng **7 entry** (AC#4), vẫn explicit list (Next 16 không glob).
+- Verify: `pnpm install` exit 0; `pnpm list -r` thấy đủ 4 package; cả 4 `pnpm --filter <pkg> build` exit 0; `pnpm build` toàn cục **7/7 tasks successful**, `docs:build ✓ Compiled successfully`.
+
 ### File List
+
+- `packages/sections/package.json` (mới — wildcard exports, no barrel)
+- `packages/sections/tsconfig.json` (mới)
+- `packages/templates-memecoin/package.json` (mới)
+- `packages/templates-memecoin/tsconfig.json` (mới)
+- `packages/templates-gamefi/package.json` (mới)
+- `packages/templates-gamefi/tsconfig.json` (mới)
+- `packages/templates-nft/package.json` (mới)
+- `packages/templates-nft/tsconfig.json` (mới)
+- `apps/docs/next.config.ts` (sửa — append 4 → 7 entry transpilePackages)
+- `pnpm-lock.yaml` (regenerate sau install)
+
+### Change Log
+
+| Date       | Version | Description                                                                                                                                     |
+| ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-06-09 | 1.0     | Scaffold 4 empty package (sections + 3 templates), wildcard exports cho sections, transpilePackages 7 entry, build no-op xanh. Status → review. |
