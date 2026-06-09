@@ -1,6 +1,10 @@
+---
+baseline_commit: f0538c504a56c905ee93b1ff0ebee1da10457978
+---
+
 # Story 1.2: pnpm Switch & In-Repo Turbo Scaffold
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -34,58 +38,55 @@ As a **builder**, I want **chuyển package manager từ npm sang pnpm và scaff
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1 — Verify precondition Gate-0 + working tree sạch (AC: Given)**
-  - [ ] Chạy `git log --oneline -20`, xác nhận có commit chứa `v20 WIP` / `gate-0` (đã có `b578a31`). Nếu chưa có → DỪNG, quay lại Story 1.1.
-  - [ ] Chạy `git status` — xác nhận không còn các WIP file Gate-0 (`PixelBlast.tsx`, `hero-crystal.tsx`, `ternus-hero.tsx`, `ternus.css`, `ternus-netstrip.tsx`) ở trạng thái chưa stage. Artifact rác (`.playwright-mcp/`, `_bmad-output/` dirty) không block — nhưng nên ghi nhận lại để tránh nhầm.
+- [x] **Task 1 — Verify precondition Gate-0 + working tree sạch (AC: Given)**
+  - [x] `git log --oneline -20 | grep -iE "gate-0|v20 WIP"` → khớp `b578a31`, exit 0.
+  - [x] `git status` sạch (chỉ untracked artifact `.playwright-mcp/`, `.planning/` — không block).
 
-- [ ] **Task 2 — Tạo / checkout branch migration (AC: When #1)**
-  - [ ] `git branch --list chore/monorepo-migration` để kiểm tra tồn tại. Hiện tại branch CHƯA tồn tại (đang ở `main`) → dùng `git checkout -b chore/monorepo-migration`.
-  - [ ] Theo quy ước user (`<branching>`): branch được yêu cầu tường minh ở story này → pair với **git worktree** nếu workflow của builder dùng worktree (isolated checkout). Nếu không dùng worktree thì làm trực tiếp trên branch vừa tạo.
-  - [ ] Verify: `git rev-parse --abbrev-ref HEAD` → `chore/monorepo-migration`.
+- [x] **Task 2 — Tạo / checkout branch migration (AC: When #1)** — ✓ qua `EnterWorktree`
+  - [x] Branch migration tạo qua git worktree (harness `EnterWorktree`) tại `.claude/worktrees/chore+monorepo-migration`, off `origin/main` = `f0538c5`.
+  - [x] Pair branch ↔ worktree theo quy ước user `<branching>` (user xác nhận "Worktree riêng").
+  - [x] Branch thực tế: `worktree-chore+monorepo-migration` (harness đặt tên; cosmetic, khác `chore/monorepo-migration` trong spec — ghi nhận cho PR sau).
 
-- [ ] **Task 3 — Di chuyển legacy source vào `_legacy-src/` GIỮ git history (AC: When #2)**
-  - [ ] `mkdir -p _legacy-src`.
-  - [ ] `git mv src/* _legacy-src/` — di chuyển tất cả thư mục/file tracked trong `src/` (`app/`, `components/`, `lib/`, `templates/`).
-  - [ ] **Dotfiles guard:** `src/` hiện KHÔNG có dotfile tracked (đã verify: `git ls-files src/` chỉ ra `app/`, `components/`, `lib/`, `templates/`; không có `.planning/` tracked). Nếu lần chạy thực tế phát hiện dotfile tracked trong `src/` (`git ls-files 'src/.*'`), thêm `git mv src/.<name> _legacy-src/` cho từng cái. Nếu là file/dir UNTRACKED (vd scratch `.planning/` không track) → dùng `mv` thường (không phải `git mv`) hoặc xoá nếu là rác.
-  - [ ] Verify `src/` rỗng: `git ls-files src/` → 0 dòng; `ls -A src/ 2>/dev/null` → rỗng (có thể `rmdir src` nếu còn dir rỗng).
-  - [ ] Verify history giữ nguyên (sanity, không bắt buộc commit ở đây): `git status` cho thấy các path ở dạng `renamed: src/... -> _legacy-src/...`.
-  - [ ] **Lưu ý migration map (Story 1.4, KHÔNG xử lý ở đây):** `_legacy-src/app/(demos)/example/` và `_legacy-src/templates/example/` sẽ bị DELETE ở 1.4 (không nằm trong catalog v1). Story 1.2 chỉ move nguyên trạng, không xoá/đổi tên nội dung.
+- [x] **Task 3 — Di chuyển legacy source vào `_legacy-src/` GIỮ git history (AC: When #2)**
+  - [x] `mkdir -p _legacy-src`.
+  - [x] `git mv src/app src/components src/lib src/templates _legacy-src/` — 46 path tracked, đều `R` (renamed, giữ history).
+  - [x] **Dotfiles guard:** `git ls-files 'src/.*'` → rỗng (không có dotfile tracked). Không cần git mv thêm.
+  - [x] `src/` rỗng → `rmdir src` OK; `git ls-files src/` → 0 dòng.
+  - [x] `git status` xác nhận dạng `renamed: src/... -> _legacy-src/...`.
+  - [x] Migration map (`(demos)/example/`, `templates/example/`) giữ nguyên — xử lý ở Story 1.4.
 
-- [ ] **Task 4 — Backup/xoá root config sẽ bị scaffold ghi đè (AC: When #3)**
-  - [ ] Các file sẽ bị `create-turbo` ghi đè (đã verify tồn tại): `package.json`, `next.config.ts`, `tsconfig.json`, `eslint.config.mjs`, `postcss.config.mjs`, `next-env.d.ts`.
-  - [ ] Backup (an toàn, dễ so sánh sau): `mkdir -p _legacy-src/_root-config-backup && git mv package.json next.config.ts tsconfig.json eslint.config.mjs postcss.config.mjs next-env.d.ts _legacy-src/_root-config-backup/` — GIỮ history, và scaffold sẽ tạo bản mới ở root. (Nếu builder chọn xoá thẳng cũng được; backup an toàn hơn để reconcile config cũ ↔ mới.)
-  - [ ] Verify root đã trống config cũ: `ls package.json next.config.ts 2>&1` → "No such file".
+- [x] **Task 4 — Backup root config sẽ bị scaffold ghi đè (AC: When #3)**
+  - [x] ⚠️ Chỉ 5 config tồn tại trên disk: `package.json`, `next.config.ts`, `tsconfig.json`, `eslint.config.mjs`, `postcss.config.mjs`. `next-env.d.ts` KHÔNG tồn tại (Next gitignore nó → fresh checkout không có) → BỎ khỏi `git mv` (nếu giữ trong lệnh sẽ abort cả `git mv`).
+  - [x] `mkdir -p _legacy-src/_root-config-backup && git mv <5 file> _legacy-src/_root-config-backup/` — giữ history.
+  - [x] Verify root trống config cũ.
 
-- [ ] **Task 5 — Kích hoạt pnpm qua corepack (AC: When #4)**
-  - [ ] `corepack enable && corepack prepare pnpm@latest --activate`.
-  - [ ] Fallback nếu corepack không có: `npm i -g pnpm`.
-  - [ ] Verify: `pnpm --version` → in ra `9.x` (Pins yêu cầu pnpm 9.x; nếu `latest` là 10.x, set `packageManager` field về `pnpm@9.x` ở Task 7 và dùng `corepack prepare pnpm@9 --activate` để khớp).
+- [x] **Task 5 — Kích hoạt pnpm (AC: When #4)** — ✓ pnpm 9.x đã active sẵn
+  - [x] BỎ `corepack prepare pnpm@latest` (sẽ kéo pnpm 10.x, phá pin 9.x). pnpm `9.15.4` đã active → đủ.
+  - [x] `pnpm --version` → `9.15.4` (khớp pin 9.x).
 
-- [ ] **Task 6 — Xoá lockfile npm + scaffold create-turbo in-repo (AC: When #5, #6)**
-  - [ ] `rm -f package-lock.json`.
-  - [ ] `pnpm dlx create-turbo@latest . -m pnpm -e with-tailwind --skip-install` — scaffold vào `.` (root repo hiện tại). KHÔNG dùng greenfield-merge / path khác (lý do: giữ git history của `src/`).
-  - [ ] **Abort gate:** nếu lệnh fail giữa chừng → `git checkout -- .` để restore tracked files, xoá thủ công phần `apps/`/`packages/` scaffold dở dang (chúng là untracked), rồi DỪNG — KHÔNG proceed Story 1.3. Ghi lý do fail vào Debug Log.
-  - [ ] Verify scaffold tạo ra: `apps/` + `packages/` + `pnpm-workspace.yaml` + `turbo.json` + root `package.json` mới.
+- [x] **Task 6 — Xoá lockfile npm + scaffold create-turbo (AC: When #5, #6)**
+  - [x] `rm -f package-lock.json`.
+  - [x] ⚠️ `create-turbo .` (in-place) bị Claude Code classifier chặn (`pnpm dlx` external) → user tự chạy. Để tránh `create-turbo` từ chối dir không rỗng (worktree còn ~20 ảnh, `docs/`, `_bmad/`...), scaffold vào temp dir rỗng rồi `rsync` khung vào worktree (history `src/` đã an toàn trong `_legacy-src/`; file scaffold là file mới, không history dù tạo ở đâu → giữ đúng ý đồ story). Cmd: `pnpm dlx create-turbo@latest /tmp/landing-turbo -m pnpm -e with-tailwind --skip-install`.
+  - [x] Bỏ `apps/web` (template ship cả docs+web; target chỉ cần `apps/docs`). Bỏ copy `.git` temp + `README.md` (giữ README cũ); merge `.gitignore` (monorepo non-anchored + giữ `.playwright-mcp/`, `next-env.d.ts`...).
+  - [x] Verify scaffold: `apps/docs` + `packages/{ui,eslint-config,typescript-config,tailwind-config}` + `pnpm-workspace.yaml` + `turbo.json` + root `package.json`.
 
-- [ ] **Task 7 — Cài deps + pin versions ĐÚNG package.json (AC: When #7, Then pins)**
-  - [ ] `pnpm install`. **Abort gate:** nếu fail → đọc lỗi peer-deps, fix (thường do version mismatch khi pin), chạy lại tới khi exit 0. KHÔNG rename/migrate (Story 1.3+) khi `node_modules` incomplete.
-  - [ ] **Root `package.json`:** đảm bảo `devDependencies.turbo` = `^2.9` và field `packageManager` = `pnpm@9.x` (khớp version Task 5).
-  - [ ] **App `package.json`** (xác định tên app scaffold tạo — thường `apps/docs` theo architecture; scaffold `with-tailwind` có thể đặt tên khác như `apps/web`, kiểm tra trước): pin `dependencies.next` = `16.2.7`, `react` = `19.2.4`, `react-dom` = `19.2.4`; `dependencies`/`devDependencies.tailwindcss` = `^4`. Reconcile nếu scaffold ship next@15 / tailwind@3.
-  - [ ] Sau khi sửa pins → chạy lại `pnpm install` để cập nhật lockfile, exit 0.
-  - [ ] **KHÔNG** dồn `next`/`react`/`tailwindcss` vào root `package.json` — chúng thuộc app package; pnpm/turborepo resolve theo workspace, dồn vào root là lỗi chức năng dù "trông giống tuân thủ AC".
+- [x] **Task 7 — Cài deps + pin versions ĐÚNG package.json (AC: When #7, Then pins)**
+  - [x] `pnpm install` exit 0; lockfile `9.0`.
+  - [x] Root `package.json`: `turbo` = `^2.9.16`; `packageManager` = `pnpm@9.15.4` (đổi từ scaffold `pnpm@10.19.0`); `engines.node` = `>=20.9.0`; `name` = `landing-page-list`.
+  - [x] App `apps/docs/package.json`: pin `next` = `16.2.7` (từ 16.2.0), `react` = `19.2.4`, `react-dom` = `19.2.4` (exact); `tailwindcss` = `^4.1.5` (đã đạt `^4`).
+  - [x] `pnpm install` lại → lockfile khớp.
+  - [x] KHÔNG dồn next/react/tailwind vào root — đúng app package.
 
-- [ ] **Task 8 — Verify acceptance (AC: Then / And)**
-  - [ ] `cat pnpm-workspace.yaml` → có `packages:` gồm `'apps/*'` và `'packages/*'`. Nếu scaffold sinh khác (vd chỉ `apps/*`, `packages/*` dạng khác) → sửa cho khớp `['apps/*', 'packages/*']`.
-  - [ ] `cat turbo.json` → có pipeline/tasks `dev`, `build`, `lint` (Turbo 2.x dùng key `tasks`, không phải `pipeline` của 1.x — giữ theo bản scaffold sinh ra, chỉ đảm bảo đủ 3 task này).
-  - [ ] Verify pins:
-    - `node -e "const p=require('./package.json'); console.log('turbo', (p.devDependencies||{}).turbo, '| pm', p.packageManager)"`
-    - `node -e "const p=require('./apps/docs/package.json'); console.log('next', p.dependencies.next, 'react', p.dependencies.react, 'tw', (p.dependencies||p.devDependencies).tailwindcss)"` (đổi `apps/docs` theo tên app thực tế).
-  - [ ] `pnpm install` exit code 0 (chạy lại lần cuối xác nhận lockfile khớp): `pnpm install --frozen-lockfile` nên cũng pass.
+- [x] **Task 8 — Verify acceptance (AC: Then / And)**
+  - [x] `pnpm-workspace.yaml` → `['apps/*', 'packages/*']`.
+  - [x] `turbo.json` (Turbo 2.x `tasks`) → có `build`, `lint`, `dev` (+ `check-types`).
+  - [x] Pins verify: root `turbo ^2.9.16 | pm pnpm@9.15.4`; docs `next 16.2.7 | react 19.2.4 | rdom 19.2.4 | tw ^4.1.5`.
+  - [x] `pnpm install --frozen-lockfile` → "Already up to date" (lockfile khớp). `pnpm build` → 3/3 tasks xanh (next 16.2.7 compiled OK).
 
-- [ ] **Task 9 — Commit scaffold (1 commit riêng, rollback-safe)**
-  - [ ] Stage có chủ đích (KHÔNG `git add -A` mù): `git add _legacy-src apps packages package.json pnpm-workspace.yaml turbo.json pnpm-lock.yaml tsconfig.json eslint.config.mjs postcss.config.mjs .gitignore` (+ bất kỳ file scaffold mới — kiểm tra `git status` rồi add tường minh; tránh add lại artifact `.playwright-mcp/`).
-  - [ ] `git commit -m "chore(monorepo): pnpm switch + in-repo create-turbo scaffold (Story 1.2)"`.
-  - [ ] Verify `git status` sạch các thay đổi scaffold; branch sẵn sàng cho Story 1.3 (rename `@repo` → `@landing`).
+- [x] **Task 9 — Commit scaffold (1 commit riêng, rollback-safe)**
+  - [x] Prep (move src + backup config + drop lock) commit riêng `a8bfe08`. Scaffold stage tường minh: `git add .gitignore .npmrc apps packages package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json` (kiểm tra index sạch, không lẫn `.playwright-mcp/`/`.planning/`/ảnh/`node_modules`).
+  - [x] `git commit` scaffold → `d822aa1` (38 file).
+  - [x] `git status` sạch các thay đổi scaffold; branch sẵn sàng cho Story 1.3.
 
 ## Dev Notes
 
@@ -152,8 +153,50 @@ landing-page-list/
 
 ### Agent Model Used
 
+claude-opus-4-8 (1M context)
+
 ### Debug Log References
+
+```
+# Task 5 — pnpm version
+$ pnpm --version
+9.15.4
+
+# Task 6 — create-turbo (user chạy qua `!`, scaffold vào temp dir)
+$ pnpm dlx create-turbo@latest /tmp/landing-turbo -m pnpm -e with-tailwind --skip-install
+Success! Created your Turborepo at /tmp/landing-turbo
+
+# Task 8 — frozen lockfile + pins + build
+$ pnpm install --frozen-lockfile   → Already up to date
+root : turbo ^2.9.16 | pm pnpm@9.15.4
+docs : next 16.2.7 | react 19.2.4 | rdom 19.2.4 | tw ^4.1.5
+$ pnpm build   → Tasks: 3 successful, 3 total  (docs:build ✓ next 16.2.7 Turbopack)
+```
 
 ### Completion Notes List
 
+- **Sai khác so với spec (đã cân nhắc, không phá AC):**
+  1. Branch tạo qua harness `EnterWorktree` → tên `worktree-chore+monorepo-migration` (không phải `chore/monorepo-migration`). Cosmetic. Toàn bộ Epic 1 (tracking + migration) sống trong worktree, merge `main` cuối Epic.
+  2. `create-turbo` chạy vào **temp dir** (`/tmp/landing-turbo`) rồi `rsync` khung vào worktree — vì `pnpm dlx` bị classifier chặn (user tự chạy) + dir worktree không rỗng dễ làm `create-turbo .` từ chối. History `src/` đã an toàn trong `_legacy-src/`; file scaffold không có history dù tạo ở đâu → giữ đúng ý đồ "in-repo, giữ history".
+  3. Bỏ `next-env.d.ts` khỏi backup `git mv` (file không tồn tại trên fresh checkout — Next gitignore).
+  4. Bỏ `corepack prepare pnpm@latest` (sẽ kéo pnpm 10.x phá pin 9.x) — pnpm 9.15.4 active sẵn.
+  5. Bỏ `apps/web` (template `with-tailwind` ship cả `docs`+`web`; target chỉ cần `apps/docs`).
+- **Reconcile pins:** scaffold ship next@16.2.0 / react@^19.2.0 / react-dom@^19.1.0 / pnpm@10.19.0 → pin lại next@16.2.7, react@19.2.4, react-dom@19.2.4, packageManager pnpm@9.15.4. tailwind@^4.1.5 đã đạt `^4`.
+- **Build xanh** (3/3 tasks).
+- **⚠️ Known issue → Story 1.3:** `pnpm build` cảnh báo Next nhầm workspace root do có `package-lock.json` lạc trong `$HOME` (`/Users/kyantran/package-lock.json`, ngoài repo). Build vẫn xanh. Fix đúng: set `turbopack.root` trong `apps/docs/next.config` — để Story 1.3 (story đó vốn sửa `next.config` cho `transpilePackages`). Đọc `node_modules/next/dist/docs/` trước khi sửa (AGENTS.md).
+- **Commits:** `a8bfe08` (prep: move src→_legacy-src + backup config + drop lock), `d822aa1` (scaffold create-turbo). BMAD tracking: `0393f7b`.
+
 ### File List
+
+**Tạo mới (scaffold, commit `d822aa1`):**
+
+- `package.json`, `pnpm-workspace.yaml`, `turbo.json`, `.npmrc`, `pnpm-lock.yaml`
+- `apps/docs/**` (Next app gallery)
+- `packages/ui/**`, `packages/eslint-config/**`, `packages/typescript-config/**`, `packages/tailwind-config/**`
+- `.gitignore` (merge: monorepo non-anchored + giữ `.playwright-mcp/`, `next-env.d.ts`, `.vercel`, `*.tsbuildinfo`)
+
+**Di chuyển (commit `a8bfe08`, giữ history):**
+
+- `src/{app,components,lib,templates}/**` → `_legacy-src/{app,components,lib,templates}/**`
+- `{package.json,next.config.ts,tsconfig.json,eslint.config.mjs,postcss.config.mjs}` (cũ) → `_legacy-src/_root-config-backup/`
+- Xoá `package-lock.json` (chuyển sang pnpm)

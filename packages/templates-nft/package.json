@@ -1,0 +1,12 @@
+{
+  "name": "@landing/templates-nft",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo \"@landing/templates-nft: no build (skeleton)\" && exit 0"
+  },
+  "devDependencies": {
+    "@landing/typescript-config": "workspace:*"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@landing/sections",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": "./src/*/index.tsx"
+  },
+  "scripts": {
+    "build": "echo \"@landing/sections: no build (skeleton)\" && exit 0"
+  },
+  "devDependencies": {
+    "@landing/typescript-config": "workspace:*"
+  }
+}
