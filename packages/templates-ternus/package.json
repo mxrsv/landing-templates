@@ -1,0 +1,22 @@
+{
+  "name": "@landing/templates-ternus",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/template.tsx"
+  },
+  "scripts": {
+    "build": "echo \"@landing/templates-ternus: no build (source package)\" && exit 0"
+  },
+  "dependencies": {
+    "@landing/ui": "workspace:*"
+  },
+  "peerDependencies": {
+    "next": "^16.2.7",
+    "react": "^19"
+  },
+  "devDependencies": {
+    "@landing/typescript-config": "workspace:*"
+  }
+}

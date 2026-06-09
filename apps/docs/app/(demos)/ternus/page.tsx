@@ -1,4 +1,4 @@
-import { TernusTemplate } from "@/templates/ternus/template";
+import { TernusTemplate } from "@landing/templates-ternus";
 
 export default function TernusPage() {
   return <TernusTemplate />;

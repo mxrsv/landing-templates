@@ -1,4 +1,4 @@
-import type { LandingTemplate } from "@/lib/types";
+import type { LandingTemplate } from "@landing/ui/lib/types";
 
 export const ternusTemplateMeta: LandingTemplate = {
   slug: "ternus",
