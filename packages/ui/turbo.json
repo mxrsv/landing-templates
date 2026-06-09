@@ -4,9 +4,6 @@
     "build": {
       "outputs": ["dist/**"]
     },
-    "build:components": {
-      "outputs": ["dist/**"]
-    },
     "check-types": {},
     "dev": {
       "cache": false,

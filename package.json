@@ -2,10 +2,10 @@
   "name": "landing-page-list",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
+    "build": "node scripts/assert-type-coverage.mjs && turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "check-types": "turbo run check-types",
+    "check-types": "node scripts/assert-type-coverage.mjs && turbo run check-types",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
