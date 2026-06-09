@@ -23,7 +23,7 @@
 # - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
 
 generated: 2026-06-08
-last_updated: 2026-06-09
+last_updated: 2026-06-09 (story 1-6 type-coverage-gate added)
 project: landing-page-list
 project_key: NOKEY
 tracking_system: file-system
@@ -37,6 +37,7 @@ development_status:
   1-3b-scaffold-empty-packages: review
   1-4-migrate-legacy-source: review
   1-5-wire-routes-redirect-smoke-test: review
+  1-6-type-coverage-gate: ready-for-dev
   epic-1-retrospective: optional
 
   epic-2: backlog
