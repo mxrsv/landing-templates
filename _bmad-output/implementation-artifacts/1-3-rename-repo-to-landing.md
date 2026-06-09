@@ -1,6 +1,10 @@
+---
+baseline_commit: a8c56c8
+---
+
 # Story 1.3: Rename @repo → @landing
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -47,33 +51,33 @@ As a **builder**, I want **đổi toàn bộ package naming từ `@repo` sang `@
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1: Rename `name` trong mọi `packages/*/package.json`** (AC: #1, #2)
-  - [ ] Liệt kê package thực tế scaffold sinh ra: `ls packages/` (with-tailwind template thường ship `@repo/ui` + có thể `@repo/eslint-config`, `@repo/typescript-config`). Chỉ rename những gì TỒN TẠI — KHÔNG tạo package mới (việc đó là Story 1.3b).
-  - [ ] Với từng package, đổi field `"name": "@repo/<x>"` → `"@landing/<x>"`.
-  - [ ] Lưu ý npm name KHÔNG cho `/` lồng: dùng `@landing/templates-ternus` (hyphen) nếu có template package; KHÔNG phải `@landing/templates/ternus`.
+- [x] **Task 1: Rename `name` trong mọi `packages/*/package.json`** (AC: #1, #2)
+  - [x] Liệt kê package thực tế scaffold sinh ra: `ls packages/` (with-tailwind template thường ship `@repo/ui` + có thể `@repo/eslint-config`, `@repo/typescript-config`). Chỉ rename những gì TỒN TẠI — KHÔNG tạo package mới (việc đó là Story 1.3b).
+  - [x] Với từng package, đổi field `"name": "@repo/<x>"` → `"@landing/<x>"`.
+  - [x] Lưu ý npm name KHÔNG cho `/` lồng: dùng `@landing/templates-ternus` (hyphen) nếu có template package; KHÔNG phải `@landing/templates/ternus`.
 
-- [ ] **Task 2: Đổi workspace deps trong `apps/docs/package.json` (và mọi package.json khác)** (AC: #1, #2)
-  - [ ] Trong `apps/docs/package.json` (và bất kỳ `packages/*/package.json` nào có internal dep): đổi mọi `"@repo/<x>": "workspace:*"` → `"@landing/<x>": "workspace:*"`.
-  - [ ] Giữ nguyên protocol `workspace:*` — chỉ đổi phần namespace `@repo` → `@landing`.
+- [x] **Task 2: Đổi workspace deps trong `apps/docs/package.json` (và mọi package.json khác)** (AC: #1, #2)
+  - [x] Trong `apps/docs/package.json` (và bất kỳ `packages/*/package.json` nào có internal dep): đổi mọi `"@repo/<x>": "workspace:*"` → `"@landing/<x>": "workspace:*"`.
+  - [x] Giữ nguyên protocol `workspace:*` — chỉ đổi phần namespace `@repo` → `@landing`.
 
-- [ ] **Task 3: Cập nhật `apps/docs/tsconfig.json` paths** (AC: #3)
-  - [ ] Mở `apps/docs/tsconfig.json`, vào `compilerOptions.paths`.
-  - [ ] Đổi mọi alias `@repo/*` → `@landing/*`.
-  - [ ] Thêm/cập nhật alias import của Ternus (path relative từ `apps/docs/`):
+- [x] **Task 3: Cập nhật `apps/docs/tsconfig.json` paths** (AC: #3)
+  - [x] Mở `apps/docs/tsconfig.json`, vào `compilerOptions.paths`.
+  - [x] Đổi mọi alias `@repo/*` → `@landing/*`.
+  - [x] Thêm/cập nhật alias import của Ternus (path relative từ `apps/docs/`):
     ```json
     "@landing/templates/ternus": ["../../packages/templates-ternus/src"]
     ```
-  - [ ] Ghi rõ trong commit/PR: alias key `@landing/templates/ternus` (slash) ≠ npm name `@landing/templates-ternus` (hyphen).
+  - [x] Ghi rõ trong commit/PR: alias key `@landing/templates/ternus` (slash) ≠ npm name `@landing/templates-ternus` (hyphen).
 
-- [ ] **Task 4: Cập nhật `transpilePackages` trong `apps/docs/next.config.ts`** (AC: #4)
-  - [ ] Đặt explicit list: `["@landing/ui", "@landing/design-tokens", "@landing/templates-ternus"]`.
-  - [ ] KHÔNG dùng glob `["@landing/*"]` (Next 16 không hỗ trợ glob — append serial cho mỗi package mới).
-  - [ ] Nếu một số package trong list chưa tồn tại trên disk ở thời điểm này (sẽ tạo ở Story 1.3b/1.4), vẫn khai báo trước theo đúng list authoritative — registration là phần của contract Epic 1.
+- [x] **Task 4: Cập nhật `transpilePackages` trong `apps/docs/next.config.ts`** (AC: #4)
+  - [x] Đặt explicit list: `["@landing/ui", "@landing/design-tokens", "@landing/templates-ternus"]`.
+  - [x] KHÔNG dùng glob `["@landing/*"]` (Next 16 không hỗ trợ glob — append serial cho mỗi package mới).
+  - [x] Nếu một số package trong list chưa tồn tại trên disk ở thời điểm này (sẽ tạo ở Story 1.3b/1.4), vẫn khai báo trước theo đúng list authoritative — registration là phần của contract Epic 1.
 
-- [ ] **Task 5: Verify grep + build** (AC: #2, #5)
-  - [ ] Chạy: `grep -rn "@repo/" . --exclude-dir=node_modules --exclude-dir=_legacy-src` → kỳ vọng **0 dòng**. Nếu còn (CI config, `.github/`) → fix.
-  - [ ] Chạy `pnpm install` để re-link workspace symlinks theo tên mới.
-  - [ ] Chạy `pnpm build` (hoặc `pnpm --filter docs build`) → exit 0, không lỗi module not found do tên cũ.
+- [x] **Task 5: Verify grep + build** (AC: #2, #5)
+  - [x] Chạy: `grep -rn "@repo/" . --exclude-dir=node_modules --exclude-dir=_legacy-src` → kỳ vọng **0 dòng**. Nếu còn (CI config, `.github/`) → fix.
+  - [x] Chạy `pnpm install` để re-link workspace symlinks theo tên mới.
+  - [x] Chạy `pnpm build` (hoặc `pnpm --filter docs build`) → exit 0, không lỗi module not found do tên cũ.
 
 ## Dev Notes
 
@@ -125,8 +129,34 @@ pnpm build   # hoặc: pnpm --filter docs build
 
 ### Agent Model Used
 
+claude-opus-4-8[1m] (BMAD Dev Story workflow)
+
 ### Debug Log References
+
+- `pnpm build` lần 1 FAIL: `next.config.ts` chứa `import.meta.url` + `fileURLToPath` (để tính `turbopack.root`) compile ra file `next.config.compiled.js` dạng CJS (`exports`), nhưng `apps/docs/package.json` có `"type": "module"` → `.js` bị coi là ESM → `ReferenceError: exports is not defined in ES module scope`.
+- Fix: gỡ `turbopack.root` + toàn bộ node import khỏi `next.config.ts`, trả về form tối thiểu đúng AC#4 (chỉ `transpilePackages` + `typescript.ignoreBuildErrors`). `turbopack.root` KHÔNG nằm trong AC của story này (chỉ là note tự thêm để dẹp warning) → loại bỏ để tránh scope creep.
+- `pnpm build` lần 2 PASS: 3/3 tasks (`@landing/ui:build:styles`, `@landing/ui:build:components`, `docs:build`), `✓ Compiled successfully`.
 
 ### Completion Notes List
 
+- Rename `@repo/` → `@landing/` blanket qua 14 file source/config (đã làm ở phần prep Story 1.2/1.3): `grep -rn "@repo/"` trong workspace source/config = **0 dòng** (loại trừ `node_modules`, `_legacy-src`, `pnpm-lock.yaml` regenerate, prose docs `_bmad-output`).
+- Package thực tế scaffold sinh ra: `@landing/ui`, `@landing/eslint-config`, `@landing/tailwind-config`, `@landing/typescript-config` (with-tailwind template). KHÔNG tạo package mới — đúng scope (sections/templates-\* để Story 1.3b/1.4).
+- `tsconfig.json`: thêm `compilerOptions.paths` alias `"@landing/templates/ternus": ["../../packages/templates-ternus/src"]` — alias key dùng slash `/`, KHÁC npm name `@landing/templates-ternus` (hyphen). Khác biệt này là cố ý (xem bảng Dev Notes).
+- `transpilePackages`: explicit list `["@landing/ui", "@landing/design-tokens", "@landing/templates-ternus"]` — `@landing/design-tokens` + `@landing/templates-ternus` chưa tồn tại trên disk (contract Epic 1, package thật ở 1.3b/1.4); Next 16 tolerate list non-existent → build vẫn xanh.
+- ⚠️ Known cosmetic warning: Next in `⚠ Next.js inferred your workspace root` do phát hiện `$HOME/package-lock.json` (artifact ngoài repo) + `package-lock.json` ở MAIN checkout (vẫn npm app trên branch `main`). KHÔNG ảnh hưởng build (exit 0). Không fix bằng `turbopack.root` vì gây lỗi ESM ở trên + ngoài scope; sẽ tự hết sau khi merge/dọn lockfile cũ.
+- AC#5 `pnpm install` re-link workspace: xanh (exit 0), không `unmet peer` / `module not found` do tên cũ.
+
 ### File List
+
+- `apps/docs/tsconfig.json` (thêm `compilerOptions.paths` alias Ternus)
+- `apps/docs/next.config.ts` (transpilePackages explicit list; gỡ turbopack.root gây lỗi ESM)
+- `apps/docs/package.json`, `apps/docs/eslint.config.js`, `apps/docs/postcss.config.js`, `apps/docs/app/{layout.tsx,globals.css,page.tsx}` (rename @repo→@landing)
+- `packages/ui/{tsconfig.json,package.json,eslint.config.mjs,src/styles.css}` (rename @repo→@landing)
+- `packages/{tailwind-config,typescript-config,eslint-config}/package.json` (rename @repo→@landing)
+- `pnpm-lock.yaml` (regenerate sau install)
+
+### Change Log
+
+| Date       | Version | Description                                                                                                                    |
+| ---------- | ------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| 2026-06-09 | 1.0     | Rename @repo→@landing toàn workspace, tsconfig alias Ternus, transpilePackages explicit list, build xanh 3/3. Status → review. |
