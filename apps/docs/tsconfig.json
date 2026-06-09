@@ -6,10 +6,7 @@
         "name": "next"
       }
     ],
-    "strictNullChecks": true,
-    "paths": {
-      "@landing/templates/ternus": ["../../packages/templates-ternus/src"]
-    }
+    "strictNullChecks": true
   },
   "include": [
     "**/*.ts",

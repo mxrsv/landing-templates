@@ -7,14 +7,10 @@
     "**/*.css"
   ],
   "exports": {
-    "./styles.css": "./src/styles.css",
     "./pixel-blast": "./src/pixel-blast/index.ts",
     "./soft-aurora": "./src/soft-aurora/index.ts",
     "./logo-loop": "./src/logo-loop/index.ts",
-    "./lib/types": "./src/lib/types.ts",
-    "./card": "./src/card.tsx",
-    "./gradient": "./src/gradient.tsx",
-    "./turborepo-logo": "./src/turborepo-logo.tsx"
+    "./lib/types": "./src/lib/types.ts"
   },
   "license": "MIT",
   "scripts": {

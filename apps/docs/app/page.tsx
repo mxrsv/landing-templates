@@ -12,7 +12,7 @@ export default function Home() {
           <p className="mt-4 text-lg leading-8 text-zinc-600 dark:text-zinc-400">
             Monorepo này chứa các template và UI components dùng chung. Catalog
             gallery sẽ được wire ở Epic 4. Hiện tại bạn có thể xem template demo
-            tại <code className="text-sm">/ternus</code>.
+            tại <code className="text-sm">/templates/ternus</code>.
           </p>
         </section>
       </main>
