@@ -23,7 +23,7 @@
 # - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
 
 generated: 2026-06-08
-last_updated: 2026-06-08
+last_updated: 2026-06-09
 project: landing-page-list
 project_key: NOKEY
 tracking_system: file-system
@@ -31,8 +31,8 @@ story_location: "_bmad-output/implementation-artifacts"
 
 development_status:
   epic-1: in-progress
-  1-1-gate-0-wip-snapshot: ready-for-dev
-  1-2-pnpm-switch-turbo-scaffold: ready-for-dev
+  1-1-gate-0-wip-snapshot: review
+  1-2-pnpm-switch-turbo-scaffold: in-progress
   1-3-rename-repo-to-landing: ready-for-dev
   1-3b-scaffold-empty-packages: ready-for-dev
   1-4-migrate-legacy-source: ready-for-dev

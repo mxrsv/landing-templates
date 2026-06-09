@@ -1,6 +1,10 @@
+---
+baseline_commit: f0538c504a56c905ee93b1ff0ebee1da10457978
+---
+
 # Story 1.2: pnpm Switch & In-Repo Turbo Scaffold
 
-Status: ready-for-dev
+Status: in-progress
 
 ## Story
 
