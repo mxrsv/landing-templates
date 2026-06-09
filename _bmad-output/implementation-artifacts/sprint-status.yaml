@@ -35,7 +35,7 @@ development_status:
   1-2-pnpm-switch-turbo-scaffold: review
   1-3-rename-repo-to-landing: review
   1-3b-scaffold-empty-packages: review
-  1-4-migrate-legacy-source: ready-for-dev
+  1-4-migrate-legacy-source: review
   1-5-wire-routes-redirect-smoke-test: ready-for-dev
   epic-1-retrospective: optional
 
