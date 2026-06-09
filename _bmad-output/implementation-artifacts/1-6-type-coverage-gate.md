@@ -4,7 +4,7 @@ baseline_commit: 778477fc513d4281c1a7d473ad120c3dbcbc8a45
 
 # Story 1.6: Type-Coverage Gate (Wave 0 tech-debt close)
 
-Status: review
+Status: done
 
 > **Nguồn gốc:** sinh từ "Senior Developer Review (AI)" cấp Epic 1 (story 1-5, ngày 2026-06-09). Đây là nợ kỹ thuật của Wave 0 migration — đóng lại quality gate mà migration lẽ ra phải có. **Phải hoàn tất TRƯỚC khi mở các wave song song dựng tiếp trên `@landing/ui` / `@landing/templates-ternus`** (kẻo lỗi type ẩn nhân lên qua các epic sau). Xếp lịch chạy đầu tiên trong khung Epic 2.
 
@@ -91,6 +91,14 @@ Sau migration Wave 0, **không tầng nào type-check/lint được source packa
   - [x] `next dev` + browser load `/templates/ternus`: render đầy đủ, canvas WebGL mount, 0 console error (lặp AC #2 Story 1.5).
   - [x] Đánh dấu các mục `[ ] [AI-Review]` tương ứng trong story 1-5 "Review Follow-ups (AI)" thành `[x]` khi xong.
 
+### Review Follow-ups (AI)
+
+Sinh từ "Senior Developer Review (AI)" story 1.6 (ngày 2026-06-09). **Mỗi finding được verify bằng bằng chứng trực tiếp** (`turbo run check-types --dry=json`, test guard tạo/xoá source giả) TRƯỚC khi xử lý — không tin findings suông.
+
+- [x] [AI-Review][High] **Gate không structural** — 4 skeleton package (`sections`, `templates-{gamefi,memecoin,nft}`) thiếu script `check-types` → turbo coi task là `<NONEXISTENT>` no-op success → khi epic sau thêm `.tsx` mà quên script, `pnpm build` vẫn xanh và bỏ qua type-check đúng package mới (tái mở lỗ Wave 0, đối lập AC#1/#7). → Thêm `scripts/assert-type-coverage.mjs`: fail (exit 1) nếu bất kỳ package nào CÓ source `.ts/.tsx` mà THIẾU script `check-types`; wire vào root `build` + `check-types` (chạy trước turbo). Verify: skeleton có source → bắt; `apps/docs` mất script → bắt; trạng thái sạch → xanh.
+- [x] [AI-Review][Med] **Orphan turbo task `build:components`** còn sót trong `packages/ui/turbo.json` (script đã xoá khỏi `package.json` ở phần đầu story 1.6 nhưng định nghĩa task chưa xoá) → cleanup chưa trọn, đối lập AC#8. → Xoá block `build:components` khỏi `packages/ui/turbo.json`.
+- [x] [AI-Review][Low] **`moduleResolution: Bundler` blast radius 6 package** (ui + sections + templates-{gamefi,nft,memecoin,ternus} extends `react-library`). Verify: ĐÚNG ngữ nghĩa — Bundler khớp Turbopack resolution (honor `exports` condition) SÁT HƠN NodeNext; 4× TS2305 ogl biến mất vì resolve type thật từ `ogl/.d.ts`, KHÔNG bỏ check → không phải regression im lặng. **Verdict: chấp nhận**, không sửa code. (Đã có Dev Notes giải thích Bundler khớp Turbopack.)
+
 ## Dev Notes
 
 ### Root cause moduleResolution (TS2835)
@@ -152,24 +160,45 @@ claude-opus-4-8 (1M context)
 
 ### File List
 
-**Source / config (1 source commit):**
+**Source / config (commit `b2f4882` + commit fix review follow-ups):**
 
 - `packages/typescript-config/react-library.json` — override `module: ESNext` + `moduleResolution: Bundler` (diệt TS2835 + TS2305 ogl)
 - `packages/ui/src/pixel-blast/PixelBlast.tsx` — 11 strict-null fix
 - `packages/ui/package.json` — xoá script mồ côi `build:components`
+- `packages/ui/turbo.json` — **(review F2)** xoá orphan task `build:components`
 - `packages/templates-ternus/src/components/hero-crystal.tsx` — 44 strict-null fix
 - `packages/templates-ternus/package.json` — thêm scripts `check-types` + `lint` + devDependencies (eslint-config, @types/react(-dom), eslint, typescript)
 - `packages/templates-ternus/eslint.config.mjs` — **MỚI** (theo mẫu ui)
 - `apps/docs/next.config.ts` — gỡ `typescript.ignoreBuildErrors`; cập nhật comment design-tokens (link Epic 2 `2-1`)
 - `apps/docs/package.json` — prune dep `geist`
 - `turbo.json` — `build.dependsOn` thêm `"check-types"` (wire gate)
+- `package.json` (root) — **(review F1)** wire `scripts/assert-type-coverage.mjs` vào `build` + `check-types`
+- `scripts/assert-type-coverage.mjs` — **MỚI (review F1)** structural guard: fail nếu package có source `.ts/.tsx` mà thiếu script `check-types`
 - `pnpm-lock.yaml` — cập nhật do thay đổi deps
 
 **BMAD bookkeeping (commit riêng):**
 
-- `_bmad-output/implementation-artifacts/1-6-type-coverage-gate.md` — story này (tasks + Dev Agent Record + Status)
+- `_bmad-output/implementation-artifacts/1-6-type-coverage-gate.md` — story này (tasks + Review Follow-ups + Senior Dev Review + Dev Agent Record + Status)
 - `_bmad-output/implementation-artifacts/1-5-wire-routes-redirect-smoke-test.md` — tick 4 mục `[AI-Review]`
-- `_bmad-output/implementation-artifacts/sprint-status.yaml` — `1-6` → review
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` — `1-6` → done
+
+## Senior Developer Review (AI)
+
+**Reviewer:** Amelia (AI — review chi tiết theo trục, verify từng finding bằng bằng chứng trực tiếp)
+**Date:** 2026-06-09
+**Scope:** diff source story 1.6 (commit `b2f4882`) + cấu hình gate (`turbo.json`, root scripts).
+**Outcome:** **Changes Requested → đã giải quyết.** 3 finding, mỗi cái verify trước khi tin (`turbo run check-types --dry=json`, test guard). F1+F2 hành động được & đã fix; F3 verify ra ĐÚNG thiết kế (chấp nhận).
+
+### Findings (đã verify)
+
+1. **[High] Gate opt-in chứ không structural** — `turbo --dry=json` xác nhận 4 skeleton package có `check-types` = `<NONEXISTENT>` (no-op success). Khi epic sau thêm source mà quên script → `pnpm build` xanh giả, bỏ qua type-check package mới, tái mở đúng lỗ Wave 0 mà AC#1/#7 tuyên bố đóng. → **Fix:** `scripts/assert-type-coverage.mjs` (structural guard) wire vào `build` + `check-types`. Test 3 case (skeleton có source, docs mất script, trạng thái sạch) đều đúng.
+2. **[Med] Orphan turbo task `build:components`** — verify còn trong `packages/ui/turbo.json:7` dù script đã xoá khỏi `package.json`. Cleanup chưa trọn (đối lập AC#8). → **Fix:** xoá block.
+3. **[Low] `moduleResolution: Bundler` blast radius 6 package** — verify ĐÚNG ngữ nghĩa (Bundler khớp Turbopack resolution, resolve type ogl thật, không che lỗi). Không phải regression. → **Verdict: chấp nhận**, không sửa.
+
+### Ghi chú giới hạn (cố ý)
+
+- Guard chỉ chặn ở root `pnpm build`/`pnpm check-types`; chạy thẳng `turbo run`/`pnpm --filter` né được (đã comment cảnh báo trong script). Khi dựng CI (story `9-5`), CI phải gọi qua `pnpm`, không gọi turbo trực tiếp.
+- Guard kiểm SỰ TỒN TẠI script `check-types`, không kiểm nội dung (về lý thuyết `"check-types": "echo ok"` né được) — chấp nhận, ngoài phạm vi.
 
 ## Change Log
 
@@ -177,3 +206,4 @@ claude-opus-4-8 (1M context)
 | ---------- | ------- | ---------------------------------------------------------------------------------------------------------- | ------ |
 | 2026-06-09 | 0.1     | Tạo story tech-debt type-coverage gate từ Senior Dev Review E1                                             | Amelia |
 | 2026-06-09 | 1.0     | Triển khai 7 task: type errors 21+55 → 0/0/0, gỡ ignoreBuildErrors, wire check-types gate; Status → review | Amelia |
+| 2026-06-09 | 1.1     | Senior Dev Review story 1.6: fix F1 (structural guard) + F2 (orphan task), F3 chấp nhận; Status → done     | Amelia |
