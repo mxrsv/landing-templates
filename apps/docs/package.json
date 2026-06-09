@@ -11,7 +11,7 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
+    "@landing/ui": "workspace:*",
     "geist": "^1.7.1",
     "next": "16.2.7",
     "react": "19.2.4",
@@ -19,9 +19,9 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^16.2.0",
-    "@repo/eslint-config": "workspace:*",
-    "@repo/tailwind-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@landing/eslint-config": "workspace:*",
+    "@landing/tailwind-config": "workspace:*",
+    "@landing/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.5",
     "@types/node": "^22.15.30",
     "@types/react": "^19.1.0",

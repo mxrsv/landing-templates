@@ -20,7 +20,7 @@ importers:
 
   apps/docs:
     dependencies:
-      '@repo/ui':
+      '@landing/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       geist:
@@ -36,18 +36,18 @@ importers:
         specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
     devDependencies:
+      '@landing/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
+      '@landing/tailwind-config':
+        specifier: workspace:*
+        version: link:../../packages/tailwind-config
+      '@landing/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       '@next/eslint-plugin-next':
         specifier: ^16.2.0
         version: 16.2.0
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../packages/eslint-config
-      '@repo/tailwind-config':
-        specifier: workspace:*
-        version: link:../../packages/tailwind-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
       '@tailwindcss/postcss':
         specifier: ^4.1.5
         version: 4.1.16
@@ -129,13 +129,13 @@ importers:
         specifier: ^19
         version: 19.2.0
     devDependencies:
-      '@repo/eslint-config':
+      '@landing/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
-      '@repo/tailwind-config':
+      '@landing/tailwind-config':
         specifier: workspace:*
         version: link:../tailwind-config
-      '@repo/typescript-config':
+      '@landing/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@tailwindcss/cli':
