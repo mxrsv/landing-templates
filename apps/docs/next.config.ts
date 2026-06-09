@@ -17,6 +17,17 @@ const nextConfig: NextConfig = {
     "@landing/templates-gamefi",
     "@landing/templates-nft",
   ],
+  // Legacy route redirect: /ternus → /templates/ternus (308 permanent).
+  // Query string tự pass-through; hash do browser tự giữ (client-side).
+  async redirects() {
+    return [
+      {
+        source: "/ternus",
+        destination: "/templates/ternus",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

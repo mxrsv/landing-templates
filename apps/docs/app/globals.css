@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "@landing/tailwind-config";
 
+/* Scan workspace packages để Tailwind không purge class chỉ dùng trong packages/*. */
+@source "../../../packages/**/src/**/*.{ts,tsx,css}";
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
