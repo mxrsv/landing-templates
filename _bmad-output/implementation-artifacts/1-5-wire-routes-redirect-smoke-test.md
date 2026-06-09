@@ -180,6 +180,7 @@ claude-opus-4-8 (1M context)
 - **Tailwind purge (AC #3)**: packages dùng HOÀN TOÀN custom CSS (`ternus.css`, `LogoLoop.css`) — KHÔNG có Tailwind utility class nào. Dùng method sentinel: chèn `tracking-[0.137em]` (arbitrary value, unique) vào `template.tsx`, rebuild → `0.137em` xuất hiện trong `.next/static/chunks/*.css` ✅ → `@source` scan `packages/*` hoạt động. Sentinel đã **revert** (git checkout), template.tsx = HEAD.
 - **Lint**: lần đầu FAIL — `LogoLoop.tsx` 2 warning "unused eslint-disable directive" (line 101/135, `--max-warnings 0`). Xoá 2 directive thừa (deps array đã đủ, directive là no-op) → `pnpm lint` exit 0 ✅.
 - **CSS bundle path**: Next 16 Turbopack output CSS ở `.next/static/chunks/*.css` (KHÔNG phải `.next/static/css/` như story giả định).
+- **Browser render verify (AC #2 — curl không đủ)**: `next dev` @ port 3100 + Playwright load `/templates/ternus`. WebGL pieces (PixelBlast→three/postprocessing, SoftAurora→ogl) chạy trong `useEffect`, prerender bỏ qua → phải load thật mới chắc không blank/throw lúc hydrate. Kết quả: **0 console errors**, DOM = `.tn` root (nav+main+footer), 6 `<section>`, **2 `<canvas>` mount thành công** (WebGL chạy OK), bg dark `rgb(7,7,12)`, 2538 ký tự nội dung (không blank) ✅. Hash redirect kiểm browser: `/ternus#token` → land `/templates/ternus#token` (browser tự giữ `#` qua 308) ✅.
 
 ### Completion Notes List
 
@@ -192,7 +193,7 @@ Story hoàn tất 7/7 AC. Là **final story Epic 1 / Wave 0 exit gate**. Deviati
 5. **`_legacy-src/` xoá sạch** (sau smoke pass): `git rm -r` xoá 5 file `_root-config-backup/` + `rm -rf` 2 empty dir sót (`_legacy-src/`, `_legacy-src/lib/` — git không track empty dir). Final `pnpm build` exit 0 xác nhận không dangling ref.
 6. **Wave 0 gate `grep @repo/` = 0**: trong **source** (`apps/`+`packages/`) = 0 ✅. 42 match còn lại đều ở `_bmad-output/` planning/story docs (ghi lịch sử rename `@repo→@landing` — documentation, không phải code). Gate thoả về codebase.
 
-Ghi chú: hash (`#`) preservation là client-side, curl không kiểm được — redirect chỉ preserve query ở server, browser tự giữ hash (đã ghi rõ trong story Task 5).
+Ghi chú: hash (`#`) preservation là client-side, curl không kiểm được — redirect chỉ preserve query ở server, browser tự giữ hash (đã ghi rõ trong story Task 5). **Đã verify trong browser thật** (Playwright): `/ternus#token` → `/templates/ternus#token` ✅, cùng pass AC #2 render (WebGL không crash, không blank, 0 console error).
 
 ### File List
 
