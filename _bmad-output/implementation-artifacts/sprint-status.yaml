@@ -43,7 +43,7 @@ development_status:
   epic-2: in-progress
   2-1-base-token-package: review
   2-2-four-theme-skeleton-files: review
-  2-3-invariant-checklist-doc: backlog
+  2-3-invariant-checklist-doc: review
   2-4-shared-errorboundary-reduced-motion: backlog
   epic-2-retrospective: optional
 
