@@ -30,7 +30,11 @@ const jetbrainsMono = JetBrains_Mono({
  */
 export function TernusTemplate() {
   return (
-    <div className={`tn ${inter.variable} ${jetbrainsMono.variable}`} id="top">
+    <div
+      className={`tn ${inter.variable} ${jetbrainsMono.variable}`}
+      data-theme="infra"
+      id="top"
+    >
       <TernusNav />
       <main>
         <TernusHero />

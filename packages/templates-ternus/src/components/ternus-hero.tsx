@@ -1,5 +1,6 @@
 "use client";
 
+import { ErrorBoundary } from "@landing/ui/lib/error-boundary";
 import { PixelBlast } from "@landing/ui/pixel-blast";
 import { useReducedMotion } from "@landing/ui/lib/use-reduced-motion";
 import { HeroCrystal } from "./hero-crystal";
@@ -13,27 +14,41 @@ export function TernusHero() {
 
   return (
     <section className="hero">
-      {!reduced && (
+      {reduced ? (
+        /* reduced-motion: static poster keeps the hero's depth without
+           mounting the WebGL canvas (no animation at all) */
+        <div className="mesh mesh-poster" aria-hidden />
+      ) : (
         <div className="mesh">
-          <PixelBlast
-            variant="square"
-            color="#fb923c"
-            pixelSize={4}
-            patternScale={2}
-            patternDensity={0.65}
-            edgeFade={0.15}
-            speed={0.15}
-            enableRipples
-            rippleSpeed={0.2}
-            rippleThickness={0.1}
-            liquid={false}
-            noiseAmount={0}
-            transparent
-            autoPauseOffscreen
-            cursorErase
-            eraseRadius={1.4}
-            eraseStrength={2}
-          />
+          <ErrorBoundary
+            fallback={
+              <div className="mesh-poster" aria-hidden>
+                <span className="mesh-fallback-label">
+                  pixel mesh unavailable
+                </span>
+              </div>
+            }
+          >
+            <PixelBlast
+              variant="square"
+              color="#fb923c"
+              pixelSize={4}
+              patternScale={2}
+              patternDensity={0.65}
+              edgeFade={0.15}
+              speed={0.15}
+              enableRipples
+              rippleSpeed={0.2}
+              rippleThickness={0.1}
+              liquid={false}
+              noiseAmount={0}
+              transparent
+              autoPauseOffscreen
+              cursorErase
+              eraseRadius={1.4}
+              eraseStrength={2}
+            />
+          </ErrorBoundary>
         </div>
       )}
       <div className="vignette" />

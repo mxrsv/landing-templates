@@ -6,26 +6,42 @@
    ============================================================ */
 
 .tn {
+  /* Theme bridge (Story 3.2): every local var resolves through the shared
+     `--p-*` palette set by `[data-theme]` (see @landing/design-tokens), with
+     the original v20 literal as fallback so the copied template still renders
+     standalone. Hex/rgba literals are allowed ONLY inside this token block. */
+  --white: #ffffff;
   /* surfaces */
-  --bg: #07070c;
-  --panel: #0c0d14;
+  --bg: var(--p-bg, #07070c);
+  --panel: var(--p-surface, #0c0d14);
   /* brand */
-  --cy: #22d3ee;
-  --cy-bright: #7fe9ff;
-  --cy-soft: #bdf6ff;
-  --orange: #fb923c; /* micro-accent: "a transaction settling" only */
+  --cy: var(--p-primary, #22d3ee);
+  --cy-bright: var(--p-primary-bright, #7fe9ff);
+  --cy-soft: var(--p-primary-soft, #bdf6ff);
+  --orange: var(
+    --p-accent,
+    #fb923c
+  ); /* micro-accent: "a transaction settling" only */
   /* ink */
-  --ink: rgba(255, 255, 255, 0.92);
-  --ink-2: rgba(255, 255, 255, 0.62);
-  --ink-3: rgba(255, 255, 255, 0.42);
+  --ink: var(--p-ink, rgba(255, 255, 255, 0.92));
+  --ink-2: var(--p-ink-2, rgba(255, 255, 255, 0.62));
+  --ink-3: var(--p-ink-3, rgba(255, 255, 255, 0.42));
   /* hairlines — exactly 3 tiers */
-  --line-1: rgba(127, 233, 255, 0.1);
-  --line-2: rgba(127, 233, 255, 0.18);
-  --line-3: rgba(127, 233, 255, 0.34);
-  --line-w: rgba(255, 255, 255, 0.1);
-  /* radius — exactly 2 */
-  --r: 4px;
-  --r-pill: 999px;
+  --line-1: var(--p-line-soft, rgba(127, 233, 255, 0.1));
+  --line-2: var(--p-line, rgba(127, 233, 255, 0.18));
+  --line-3: color-mix(in srgb, var(--cy-bright) 34%, transparent);
+  --line-w: color-mix(in srgb, var(--white) 10%, transparent);
+  /* component surfaces (terminal) */
+  --term-bg: #060a0e;
+  --term-string: #9fe6c0;
+  /* mask helper — alpha-only fill for gradient masks */
+  --mask-fill: #000;
+  /* motion — named easing from the token floor (INVARIANT I-2) */
+  --ease: var(--ease-standard, cubic-bezier(0.4, 0, 0.2, 1));
+  --ease-enter: var(--ease-entrance, cubic-bezier(0.16, 1, 0.3, 1));
+  /* radius — exactly 2, from the floor (INVARIANT I-6) */
+  --r: var(--radius-sm, 4px);
+  --r-pill: var(--radius-pill, 999px);
   /* tracking */
   --tr-ui: 0.02em;
   --tr-cap: 0.16em;
@@ -95,7 +111,7 @@ html:has(.tn) {
   text-transform: uppercase;
   color: var(--ink-2);
   font-weight: var(--w-ui);
-  margin-bottom: 20px;
+  margin-bottom: var(--space-5, 20px);
   display: inline-flex;
   align-items: center;
   gap: 11px;
@@ -114,10 +130,10 @@ html:has(.tn) {
   max-width: 18ch;
 }
 .tn h2 .ac {
-  color: #fff;
+  color: var(--white);
 }
 .tn .lead {
-  margin-top: 20px;
+  margin-top: var(--space-5, 20px);
   font-size: var(--t-body);
   color: var(--ink-2);
   max-width: 56ch;
@@ -126,21 +142,21 @@ html:has(.tn) {
 .tn .split {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  gap: var(--space-16, 64px);
   align-items: center;
 }
 @media (max-width: 820px) {
   .tn .split {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: var(--space-10, 40px);
   }
 }
 .tn .reveal {
   opacity: 0;
   transform: translateY(20px);
   transition:
-    opacity 0.7s,
-    transform 0.7s;
+    opacity 0.7s var(--ease-enter),
+    transform 0.7s var(--ease-enter);
 }
 .tn .reveal.in {
   opacity: 1;
@@ -192,14 +208,14 @@ html:has(.tn) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 40px;
+  padding: 0 var(--space-10, 40px);
   transition:
-    background 0.3s,
-    border-color 0.3s;
+    background 0.3s var(--ease),
+    border-color 0.3s var(--ease);
   border-bottom: 1px solid transparent;
 }
 .tn .nav.scrolled {
-  background: rgba(7, 7, 12, 0.72);
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
   backdrop-filter: blur(12px);
   border-bottom-color: var(--line-1);
 }
@@ -222,27 +238,27 @@ html:has(.tn) {
 .tn .navlinks a {
   color: inherit;
   text-decoration: none;
-  transition: color 0.15s;
+  transition: color 0.15s var(--ease);
 }
 .tn .navlinks a:hover {
-  color: #fff;
+  color: var(--white);
 }
 .tn .connect {
   font-size: 13px;
   font-weight: var(--w-ui);
   padding: 9px 18px;
   border-radius: var(--r);
-  color: #07070c;
-  background: #fff;
-  border: 1px solid #fff;
+  color: var(--bg);
+  background: var(--white);
+  border: 1px solid var(--white);
   cursor: pointer;
   transition:
-    border-color 0.15s,
-    background 0.15s;
+    border-color 0.15s var(--ease),
+    background 0.15s var(--ease);
 }
 .tn .connect:hover {
-  background: rgba(255, 255, 255, 0.86);
-  border-color: rgba(255, 255, 255, 0.86);
+  background: color-mix(in srgb, var(--white) 86%, transparent);
+  border-color: color-mix(in srgb, var(--white) 86%, transparent);
 }
 @media (max-width: 820px) {
   .tn .navlinks {
@@ -259,12 +275,38 @@ html:has(.tn) {
   overflow: hidden;
   /* hero overrides `.wrap` to width:100% (see `.tn .hero .wrap`), so its
      horizontal gutter must live here rather than on the shared `.wrap` */
-  padding: 0 24px 64px;
+  padding: 0 var(--space-6, 24px) var(--space-16, 64px);
 }
 .tn .hero .mesh {
   position: absolute;
   inset: 0;
   z-index: 0;
+}
+/* static stand-in for the WebGL mesh: reduced-motion poster + ErrorBoundary
+   fallback. Same footprint as `.mesh`, zero animation. */
+.tn .mesh-poster {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: end center;
+  background:
+    radial-gradient(
+      90% 70% at 64% 38%,
+      color-mix(in srgb, var(--cy) 10%, transparent) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      60% 50% at 78% 60%,
+      color-mix(in srgb, var(--orange) 6%, transparent) 0%,
+      transparent 75%
+    );
+}
+.tn .mesh-fallback-label {
+  font: 500 11px var(--tn-mono);
+  letter-spacing: var(--tr-cap);
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding-bottom: var(--space-6, 24px);
 }
 .tn .hero .vignette {
   position: absolute;
@@ -287,9 +329,9 @@ html:has(.tn) {
   pointer-events: none;
   background: linear-gradient(
     100deg,
-    rgba(7, 7, 12, 0.78) 0%,
-    rgba(7, 7, 12, 0.55) 28%,
-    rgba(7, 7, 12, 0.22) 55%,
+    color-mix(in srgb, var(--bg) 78%, transparent) 0%,
+    color-mix(in srgb, var(--bg) 55%, transparent) 28%,
+    color-mix(in srgb, var(--bg) 22%, transparent) 55%,
     transparent 75%
   );
 }
@@ -300,7 +342,7 @@ html:has(.tn) {
 .tn .hero-grid {
   display: grid;
   grid-template-columns: 1fr 1.05fr;
-  gap: 40px;
+  gap: var(--space-10, 40px);
   align-items: center;
 }
 /* crystal hidden: single column, copy stretches to the middle of the screen */
@@ -328,7 +370,7 @@ html:has(.tn) {
 .tn .badges {
   display: flex;
   gap: 10px;
-  margin-bottom: 24px;
+  margin-bottom: var(--space-6, 24px);
   flex-wrap: wrap;
 }
 .tn .badge {
@@ -353,7 +395,7 @@ html:has(.tn) {
   border-radius: 50%;
   background: var(--orange); /* orange's ONE job here: "live / now" */
   box-shadow: 0 0 8px var(--orange);
-  animation: tn-pulse 1.9s ease-in-out infinite;
+  animation: tn-pulse 1.9s var(--ease) infinite;
 }
 .tn .headline {
   font-size: var(--t-display);
@@ -364,19 +406,19 @@ html:has(.tn) {
   max-width: 14ch;
 }
 .tn .headline .ac {
-  color: #fff;
+  color: var(--white);
 }
 .tn .hero-sub {
-  margin-top: 24px;
+  margin-top: var(--space-6, 24px);
   font-size: var(--t-body);
   color: var(--ink-2);
   max-width: 46ch;
   line-height: 1.6;
 }
 .tn .cta {
-  margin-top: 32px;
+  margin-top: var(--space-8, 32px);
   display: flex;
-  gap: 12px;
+  gap: var(--space-3, 12px);
   flex-wrap: wrap;
 }
 .tn .btn {
@@ -390,36 +432,36 @@ html:has(.tn) {
   background: transparent;
   color: var(--ink);
   transition:
-    border-color 0.18s,
-    background 0.18s,
-    transform 0.15s;
+    border-color 0.18s var(--ease),
+    background 0.18s var(--ease),
+    transform 0.15s var(--ease);
 }
 .tn .btn:hover {
   transform: translateY(-1px);
 }
 .tn .btn-primary {
-  color: #07070c;
-  border-color: #fff;
-  background: #fff;
+  color: var(--bg);
+  border-color: var(--white);
+  background: var(--white);
 }
 .tn .btn-primary:hover {
-  background: rgba(255, 255, 255, 0.86);
-  border-color: rgba(255, 255, 255, 0.86);
+  background: color-mix(in srgb, var(--white) 86%, transparent);
+  border-color: color-mix(in srgb, var(--white) 86%, transparent);
 }
 .tn .btn-ghost {
   color: var(--ink-2);
   border-color: var(--line-w);
 }
 .tn .btn-ghost:hover {
-  border-color: rgba(255, 255, 255, 0.34);
+  border-color: color-mix(in srgb, var(--white) 34%, transparent);
 }
 .tn .netstrip {
   display: flex;
-  margin-top: 40px;
-  padding-top: 20px;
+  margin-top: var(--space-10, 40px);
+  padding-top: var(--space-5, 20px);
   border-top: 1px solid var(--line-1);
   align-items: center;
-  gap: 24px;
+  gap: var(--space-6, 24px);
 }
 .tn .nstat .nk {
   font-size: 10px;
@@ -490,10 +532,14 @@ html:has(.tn) {
   pointer-events: none;
   -webkit-mask-image: radial-gradient(
     120% 75% at 50% 50%,
-    #000 25%,
+    var(--mask-fill) 25%,
     transparent 82%
   );
-  mask-image: radial-gradient(120% 75% at 50% 50%, #000 25%, transparent 82%);
+  mask-image: radial-gradient(
+    120% 75% at 50% 50%,
+    var(--mask-fill) 25%,
+    transparent 82%
+  );
   background-image: repeating-radial-gradient(
     circle at 78% 50%,
     transparent 0 30px,
@@ -528,10 +574,14 @@ html:has(.tn) {
   background-size: 48px 48px;
   -webkit-mask-image: radial-gradient(
     120% 75% at 50% 50%,
-    #000 25%,
+    var(--mask-fill) 25%,
     transparent 82%
   );
-  mask-image: radial-gradient(120% 75% at 50% 50%, #000 25%, transparent 82%);
+  mask-image: radial-gradient(
+    120% 75% at 50% 50%,
+    var(--mask-fill) 25%,
+    transparent 82%
+  );
 }
 .tn .scrolly-grid {
   display: grid;
@@ -549,8 +599,8 @@ html:has(.tn) {
   opacity: 0;
   transform: translateY(14px);
   transition:
-    opacity 0.5s,
-    transform 0.5s;
+    opacity 0.5s var(--ease-enter),
+    transform 0.5s var(--ease-enter);
   max-width: 42ch;
   pointer-events: none;
 }
@@ -567,7 +617,7 @@ html:has(.tn) {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 16px;
+  margin-bottom: var(--space-4, 16px);
 }
 .tn .phase .ph-k .ring {
   width: 22px;
@@ -586,7 +636,7 @@ html:has(.tn) {
   letter-spacing: -0.01em;
 }
 .tn .phase p {
-  margin-top: 16px;
+  margin-top: var(--space-4, 16px);
   color: var(--ink-2);
   line-height: 1.6;
   font-size: var(--t-body);
@@ -613,7 +663,7 @@ html:has(.tn) {
   inset: 0 0 auto 0;
   height: 0%;
   background: linear-gradient(var(--cy-bright), var(--cy));
-  box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--cy) 50%, transparent);
 }
 .tn .rl {
   position: relative;
@@ -623,11 +673,11 @@ html:has(.tn) {
   padding: 18px 22px;
   border: 1px solid var(--line-1);
   border-radius: var(--r);
-  background: rgba(12, 13, 20, 0.55);
+  background: color-mix(in srgb, var(--panel) 55%, transparent);
   transition:
-    border-color 0.35s,
-    background 0.35s,
-    transform 0.35s;
+    border-color 0.35s var(--ease),
+    background 0.35s var(--ease),
+    transform 0.35s var(--ease);
 }
 .tn .rl .dot {
   width: 14px;
@@ -639,19 +689,19 @@ html:has(.tn) {
   z-index: 2;
   background: var(--bg);
   transition:
-    border-color 0.35s,
-    box-shadow 0.35s;
+    border-color 0.35s var(--ease),
+    box-shadow 0.35s var(--ease);
 }
 .tn .rl.on {
   border-color: var(--line-3);
-  background: rgba(34, 211, 238, 0.06);
+  background: color-mix(in srgb, var(--cy) 6%, transparent);
   transform: translateX(4px);
 }
 .tn .rl.on .dot {
   border-color: var(--cy-bright);
   box-shadow:
-    0 0 0 4px rgba(34, 211, 238, 0.12),
-    0 0 16px rgba(34, 211, 238, 0.6);
+    0 0 0 4px color-mix(in srgb, var(--cy) 12%, transparent),
+    0 0 16px color-mix(in srgb, var(--cy) 60%, transparent);
 }
 .tn .rl .rl-k {
   font-size: 11px;
@@ -681,14 +731,14 @@ html:has(.tn) {
   height: 12px;
   border-radius: 50%;
   background: var(--cy-bright);
-  box-shadow: 0 0 14px rgba(127, 233, 255, 0.9);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--cy-bright) 90%, transparent);
   z-index: 3;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s var(--ease);
 }
 .tn .txpulse.settled {
   background: var(--orange);
-  box-shadow: 0 0 16px rgba(251, 146, 60, 0.9);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--orange) 90%, transparent);
 }
 /* count-up proof stats fold into bottom of stage */
 .tn .scrolly-stats {
@@ -702,8 +752,8 @@ html:has(.tn) {
   opacity: 0;
   transform: translateY(16px);
   transition:
-    opacity 0.6s,
-    transform 0.6s;
+    opacity 0.6s var(--ease-enter),
+    transform 0.6s var(--ease-enter);
 }
 .tn .scrolly-stats.in {
   opacity: 1;
@@ -767,7 +817,7 @@ html:has(.tn) {
     bottom: auto;
     opacity: 1;
     transform: none;
-    margin-top: 40px;
+    margin-top: var(--space-10, 40px);
   }
 }
 
@@ -775,17 +825,17 @@ html:has(.tn) {
 .tn #build .term {
   border: 1px solid var(--line-2);
   border-radius: var(--r);
-  background: #060a0e;
+  background: var(--term-bg);
   overflow: hidden;
-  box-shadow: 0 30px 80px -40px rgba(34, 211, 238, 0.25);
+  box-shadow: 0 30px 80px -40px color-mix(in srgb, var(--cy) 25%, transparent);
 }
 .tn .term-bar {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
+  gap: var(--space-2, 8px);
+  padding: var(--space-3, 12px) var(--space-4, 16px);
   border-bottom: 1px solid var(--line-1);
-  background: rgba(12, 13, 20, 0.6);
+  background: color-mix(in srgb, var(--panel) 60%, transparent);
 }
 .tn .term-dot {
   width: 10px;
@@ -808,16 +858,16 @@ html:has(.tn) {
   border: 1px solid transparent;
   background: transparent;
   transition:
-    color 0.15s,
-    background 0.15s,
-    border-color 0.15s;
+    color 0.15s var(--ease),
+    background 0.15s var(--ease),
+    border-color 0.15s var(--ease);
 }
 .tn .term-tab:hover {
   color: var(--ink-2);
 }
 .tn .term-tab.on {
   color: var(--cy-soft);
-  background: rgba(34, 211, 238, 0.07);
+  background: color-mix(in srgb, var(--cy) 7%, transparent);
   border-color: var(--line-2);
 }
 .tn .term-copy {
@@ -831,8 +881,8 @@ html:has(.tn) {
   padding: 6px 12px;
   cursor: pointer;
   transition:
-    color 0.15s,
-    border-color 0.15s;
+    color 0.15s var(--ease),
+    border-color 0.15s var(--ease);
 }
 .tn .term-copy:hover {
   color: var(--cy-soft);
@@ -860,7 +910,7 @@ html:has(.tn) {
   color: var(--cy-bright);
 }
 .tn .term-body .s {
-  color: #9fe6c0;
+  color: var(--term-string);
 }
 .tn .term-body .o {
   color: var(--orange);
@@ -873,7 +923,7 @@ html:has(.tn) {
 .tn #ecosystem .eco-head {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 40px;
+  gap: var(--space-10, 40px);
   align-items: end;
 }
 .tn .eco-stats {
@@ -908,24 +958,24 @@ html:has(.tn) {
   margin-top: 52px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: var(--space-4, 16px);
 }
 .tn .eco-card {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-4, 16px);
   padding: 22px 24px;
   border: 1px solid var(--line-1);
   border-radius: var(--r);
-  background: rgba(12, 13, 20, 0.4);
+  background: color-mix(in srgb, var(--panel) 40%, transparent);
   transition:
-    border-color 0.2s,
-    background 0.2s,
-    transform 0.2s;
+    border-color 0.2s var(--ease),
+    background 0.2s var(--ease),
+    transform 0.2s var(--ease);
 }
 .tn .eco-card:hover {
   border-color: var(--line-3);
-  background: rgba(34, 211, 238, 0.04);
+  background: color-mix(in srgb, var(--cy) 4%, transparent);
   transform: translateY(-2px);
 }
 .tn .eco-mono {
@@ -973,7 +1023,7 @@ html:has(.tn) {
 
 /* ============ TOKEN ============ */
 .tn .utils {
-  margin-top: 32px;
+  margin-top: var(--space-8, 32px);
   border-top: 1px solid var(--line-w);
 }
 .tn .util {
@@ -1012,13 +1062,13 @@ html:has(.tn) {
 .tn .lrow {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3, 12px);
   font-size: 14px;
   opacity: 0;
   transform: translateX(8px);
   transition:
-    opacity 0.5s,
-    transform 0.5s;
+    opacity 0.5s var(--ease-enter),
+    transform 0.5s var(--ease-enter);
 }
 .tn .lrow.in {
   opacity: 1;
@@ -1035,7 +1085,7 @@ html:has(.tn) {
 .tn .lpct {
   margin-left: auto;
   font-variant-numeric: tabular-nums;
-  color: #fff;
+  color: var(--white);
 }
 @media (max-width: 560px) {
   .tn .token-visual {
@@ -1062,11 +1112,11 @@ html:has(.tn) {
 /* ============ FOOTER ============ */
 .tn .footer {
   border-top: 1px solid var(--line-1);
-  padding: 40px;
+  padding: var(--space-10, 40px);
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: var(--space-5, 20px);
   color: var(--ink-3);
   font-size: 13px;
 }
@@ -1076,7 +1126,7 @@ html:has(.tn) {
   margin-left: 22px;
 }
 .tn .footer a:hover {
-  color: #fff;
+  color: var(--white);
 }
 
 @keyframes tn-pulse {
