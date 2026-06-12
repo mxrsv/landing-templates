@@ -5,12 +5,16 @@
   "type": "module",
   "exports": {
     ".": "./src/base.css",
+    "./theme": "./src/theme.ts",
     "./themes/*": "./src/themes/*.css"
   },
   "scripts": {
-    "build": "echo \"@landing/design-tokens: no build (CSS-only token floor)\" && exit 0"
+    "build": "echo \"@landing/design-tokens: no build (CSS + TS source)\" && exit 0",
+    "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "tailwindcss": "^4.1.5"
+    "@landing/typescript-config": "workspace:*",
+    "tailwindcss": "^4.1.5",
+    "typescript": "5.9.2"
   }
 }

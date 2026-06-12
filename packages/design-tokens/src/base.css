@@ -20,6 +20,18 @@
      - named easing curves only — never `transition: all`
    ============================================================ */
 
+/* Theme palette overrides — each sets ONLY --p-* under [data-theme="…"].
+   MUST stay at the top (CSS @import ordering rule). They use plain
+   [data-theme] selectors and are applied on a wrapper element (a div in
+   Epic 4 previews, or the demo wrapper in /dev/theme-switch) — NOT on the
+   same element that carries the :root defaults below, so there is no
+   same-element specificity tie. Consumers keep a single
+   `@import "@landing/design-tokens"`. */
+@import "./themes/infra.css";
+@import "./themes/neon.css";
+@import "./themes/game.css";
+@import "./themes/nft.css";
+
 :root {
   /* --- spacing — 4/8px grid -------------------------------- */
   --space-0: 0;

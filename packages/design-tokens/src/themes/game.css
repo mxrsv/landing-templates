@@ -1,0 +1,19 @@
+/* Theme: game — GameFi HUD mood. Lime/amber on charcoal, energetic but
+   controlled motion. Overrides ONLY --p-* + motion. */
+
+[data-theme="game"] {
+  --p-bg: #0b0f0a;
+  --p-surface: #141a10;
+  --p-primary: #a3e635;
+  --p-primary-bright: #d9f99d;
+  --p-primary-soft: #ecfccb;
+  --p-accent: #f59e0b;
+  --p-ink: rgba(255, 255, 255, 0.92);
+  --p-ink-2: rgba(217, 249, 157, 0.6);
+  --p-ink-3: rgba(217, 249, 157, 0.4);
+  --p-line: rgba(163, 230, 53, 0.22);
+  --p-line-soft: rgba(163, 230, 53, 0.1);
+
+  /* motion personality — energetic-but-controlled */
+  --duration-base: 200ms;
+}

@@ -1,0 +1,25 @@
+/* Theme: nft — PLACEHOLDER, non-live MVP.
+   PRD scope = "3 theme live (infra/neon/game) + 1 skeleton (nft)".
+   Copies the infra palette and shifts 2–3 accents only; a real NFT mood
+   (gallery-forward, warmer neutrals) is deferred to its own epic. */
+
+[data-theme="nft"] {
+  /* base = infra floor */
+  --p-bg: #07070c;
+  --p-surface: #0c0d14;
+  --p-primary: #22d3ee;
+  --p-primary-bright: #7fe9ff;
+  --p-primary-soft: #bdf6ff;
+  --p-ink: rgba(255, 255, 255, 0.92);
+  --p-ink-2: rgba(255, 255, 255, 0.62);
+  --p-ink-3: rgba(255, 255, 255, 0.42);
+  --p-line: rgba(127, 233, 255, 0.18);
+  --p-line-soft: rgba(127, 233, 255, 0.1);
+
+  /* PLACEHOLDER accents — only signal of "different mood" until real design */
+  --p-primary: #c084fc;
+  --p-accent: #f0abfc;
+  --p-line: rgba(192, 132, 252, 0.2);
+
+  --duration-base: 240ms;
+}

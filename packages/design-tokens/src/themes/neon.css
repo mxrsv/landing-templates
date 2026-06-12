@@ -1,0 +1,19 @@
+/* Theme: neon — memecoin/degen-adjacent but kept premium. Electric magenta
+   on deep violet-black. Snappier motion. Overrides ONLY --p-* + motion. */
+
+[data-theme="neon"] {
+  --p-bg: #0a0410;
+  --p-surface: #150a1f;
+  --p-primary: #d946ef;
+  --p-primary-bright: #f0abfc;
+  --p-primary-soft: #f5d0fe;
+  --p-accent: #22d3ee;
+  --p-ink: rgba(255, 255, 255, 0.94);
+  --p-ink-2: rgba(245, 208, 254, 0.66);
+  --p-ink-3: rgba(245, 208, 254, 0.42);
+  --p-line: rgba(217, 70, 239, 0.24);
+  --p-line-soft: rgba(217, 70, 239, 0.12);
+
+  /* motion personality — snappy */
+  --duration-base: 160ms;
+}

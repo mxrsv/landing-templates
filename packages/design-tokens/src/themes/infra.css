@@ -1,0 +1,21 @@
+/* Theme: infra — calm/premium L2 reference mood (Ternus aesthetic).
+   Overrides ONLY --p-* palette + motion personality. Spacing/type floor
+   (base.css) is never touched. Mirrors base.css :root defaults explicitly
+   so `[data-theme="infra"]` is self-contained. */
+
+[data-theme="infra"] {
+  --p-bg: #07070c;
+  --p-surface: #0c0d14;
+  --p-primary: #22d3ee;
+  --p-primary-bright: #7fe9ff;
+  --p-primary-soft: #bdf6ff;
+  --p-accent: #fb923c;
+  --p-ink: rgba(255, 255, 255, 0.92);
+  --p-ink-2: rgba(255, 255, 255, 0.62);
+  --p-ink-3: rgba(255, 255, 255, 0.42);
+  --p-line: rgba(127, 233, 255, 0.18);
+  --p-line-soft: rgba(127, 233, 255, 0.1);
+
+  /* motion personality — calm */
+  --duration-base: 240ms;
+}
