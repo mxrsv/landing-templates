@@ -2,11 +2,9 @@
  * Catalog schema — canonical types cho mọi Piece trong gallery.
  *
  * Registration convention (Epic D):
- * - Mỗi piece export `pieceMeta` từ `config.ts` (hoặc `meta.ts`) trong package
- *   của nó — file đó là PURE DATA, cấm import component (tránh kéo Three.js
- *   hay client code vào catalog server module).
- * - Epic khác KHÔNG sửa aggregator (`lib/catalog/index.ts`) trực tiếp — chỉ
- *   export `pieceMeta` rồi mở registration task; Epic D owner merge serial.
+ * - Thêm Piece tại `apps/docs/lib/catalog/piece-registrations.ts` (single entry point).
+ * - Slug phải có trong `manifest.ts` trước.
+ * - Package export `pieceMeta` pure-data từ `config.ts` — cấm import component ở config.
  */
 
 /** Tầng của Piece trong catalog — quyết định route prefix (/ui, /sections, /templates). */

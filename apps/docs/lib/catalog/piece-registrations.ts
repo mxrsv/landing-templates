@@ -1,0 +1,38 @@
+/**
+ * Single entry point — thêm Piece mới CHỈ sửa file này.
+ *
+ * Mỗi entry gồm:
+ * - `slug` — phải khớp `meta.slug` (aggregator validate fail-fast)
+ * - `meta` — pure-data export từ package `config.ts`
+ * - `loadPreview` — dynamic import component (dùng cho detail + index card)
+ * - `packageName` — workspace package → tự động vào transpilePackages
+ *
+ * Slug phải có trong `manifest.ts` (planned budget). Aggregator validate fail-fast.
+ */
+import type { ComponentType } from "react";
+
+import { pieceMeta as ternusPieceMeta } from "@landing/templates-ternus/config";
+
+export interface PieceRegistration {
+  /** Khoá định danh — phải khớp `meta.slug`, dùng để map preview loader. */
+  slug: string;
+  /** Label cho error message khi validate meta. */
+  source: string;
+  meta: unknown;
+  /** Workspace package — append vào Next `transpilePackages` tự động. */
+  packageName: string;
+  loadPreview: () => Promise<{ default: ComponentType }>;
+}
+
+export const pieceRegistrations: readonly PieceRegistration[] = [
+  {
+    slug: "ternus",
+    source: "@landing/templates-ternus/config",
+    meta: ternusPieceMeta,
+    packageName: "@landing/templates-ternus",
+    loadPreview: () =>
+      import("@landing/templates-ternus").then((m) => ({
+        default: m.TernusTemplate,
+      })),
+  },
+];

@@ -1,9 +1,10 @@
 import type { PieceMeta } from "../../lib/catalog";
-import { previewComponents } from "../../lib/catalog/preview-registry";
+import { hasPreview } from "../../lib/catalog/preview-loaders";
 import {
   assembleSingleFile,
   readPieceSources,
 } from "../../lib/catalog/read-source";
+import { PieceLivePreview } from "./piece-live-preview";
 import { SourceViewer } from "./source-viewer";
 
 const TAG_GROUPS = [
@@ -15,7 +16,6 @@ const TAG_GROUPS = [
 
 /** Detail page dùng chung: metadata header + full preview trong data-theme wrapper. */
 export async function PieceDetail({ piece }: { piece: PieceMeta }) {
-  const Preview = previewComponents[piece.slug];
   const hasSources = (piece.sourcePaths?.length ?? 0) > 0;
   const sources = hasSources ? await readPieceSources(piece) : [];
 
@@ -54,13 +54,13 @@ export async function PieceDetail({ piece }: { piece: PieceMeta }) {
       </header>
 
       <div data-theme={piece.mood[0]}>
-        {Preview === undefined ? (
+        {!hasPreview(piece.slug) ? (
           <p className="mx-auto w-full max-w-6xl px-6 pb-16 text-sm text-zinc-500 dark:text-zinc-400">
             Preview chưa đăng ký cho Piece này — thêm entry vào
-            `lib/catalog/preview-registry.tsx`.
+            `lib/catalog/piece-registrations.ts`.
           </p>
         ) : (
-          <Preview />
+          <PieceLivePreview slug={piece.slug} />
         )}
       </div>
 

@@ -4,6 +4,9 @@
  * Copy mechanism chốt toàn catalog: RSC `fs.readFile` tại build theo
  * `pieceMeta.sourcePaths`. KHÔNG import file này từ client component.
  */
+import "server-only";
+
+import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -17,9 +20,19 @@ export interface PieceSourceFile {
   content: string;
 }
 
-/** next dev/build chạy trong `apps/docs` — repo root là 2 cấp trên cwd. */
+/** Repo root = thư mục chứa `pnpm-workspace.yaml`, dò từ cwd đi lên. */
 function repoRoot(): string {
-  return path.resolve(process.cwd(), "..", "..");
+  let dir = process.cwd();
+  while (!existsSync(path.join(dir, "pnpm-workspace.yaml"))) {
+    const parent = path.dirname(dir);
+    if (parent === dir) {
+      throw new Error(
+        "[catalog] không tìm thấy pnpm-workspace.yaml từ cwd đi lên — read-source cần chạy trong monorepo",
+      );
+    }
+    dir = parent;
+  }
+  return dir;
 }
 
 /**

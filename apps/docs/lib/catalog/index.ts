@@ -1,17 +1,11 @@
 /**
  * Catalog aggregator — source of truth cho `allPieces`.
+ * Preview loaders (client-safe) nằm ở `preview-loaders.ts`.
  *
- * REGISTRATION PATTERN (Epic D owner duy nhất sửa file này):
- * 1. Package export `pieceMeta` pure-data từ `config.ts`/`meta.ts` của nó.
- * 2. Mở registration task — Epic D owner merge SERIAL vào danh sách dưới.
- * 3. Epic khác KHÔNG sửa file này trực tiếp (tránh conflict giữa các epic song song).
- *
- * Kèm registration: append package vào `transpilePackages` (next.config.ts)
- * nếu chưa có. Mọi entry được validate fail-fast lúc module init — lỗi
- * registration nổ ngay khi build/dev, không đợi tới lúc render.
+ * REGISTRATION: thêm Piece mới tại `piece-registrations.ts` (single entry point).
+ * Slug phải có trong `manifest.ts` trước. Không sửa file này trực tiếp.
  */
-import { pieceMeta as ternusPieceMeta } from "@landing/templates-ternus/config";
-
+import { pieceRegistrations } from "./piece-registrations";
 import { manifestSlugs } from "./manifest";
 import type { CopyMode, PieceLayer, PieceMeta, PieceMood } from "./types";
 
@@ -27,11 +21,6 @@ const LAYERS: readonly PieceLayer[] = ["ui", "section", "template"];
 const MOODS: readonly PieceMood[] = ["infra", "neon", "game", "nft"];
 const COPY_MODES: readonly CopyMode[] = ["single", "multi"];
 
-/**
- * Validate một pieceMeta export (boundary giữa package và catalog) và narrow
- * các field widened (`string[]` → `PieceMood[]`). Throw với message rõ ràng
- * khi registration không hợp lệ.
- */
 function assertPieceMeta(input: unknown, source: string): PieceMeta {
   if (typeof input !== "object" || input === null) {
     throw new Error(`[catalog] ${source}: pieceMeta phải là object`);
@@ -93,13 +82,17 @@ function assertPieceMeta(input: unknown, source: string): PieceMeta {
   };
 }
 
-/** Gom + validate registrations; duplicate slug bị reject ngay. */
 function buildCatalog(
-  registrations: ReadonlyArray<{ meta: unknown; source: string }>,
+  registrations: typeof pieceRegistrations,
 ): readonly PieceMeta[] {
   const seen = new Set<string>();
-  return registrations.map(({ meta, source }) => {
+  return registrations.map(({ slug, meta, source }) => {
     const piece = assertPieceMeta(meta, source);
+    if (piece.slug !== slug) {
+      throw new Error(
+        `[catalog] registration slug "${slug}" (${source}) không khớp meta.slug "${piece.slug}"`,
+      );
+    }
     if (seen.has(piece.slug)) {
       throw new Error(
         `[catalog] duplicate slug "${piece.slug}" (${source}) — slug phải duy nhất toàn catalog`,
@@ -107,7 +100,7 @@ function buildCatalog(
     }
     if (!manifestSlugs.has(piece.slug)) {
       throw new Error(
-        `[catalog] slug "${piece.slug}" (${source}) không có trong manifest — thêm vào lib/catalog/manifest.ts trước khi registration (budget FR-10/NFR-9)`,
+        `[catalog] slug "${piece.slug}" (${source}) không có trong manifest — thêm vào lib/catalog/manifest.ts trước khi registration`,
       );
     }
     seen.add(piece.slug);
@@ -115,7 +108,4 @@ function buildCatalog(
   });
 }
 
-export const allPieces: readonly PieceMeta[] = buildCatalog([
-  // Registration #1 — Ternus (Story 3.3 / 4.5)
-  { meta: ternusPieceMeta, source: "@landing/templates-ternus/config" },
-]);
+export const allPieces: readonly PieceMeta[] = buildCatalog(pieceRegistrations);

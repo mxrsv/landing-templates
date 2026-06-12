@@ -3,6 +3,12 @@ import { notFound } from "next/navigation";
 import { PieceDetail } from "../../../components/catalog/piece-detail";
 import { allPieces } from "../../../lib/catalog";
 
+export function generateStaticParams() {
+  return allPieces
+    .filter((p) => p.layer === "section")
+    .map((p) => ({ slug: p.slug }));
+}
+
 export default async function SectionDetailPage(
   props: PageProps<"/sections/[slug]">,
 ) {
