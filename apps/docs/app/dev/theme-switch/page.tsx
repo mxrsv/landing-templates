@@ -2,11 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  THEME_MOODS,
-  resolveTheme,
-  type ThemeMood,
-} from "@landing/design-tokens/theme";
+import { THEME_MOODS, type ThemeMood } from "@landing/design-tokens/theme";
 
 export default function ThemeSwitchPage() {
   const [theme, setTheme] = useState<ThemeMood>("infra");
@@ -26,7 +22,7 @@ export default function ThemeSwitchPage() {
           <button
             key={mood}
             type="button"
-            onClick={() => setTheme(resolveTheme(mood))}
+            onClick={() => setTheme(mood)}
             aria-pressed={theme === mood}
             className={`rounded border px-3 py-1.5 text-sm transition-colors ${
               theme === mood

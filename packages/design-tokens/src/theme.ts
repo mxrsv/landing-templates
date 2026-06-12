@@ -13,11 +13,20 @@ export type ThemeMood = (typeof THEME_MOODS)[number];
 export const DEFAULT_THEME: ThemeMood = "infra";
 
 /**
+ * Type guard: is `value` one of the known theme moods?
+ * Narrows to `ThemeMood` so callers avoid an unsafe `as` cast.
+ */
+export function isThemeMood(value: unknown): value is ThemeMood {
+  return (
+    typeof value === "string" &&
+    (THEME_MOODS as readonly string[]).includes(value)
+  );
+}
+
+/**
  * Narrow an untrusted value (URL param, attribute, props) to a valid
  * `ThemeMood`, falling back to `infra` for anything invalid.
  */
 export function resolveTheme(value: string | null | undefined): ThemeMood {
-  return (THEME_MOODS as readonly string[]).includes(value ?? "")
-    ? (value as ThemeMood)
-    : DEFAULT_THEME;
+  return isThemeMood(value) ? value : DEFAULT_THEME;
 }
