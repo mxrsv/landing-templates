@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "../lib/use-in-view";
-import { useReducedMotion } from "../lib/use-reduced-motion";
+import { useReducedMotion } from "@landing/ui/lib/use-reduced-motion";
 
 interface Segment {
   n: string;

@@ -1,5 +1,5 @@
 import { type RefObject, useEffect, useState } from "react";
-import { useReducedMotion } from "./use-reduced-motion";
+import { useReducedMotion } from "@landing/ui/lib/use-reduced-motion";
 
 const clamp = (v: number, a: number, b: number): number =>
   Math.max(a, Math.min(b, v));

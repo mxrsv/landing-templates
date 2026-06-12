@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useReducedMotion } from "../lib/use-reduced-motion";
+import { useReducedMotion } from "@landing/ui/lib/use-reduced-motion";
 
 const INITIAL_BLOCK = 18234567;
 

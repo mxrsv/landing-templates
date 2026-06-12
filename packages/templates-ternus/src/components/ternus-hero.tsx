@@ -1,7 +1,7 @@
 "use client";
 
 import { PixelBlast } from "@landing/ui/pixel-blast";
-import { useReducedMotion } from "../lib/use-reduced-motion";
+import { useReducedMotion } from "@landing/ui/lib/use-reduced-motion";
 import { HeroCrystal } from "./hero-crystal";
 import { TernusNetstrip } from "./ternus-netstrip";
 

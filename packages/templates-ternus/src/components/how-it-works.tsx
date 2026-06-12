@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { useReducedMotion } from "../lib/use-reduced-motion";
+import { useReducedMotion } from "@landing/ui/lib/use-reduced-motion";
 import { useScrollProgress } from "../lib/use-scroll-progress";
 import { Mark } from "./mark";
 import { StatNumber } from "./stat-number";
