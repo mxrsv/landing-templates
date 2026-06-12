@@ -23,7 +23,7 @@
 # - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
 
 generated: 2026-06-08
-last_updated: 2026-06-12 (Epic 2 đóng sổ — code-review 3 agent APPROVE, 2-1..2-4 → done)
+last_updated: 2026-06-12 (Epic 3 mở — story 3-1 created, ready-for-dev)
 project: landing-page-list
 project_key: NOKEY
 tracking_system: file-system
@@ -47,9 +47,9 @@ development_status:
   2-4-shared-errorboundary-reduced-motion: done
   epic-2-retrospective: optional
 
-  epic-3: backlog
-  3-1-complete-ternus-v20-port: backlog
-  3-2-apply-theme-infra-invariant: backlog
+  epic-3: in-progress
+  3-1-complete-ternus-v20-port: review
+  3-2-apply-theme-infra-invariant: ready-for-dev
   3-3-export-ternus-piecemeta: backlog
   epic-3-retrospective: optional
 
