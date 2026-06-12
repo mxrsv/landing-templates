@@ -1,5 +1,10 @@
 import type { PieceMeta } from "../../lib/catalog";
 import { previewComponents } from "../../lib/catalog/preview-registry";
+import {
+  assembleSingleFile,
+  readPieceSources,
+} from "../../lib/catalog/read-source";
+import { SourceViewer } from "./source-viewer";
 
 const TAG_GROUPS = [
   ["mood", (p: PieceMeta) => p.mood],
@@ -9,8 +14,10 @@ const TAG_GROUPS = [
 ] as const;
 
 /** Detail page dùng chung: metadata header + full preview trong data-theme wrapper. */
-export function PieceDetail({ piece }: { piece: PieceMeta }) {
+export async function PieceDetail({ piece }: { piece: PieceMeta }) {
   const Preview = previewComponents[piece.slug];
+  const hasSources = (piece.sourcePaths?.length ?? 0) > 0;
+  const sources = hasSources ? await readPieceSources(piece) : [];
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black">
@@ -56,6 +63,23 @@ export function PieceDetail({ piece }: { piece: PieceMeta }) {
           <Preview />
         )}
       </div>
+
+      {sources.length > 0 && (
+        <section className="mx-auto w-full max-w-6xl px-6 py-12">
+          <h2 className="text-sm font-medium tracking-[0.2em] text-zinc-500 uppercase dark:text-zinc-400">
+            Source
+          </h2>
+          <div className="mt-4">
+            <SourceViewer
+              mode={piece.copyMode}
+              files={sources}
+              {...(piece.copyMode === "single"
+                ? { singlePayload: assembleSingleFile(piece, sources) }
+                : {})}
+            />
+          </div>
+        </section>
+      )}
     </div>
   );
 }

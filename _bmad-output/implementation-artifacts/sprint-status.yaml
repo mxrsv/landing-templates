@@ -23,7 +23,7 @@
 # - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
 
 generated: 2026-06-08
-last_updated: 2026-06-12 (story 4-3 dev xong → review — dev theo dependency order 4-2→4-5→4-1→4-3→4-4→4-6)
+last_updated: 2026-06-12 (story 4-4 dev xong → review — còn 4-6)
 project: landing-page-list
 project_key: NOKEY
 tracking_system: file-system
@@ -57,7 +57,7 @@ development_status:
   4-1-gallery-layout-home: review
   4-2-catalog-schema-types: review
   4-3-dynamic-slug-routes: review
-  4-4-copybutton-single-multi: backlog
+  4-4-copybutton-single-multi: review
   4-5-catalog-aggregator-registration: review
   4-6-catalog-manifest-budget: backlog
   epic-4-retrospective: optional
