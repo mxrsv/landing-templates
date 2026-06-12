@@ -1,3 +1,5 @@
+import { Badge } from "@landing/ui/components/badge";
+import { Card, CardBody, CardPreview } from "@landing/ui/components/card";
 import Link from "next/link";
 
 import type { PieceMeta } from "../../lib/catalog";
@@ -17,6 +19,7 @@ export function pieceDetailHref(piece: PieceMeta): string {
 /**
  * Card index thống nhất cho mọi layer: lazy inline preview (IntersectionObserver
  * + dynamic import) + tên + tags. Click bất kỳ đâu → detail.
+ * Accent budget: chỉ mood tag dùng Badge accent, còn lại neutral.
  */
 export function PieceCard({ piece }: { piece: PieceMeta }) {
   const href = pieceDetailHref(piece);
@@ -25,26 +28,30 @@ export function PieceCard({ piece }: { piece: PieceMeta }) {
   return (
     <Link
       href={href}
-      className="group overflow-hidden rounded-lg border border-zinc-200 transition-colors hover:border-violet-400 dark:border-zinc-800 dark:hover:border-violet-500"
+      className="group focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--state-focus-ring)] rounded-[var(--card-radius)]"
     >
-      <div className="overflow-hidden border-b border-zinc-200 dark:border-zinc-800">
-        <PieceCardPreview slug={piece.slug} mood={mood} />
-      </div>
-      <div className="p-5">
-        <h3 className="font-medium text-zinc-900 group-hover:text-violet-600 dark:text-zinc-50 dark:group-hover:text-violet-300">
-          {piece.name}
-        </h3>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {[...piece.mood, ...piece.stackTags].map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full border border-zinc-200 px-2 py-0.5 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
+      <Card>
+        <CardPreview className="border-b border-[var(--card-border)]">
+          <PieceCardPreview slug={piece.slug} mood={mood} />
+        </CardPreview>
+        <CardBody>
+          <h3 className="text-[length:var(--text-caption)] font-medium text-[var(--p-ink)]">
+            {piece.name}
+          </h3>
+          <div className="mt-[var(--space-2)] flex flex-wrap gap-[var(--space-1)]">
+            {piece.mood.map((tag) => (
+              <Badge key={tag} variant="accent">
+                {tag}
+              </Badge>
+            ))}
+            {piece.stackTags.map((tag) => (
+              <Badge key={tag} variant="neutral">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        </CardBody>
+      </Card>
     </Link>
   );
 }

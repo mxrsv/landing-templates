@@ -1,85 +1,168 @@
+import { Badge } from "@landing/ui/components/badge";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@landing/ui/components/tabs";
+import { Tooltip } from "@landing/ui/components/tooltip";
+import Link from "next/link";
+
 import type { PieceMeta } from "../../lib/catalog";
 import { hasPreview } from "../../lib/catalog/preview-loaders";
 import {
   assembleSingleFile,
+  type PieceSourceFile,
   readPieceSources,
 } from "../../lib/catalog/read-source";
+import { CodeBlock } from "./code-block";
+import { CopyButton } from "./copy-button";
 import { PieceLivePreview } from "./piece-live-preview";
-import { SourceViewer } from "./source-viewer";
+import { PreviewViewport } from "./preview-viewport";
 
-const TAG_GROUPS = [
-  ["mood", (p: PieceMeta) => p.mood],
-  ["use case", (p: PieceMeta) => p.useCase],
-  ["stack", (p: PieceMeta) => p.stackTags],
-  ["animation", (p: PieceMeta) => p.animationTags],
-] as const;
+const LAYER_INDEX: Record<PieceMeta["layer"], { href: string; label: string }> =
+  {
+    ui: { href: "/ui", label: "UI" },
+    section: { href: "/sections", label: "Sections" },
+    template: { href: "/templates", label: "Templates" },
+  };
 
-/** Detail page dùng chung: metadata header + full preview trong data-theme wrapper. */
+/** Payload copy cho mode multi: nối toàn bộ file kèm banner path. */
+function assembleMultiPayload(files: readonly PieceSourceFile[]): string {
+  return files
+    .map((file) => `// ---- ${file.path} ----\n\n${file.content}`)
+    .join("\n\n");
+}
+
+/**
+ * Detail page mới (Epic 10): breadcrumb + header (badges, deps tooltip,
+ * 1 nút Copy solid duy nhất) + Tabs Preview | Code. Copy mechanism giữ
+ * nguyên Epic 4: RSC fs.readFile qua read-source.
+ */
 export async function PieceDetail({ piece }: { piece: PieceMeta }) {
+  const layerIndex = LAYER_INDEX[piece.layer];
   const hasSources = (piece.sourcePaths?.length ?? 0) > 0;
   const sources = hasSources ? await readPieceSources(piece) : [];
+  const single = piece.copyMode === "single";
+  const copyPayload = single
+    ? assembleSingleFile(piece, sources)
+    : assembleMultiPayload(sources);
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-black">
-      <header className="mx-auto w-full max-w-6xl px-6 py-10">
-        <p className="text-sm font-medium tracking-[0.3em] text-violet-600 uppercase dark:text-violet-300">
-          {piece.layer}
-        </p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          {piece.name}
-        </h1>
-        <dl className="mt-5 flex flex-col gap-2">
-          {TAG_GROUPS.map(([label, pick]) => {
-            const tags = pick(piece);
-            if (tags.length === 0) return null;
-            return (
-              <div key={label} className="flex flex-wrap items-center gap-2">
-                <dt className="w-24 text-xs tracking-[0.15em] text-zinc-500 uppercase dark:text-zinc-400">
-                  {label}
-                </dt>
-                <dd className="flex flex-wrap gap-2">
-                  {tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-zinc-200 px-2 py-0.5 text-xs text-zinc-600 dark:border-zinc-800 dark:text-zinc-300"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </dd>
-              </div>
-            );
-          })}
-        </dl>
+    <main className="mx-auto w-full max-w-[var(--container-max)] px-[var(--space-6)] py-[var(--space-8)]">
+      <nav
+        aria-label="Breadcrumb"
+        className="flex items-center gap-[var(--space-2)] text-[length:var(--text-eyebrow)] text-[var(--p-ink-3)]"
+      >
+        <Link
+          href={layerIndex.href}
+          className="hover:text-[var(--p-ink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--state-focus-ring)]"
+        >
+          {layerIndex.label}
+        </Link>
+        <span aria-hidden>/</span>
+        <span className="text-[var(--p-ink-2)]">{piece.name}</span>
+      </nav>
+
+      <header className="mt-[var(--space-4)] flex flex-wrap items-start justify-between gap-[var(--space-4)]">
+        <div>
+          <h1 className="text-[length:var(--text-h2)] font-semibold tracking-tight text-[var(--p-ink)]">
+            {piece.name}
+          </h1>
+          <div className="mt-[var(--space-3)] flex flex-wrap items-center gap-[var(--space-1)]">
+            {piece.mood.map((tag) => (
+              <Badge key={tag} variant="accent">
+                {tag}
+              </Badge>
+            ))}
+            {[...piece.useCase, ...piece.stackTags, ...piece.animationTags].map(
+              (tag) => (
+                <Badge key={tag} variant="neutral">
+                  {tag}
+                </Badge>
+              ),
+            )}
+            {piece.deps.length > 0 && (
+              <Tooltip
+                content={
+                  <span className="font-mono">
+                    pnpm add {piece.deps.join(" ")}
+                  </span>
+                }
+              >
+                <Badge
+                  variant="outline"
+                  tabIndex={0}
+                  className="cursor-help focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--state-focus-ring)]"
+                >
+                  {piece.deps.length} deps
+                </Badge>
+              </Tooltip>
+            )}
+          </div>
+        </div>
+        {sources.length > 0 && (
+          <CopyButton
+            text={copyPayload}
+            label={single ? "Copy source" : "Copy all files"}
+            variant="solid"
+          />
+        )}
       </header>
 
-      <div data-theme={piece.mood[0]}>
-        {!hasPreview(piece.slug) ? (
-          <p className="mx-auto w-full max-w-6xl px-6 pb-16 text-sm text-zinc-500 dark:text-zinc-400">
-            Preview chưa đăng ký cho Piece này — thêm entry vào
-            `lib/catalog/piece-registrations.ts`.
-          </p>
-        ) : (
-          <PieceLivePreview slug={piece.slug} />
-        )}
-      </div>
+      <div className="mt-[var(--space-6)]">
+        <Tabs defaultValue="preview">
+          <TabsList>
+            <TabsTrigger value="preview">Preview</TabsTrigger>
+            {single
+              ? sources.length > 0 && (
+                  <TabsTrigger value="code">Code</TabsTrigger>
+                )
+              : sources.map((file) => (
+                  <TabsTrigger key={file.path} value={file.path}>
+                    {file.name}
+                  </TabsTrigger>
+                ))}
+          </TabsList>
 
-      {sources.length > 0 && (
-        <section className="mx-auto w-full max-w-6xl px-6 py-12">
-          <h2 className="text-sm font-medium tracking-[0.2em] text-zinc-500 uppercase dark:text-zinc-400">
-            Source
-          </h2>
-          <div className="mt-4">
-            <SourceViewer
-              mode={piece.copyMode}
-              files={sources}
-              {...(piece.copyMode === "single"
-                ? { singlePayload: assembleSingleFile(piece, sources) }
-                : {})}
-            />
-          </div>
-        </section>
-      )}
-    </div>
+          <TabsContent value="preview" className="mt-[var(--space-4)]">
+            {!hasPreview(piece.slug) ? (
+              <p className="text-[length:var(--text-caption)] text-[var(--p-ink-3)]">
+                Preview chưa đăng ký cho Piece này — thêm entry vào
+                `lib/catalog/piece-registrations.ts`.
+              </p>
+            ) : (
+              <PreviewViewport slug={piece.slug}>
+                <div data-theme={piece.mood[0]}>
+                  <PieceLivePreview slug={piece.slug} />
+                </div>
+              </PreviewViewport>
+            )}
+          </TabsContent>
+
+          {single
+            ? sources.length > 0 && (
+                <TabsContent value="code" className="mt-[var(--space-4)]">
+                  <CodeBlock content={copyPayload} copyLabel="Copy source" />
+                </TabsContent>
+              )
+            : sources.map((file) => (
+                <TabsContent
+                  key={file.path}
+                  value={file.path}
+                  className="mt-[var(--space-4)]"
+                >
+                  <p className="mb-[var(--space-2)] truncate font-mono text-[length:var(--text-eyebrow)] text-[var(--p-ink-3)]">
+                    {file.path}
+                  </p>
+                  <CodeBlock
+                    content={file.content}
+                    copyLabel={`Copy ${file.name}`}
+                  />
+                </TabsContent>
+              ))}
+        </Tabs>
+      </div>
+    </main>
   );
 }

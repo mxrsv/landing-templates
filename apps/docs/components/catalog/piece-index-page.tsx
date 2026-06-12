@@ -1,16 +1,29 @@
+import { EmptyState } from "@landing/ui/components/empty-state";
+
 import {
   allPieces,
   type PieceLayer,
   type PieceMeta,
   type PieceMood,
 } from "../../lib/catalog";
+import {
+  collectFilterOptions,
+  filterPieces,
+  hasActiveFilter,
+  parseCatalogFilter,
+  type SearchParamsRecord,
+} from "../../lib/catalog/filter-params";
+import { ActiveFilterChips } from "../shell/active-filter-chips";
+import { FilterSidebar } from "../shell/filter-sidebar";
 import { PieceCard } from "./piece-card";
 
 interface PieceIndexPageProps {
   layer: PieceLayer;
   eyebrow: string;
   title: string;
-  /** Group cards theo mood[0] (dùng cho /templates — pre-filter UX). */
+  /** `await props.searchParams` từ page — URL là source of truth cho filter. */
+  searchParams: SearchParamsRecord;
+  /** Group cards theo mood[0] khi KHÔNG có filter active (dùng cho /templates). */
   groupByMood?: boolean;
 }
 
@@ -28,7 +41,7 @@ function groupPiecesByMood(
 
 function CardGrid({ pieces }: { pieces: readonly PieceMeta[] }) {
   return (
-    <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-[var(--space-4)] sm:grid-cols-2 xl:grid-cols-3">
       {pieces.map((piece) => (
         <PieceCard key={piece.slug} piece={piece} />
       ))}
@@ -36,46 +49,73 @@ function CardGrid({ pieces }: { pieces: readonly PieceMeta[] }) {
   );
 }
 
-/** Index layout dùng chung cho /ui, /sections, /templates — một pattern duy nhất. */
+/**
+ * Index layout discovery-first dùng chung cho /ui, /sections, /templates:
+ * sidebar filter 4 trục + chips active + grid. Filter resolve hoàn toàn
+ * trên server từ searchParams (story 9.1/9.2 absorbed vào Epic 10).
+ */
 export function PieceIndexPage({
   layer,
   eyebrow,
   title,
+  searchParams,
   groupByMood = false,
 }: PieceIndexPageProps) {
-  const pieces = allPieces.filter((piece) => piece.layer === layer);
+  const layerPieces = allPieces.filter((piece) => piece.layer === layer);
+  const options = collectFilterOptions(layerPieces);
+  const filter = parseCatalogFilter(searchParams, options);
+  const filtered = filterPieces(layerPieces, filter);
+  const filtering = hasActiveFilter(filter);
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-black">
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-16">
-        <section>
-          <p className="text-sm font-medium tracking-[0.3em] text-violet-600 uppercase dark:text-violet-300">
-            {eyebrow}
-          </p>
-          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-            {title}
-          </h1>
-        </section>
+    <main className="mx-auto w-full max-w-[var(--container-max)] px-[var(--space-6)] py-[var(--space-10)]">
+      <header>
+        <p className="text-[length:var(--text-eyebrow)] font-medium tracking-[0.3em] text-[var(--p-ink-3)] uppercase">
+          {eyebrow}
+        </p>
+        <h1 className="mt-[var(--space-2)] text-[length:var(--text-h2)] font-semibold tracking-tight text-[var(--p-ink)]">
+          {title}
+        </h1>
+      </header>
 
-        {pieces.length === 0 ? (
-          <p className="rounded-lg border border-dashed border-zinc-300 p-6 text-sm text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
-            Chưa có Piece — đang chờ registration.
-          </p>
-        ) : groupByMood ? (
-          groupPiecesByMood(pieces).map(([mood, moodPieces]) => (
-            <section key={mood}>
-              <h2 className="text-sm font-medium tracking-[0.2em] text-zinc-500 uppercase dark:text-zinc-400">
-                {mood}
-              </h2>
-              <CardGrid pieces={moodPieces} />
-            </section>
-          ))
-        ) : (
-          <section>
-            <CardGrid pieces={pieces} />
-          </section>
-        )}
-      </main>
-    </div>
+      {layerPieces.length === 0 ? (
+        <div className="mt-[var(--space-8)]">
+          <EmptyState
+            message="Chưa có Piece nào ở layer này"
+            hint="Đang chờ registration trong lib/catalog/piece-registrations.ts."
+          />
+        </div>
+      ) : (
+        <div className="mt-[var(--space-8)] flex flex-col gap-[var(--space-8)] lg:flex-row">
+          <FilterSidebar options={options} />
+          <div className="flex min-w-0 flex-1 flex-col gap-[var(--space-4)]">
+            <ActiveFilterChips
+              options={options}
+              resultCount={filtered.length}
+            />
+            {filtered.length === 0 ? (
+              <EmptyState
+                message="Không có Piece phù hợp"
+                hint="Thử bỏ bớt filter hoặc xoá từ khoá tìm kiếm."
+              />
+            ) : groupByMood && !filtering ? (
+              groupPiecesByMood(filtered).map(([mood, moodPieces]) => (
+                <section
+                  key={mood}
+                  className="flex flex-col gap-[var(--space-3)]"
+                >
+                  <h2 className="text-[length:var(--text-eyebrow)] font-medium tracking-[0.2em] text-[var(--p-ink-3)] uppercase">
+                    {mood}
+                  </h2>
+                  <CardGrid pieces={moodPieces} />
+                </section>
+              ))
+            ) : (
+              <CardGrid pieces={filtered} />
+            )}
+          </div>
+        </div>
+      )}
+    </main>
   );
 }

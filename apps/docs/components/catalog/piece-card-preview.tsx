@@ -18,7 +18,7 @@ function CardPreviewPlaceholder({ mood }: { mood: PieceMood }) {
       className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${MOOD_GRADIENT[mood]}`}
       aria-hidden
     >
-      <span className="text-xs tracking-[0.25em] text-zinc-500 uppercase">
+      <span className="text-[length:var(--text-eyebrow)] tracking-[0.25em] text-[var(--p-ink-3)] uppercase">
         Preview
       </span>
     </div>
@@ -57,7 +57,7 @@ export function PieceCardPreview({ slug, mood }: PieceCardPreviewProps) {
   return (
     <div
       ref={rootRef}
-      className="relative aspect-[16/9] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-900"
+      className="relative aspect-[16/9] w-full overflow-hidden bg-[var(--surface-1)]"
     >
       {visible && Preview !== undefined ? (
         <div

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
-import { PieceDetail } from "../../../components/catalog/piece-detail";
-import { allPieces } from "../../../lib/catalog";
+import { PieceDetail } from "../../../../components/catalog/piece-detail";
+import { allPieces } from "../../../../lib/catalog";
 
 export function generateStaticParams() {
   return allPieces

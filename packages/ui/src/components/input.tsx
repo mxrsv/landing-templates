@@ -1,8 +1,10 @@
-import type { InputHTMLAttributes } from "react";
+import type { InputHTMLAttributes, Ref } from "react";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   /** Keyboard hint rendered at the right edge (e.g. "⌘K"). */
   shortcutHint?: string;
+  /** Ref forwarded to the inner `<input>` (React 19 ref-as-prop). */
+  ref?: Ref<HTMLInputElement>;
 }
 
 /** Search/text input on the token layer; client-side filtering only (v1). */

@@ -1,20 +1,23 @@
 "use client";
 
+import { Button } from "@landing/ui/components/button";
 import { useState } from "react";
 
 type CopyState = "idle" | "copied" | "fallback";
 
 /**
- * Copy text vào clipboard (desktop). Clipboard API thiếu (non-secure
- * context, mobile cũ) hoặc bị deny → hiện fallback textarea read-only
- * auto select-all để user copy tay.
+ * Copy text vào clipboard. Clipboard API thiếu (non-secure context, mobile
+ * cũ) hoặc bị deny → hiện fallback textarea read-only auto select-all để
+ * user copy tay. `variant="solid"` cho primary action duy nhất trên detail.
  */
 export function CopyButton({
   text,
   label = "Copy",
+  variant = "ghost",
 }: {
   text: string;
   label?: string;
+  variant?: "solid" | "ghost";
 }) {
   const [state, setState] = useState<CopyState>("idle");
 
@@ -33,14 +36,10 @@ export function CopyButton({
   };
 
   return (
-    <div className="flex flex-col gap-2">
-      <button
-        type="button"
-        onClick={handleCopy}
-        className="self-start rounded-md border border-zinc-300 px-3 py-1 text-xs font-medium text-zinc-700 transition-colors hover:border-violet-400 hover:text-violet-600 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-violet-500 dark:hover:text-violet-300"
-      >
+    <div className="flex flex-col gap-[var(--space-2)]">
+      <Button variant={variant} onClick={handleCopy} className="self-start">
         {state === "copied" ? "Đã copy ✓" : label}
-      </button>
+      </Button>
       {state === "fallback" && (
         <textarea
           readOnly
@@ -48,7 +47,7 @@ export function CopyButton({
           rows={6}
           aria-label="Source code — select all để copy tay"
           onFocus={(e) => e.currentTarget.select()}
-          className="w-full rounded-md border border-zinc-300 bg-zinc-100 p-3 font-mono text-xs text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300"
+          className="w-full rounded-[var(--radius-md)] border border-[var(--border-default)] bg-[var(--surface-1)] p-[var(--space-3)] font-mono text-[length:var(--text-eyebrow)] text-[var(--p-ink-2)]"
         />
       )}
     </div>
