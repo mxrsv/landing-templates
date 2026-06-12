@@ -31,8 +31,9 @@
   --line-2: var(--p-line, rgba(127, 233, 255, 0.18));
   --line-3: color-mix(in srgb, var(--cy-bright) 34%, transparent);
   --line-w: color-mix(in srgb, var(--white) 10%, transparent);
-  /* component surfaces (terminal) */
-  --term-bg: #060a0e;
+  /* component surfaces (terminal) — v2 (I-8): nền terminal từ surface ramp,
+     fallback giữ literal v20 cho bản copy standalone */
+  --term-bg: var(--surface-0, #060a0e);
   --term-string: #9fe6c0;
   /* mask helper — alpha-only fill for gradient masks */
   --mask-fill: #000;
@@ -93,6 +94,14 @@
 
 html:has(.tn) {
   scroll-behavior: smooth;
+}
+
+/* v2 (INVARIANT I-7): focus ring thống nhất từ --state-* cho mọi element
+   tương tác — keyboard đi hết nav → CTA → terminal tabs đều thấy ring. */
+.tn a:focus-visible,
+.tn button:focus-visible {
+  outline: 2px solid var(--state-focus-ring, var(--cy));
+  outline-offset: 2px;
 }
 
 /* ============ PRIMITIVES ============ */
