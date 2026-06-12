@@ -31,6 +31,8 @@
 @import "./themes/neon.css";
 @import "./themes/game.css";
 @import "./themes/nft.css";
+/* `chrome` is NOT a catalog mood — gallery-shell-only neutral frame (v2). */
+@import "./themes/chrome.css";
 
 :root {
   /* --- spacing — 4/8px grid -------------------------------- */
@@ -67,8 +69,68 @@
 
   /* --- radius / hairline floor ----------------------------- */
   --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
   --radius-pill: 999px;
   --line-w: 1px;
+
+  /* --- v2: surface elevation ramp --------------------------- */
+  /* 0 = page, 1 = card, 2 = popover/dropdown, 3 = modal.
+     Themes may override; floor mirrors the infra near-black ramp. */
+  --surface-0: #07070c;
+  --surface-1: #0c0d14;
+  --surface-2: #12131c;
+  --surface-3: #181a25;
+
+  /* --- v2: semantic interactive states ---------------------- */
+  /* Every interactive element consumes these — no per-piece
+     hand-rolled hover/focus (INVARIANT I-7). */
+  --state-hover-bg: rgba(255, 255, 255, 0.05);
+  --state-active-bg: rgba(255, 255, 255, 0.03);
+  --state-focus-ring: var(--p-primary);
+  --state-disabled-opacity: 0.4;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --border-default: var(--p-line-soft);
+  --border-emphasis: var(--p-line);
+
+  /* --- v2: layout rhythm ------------------------------------ */
+  /* Sections consume these instead of self-declared max-widths
+     (INVARIANT I-9). Breakpoints = Tailwind 4 defaults. */
+  --container-sm: 40rem; /* 640px */
+  --container-md: 48rem; /* 768px */
+  --container-lg: 64rem; /* 1024px */
+  --container-max: 80rem; /* 1280px */
+  --section-pad-y-sm: var(--space-12); /* 48px */
+  --section-pad-y-md: var(--space-20); /* 80px */
+  --section-pad-y-lg: var(--space-32); /* 128px */
+
+  /* --- v2: component tokens (mapping layer ONLY) ------------ */
+  /* Values must map from floor/surface tokens — never raw hex.
+     Themes restyle shared components by overriding this layer. */
+  --btn-bg: var(--surface-2);
+  --btn-fg: var(--p-ink);
+  --btn-border: var(--border-default);
+  --btn-radius: var(--radius-md);
+  --btn-solid-bg: var(--p-primary);
+  --btn-solid-fg: var(--p-bg);
+  --card-bg: var(--surface-1);
+  --card-border: var(--border-default);
+  --card-border-hover: var(--border-emphasis);
+  --card-radius: var(--radius-lg);
+  --tab-active-fg: var(--p-ink);
+  --tab-inactive-fg: var(--p-ink-2);
+  --tab-indicator: var(--p-primary);
+  --input-bg: var(--surface-0);
+  --input-border: var(--border-default);
+  --input-fg: var(--p-ink);
+  --input-placeholder: var(--p-ink-3);
+  --badge-bg: var(--surface-2);
+  --badge-fg: var(--p-ink-2);
+  --badge-accent-bg: color-mix(in srgb, var(--p-primary) 14%, transparent);
+  --badge-accent-fg: var(--p-primary);
+  --tooltip-bg: var(--surface-3);
+  --tooltip-fg: var(--p-ink);
+  --tooltip-border: var(--border-emphasis);
 
   /* --- palette tokens — DEFAULT = infra mood --------------- */
   /* Story 2.2 overrides these under [data-theme="neon|game|nft"].
@@ -101,4 +163,11 @@
   --color-ink-3: var(--p-ink-3);
   --color-line: var(--p-line);
   --color-line-soft: var(--p-line-soft);
+  /* v2 surfaces + borders (bg-surface-1, border-edge, border-edge-strong…) */
+  --color-surface-0: var(--surface-0);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-edge: var(--border-default);
+  --color-edge-strong: var(--border-emphasis);
 }

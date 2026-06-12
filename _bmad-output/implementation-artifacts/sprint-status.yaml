@@ -23,7 +23,7 @@
 # - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
 
 generated: 2026-06-08
-last_updated: 2026-06-12 (epic-3 + epic-4 dev xong toàn bộ — 9 stories ở review, chờ code-review)
+last_updated: 2026-06-12 (epic-3+4 đóng nhanh theo quyết định redesign; thêm epic-10 Design System v2 & Gallery Redesign — spec: docs/superpowers/specs/2026-06-12-design-system-v2-gallery-redesign-design.md; epic-9 bỏ 9-1/9-2 vì đã nuốt vào epic-10; thứ tự mới: 10 → 5 → 6 → 7 → 8 → 9)
 project: landing-page-list
 project_key: NOKEY
 tracking_system: file-system
@@ -47,20 +47,31 @@ development_status:
   2-4-shared-errorboundary-reduced-motion: done
   epic-2-retrospective: optional
 
-  epic-3: in-progress
-  3-1-complete-ternus-v20-port: review
-  3-2-apply-theme-infra-invariant: review
-  3-3-export-ternus-piecemeta: review
+  # epic-3/4: đóng nhanh không code-review kỹ (quyết định redesign 2026-06-12,
+  # chấp nhận rủi ro logic — UI shell sẽ bị epic-10 thay phần lớn)
+  epic-3: done
+  3-1-complete-ternus-v20-port: done
+  3-2-apply-theme-infra-invariant: done
+  3-3-export-ternus-piecemeta: done
   epic-3-retrospective: optional
 
-  epic-4: in-progress
-  4-1-gallery-layout-home: review
-  4-2-catalog-schema-types: review
-  4-3-dynamic-slug-routes: review
-  4-4-copybutton-single-multi: review
-  4-5-catalog-aggregator-registration: review
-  4-6-catalog-manifest-budget: review
+  epic-4: done
+  4-1-gallery-layout-home: done
+  4-2-catalog-schema-types: done
+  4-3-dynamic-slug-routes: done
+  4-4-copybutton-single-multi: done
+  4-5-catalog-aggregator-registration: done
+  4-6-catalog-manifest-budget: done
   epic-4-retrospective: optional
+
+  # epic-10 chen TRƯỚC epic 5-9: pieces mới phải build trên chuẩn design system v2.
+  # Spec: docs/superpowers/specs/2026-06-12-design-system-v2-gallery-redesign-design.md
+  epic-10: in-progress
+  10-1-design-tokens-v2: in-progress
+  10-2-ui-component-library: backlog
+  10-3-gallery-shell-redesign: backlog
+  10-4-ternus-retrofit: backlog
+  epic-10-retrospective: optional
 
   epic-5: backlog
   5-1-price-ticker-ui: backlog
@@ -89,9 +100,8 @@ development_status:
   8-4-register-ui-catalog: backlog
   epic-8-retrospective: optional
 
+  # epic-9: 9-1 + 9-2 đã NUỐT vào epic-10 (story 10-3) — xoá khỏi backlog
   epic-9: backlog
-  9-1-filterbar-multi-axis: backlog
-  9-2-url-searchparams-persistence: backlog
   9-3-catalog-invariant-qa-audit: backlog
   9-4-e2e-route-smoke-test: backlog
   9-5-ci-pipeline-vercel-deploy: backlog

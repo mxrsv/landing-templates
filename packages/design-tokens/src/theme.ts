@@ -13,6 +13,16 @@ export type ThemeMood = (typeof THEME_MOODS)[number];
 export const DEFAULT_THEME: ThemeMood = "infra";
 
 /**
+ * Gallery-shell-only neutral frame ("Warm graphite"). Deliberately NOT in
+ * `THEME_MOODS`: pieces never carry it, so it stays out of catalog filters,
+ * `resolveTheme`, and `pieceMeta.mood`.
+ */
+export const CHROME_THEME = "chrome" as const;
+
+/** Every `data-theme` value that exists in CSS (moods + chrome frame). */
+export type ThemeName = ThemeMood | typeof CHROME_THEME;
+
+/**
  * Type guard: is `value` one of the known theme moods?
  * Narrows to `ThemeMood` so callers avoid an unsafe `as` cast.
  */

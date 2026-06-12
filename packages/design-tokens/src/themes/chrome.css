@@ -1,0 +1,40 @@
+/* Theme: chrome — neutral "Warm graphite" frame for the gallery shell ONLY.
+   NOT a catalog mood: pieces never ship with data-theme="chrome"; the shell
+   wears it so piece moods stay the loudest thing on screen ("khung tranh").
+
+   Direction locked in the 2026-06-12 redesign brainstorm: warm zinc ramp,
+   6-8px radius, single light-orange accent #fbbf77 (kin to Ternus orange).
+   Accent budget: max 1 solid-accent element per viewport — primary action
+   (Copy), tab indicator, mood badge, focus ring, checked checkbox. */
+
+[data-theme="chrome"] {
+  --p-bg: #101012;
+  --p-surface: #18181b;
+  --p-primary: #fbbf77;
+  --p-primary-bright: #fdd6a3;
+  --p-primary-soft: #fee8c8;
+  --p-accent: #fbbf77;
+  --p-ink: #fafafa;
+  --p-ink-2: #a1a1aa;
+  --p-ink-3: #71717a;
+  --p-line: #38383e;
+  --p-line-soft: #26262a;
+
+  /* v2 ramps — warm zinc */
+  --surface-0: #101012;
+  --surface-1: #18181b;
+  --surface-2: #202024;
+  --surface-3: #28282d;
+  --state-hover-bg: rgba(255, 255, 255, 0.06);
+  --state-active-bg: rgba(255, 255, 255, 0.04);
+  --state-focus-ring: #fbbf77;
+  --border-default: #26262a;
+  --border-emphasis: #424249;
+
+  /* component personality — soft radius, dark text on accent solid */
+  --btn-solid-bg: #fbbf77;
+  --btn-solid-fg: #1c1208;
+  --tab-indicator: #fbbf77;
+  --badge-accent-bg: #2a2118;
+  --badge-accent-fg: #fbbf77;
+}
