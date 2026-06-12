@@ -4,7 +4,7 @@ baseline_commit: 102b1056c56907a7ec690dd0f7a24b396241db57
 
 # Story 1.5: Wire Routes, Redirect & Smoke Test
 
-Status: review
+Status: done
 
 ## Story
 

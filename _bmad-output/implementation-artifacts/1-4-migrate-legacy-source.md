@@ -4,7 +4,7 @@ baseline_commit: ab3daf25d492ab8ef032cabcac094538cfa42d93
 
 # Story 1.4: Migrate Legacy Source to Packages
 
-Status: review
+Status: done
 
 ## Story
 

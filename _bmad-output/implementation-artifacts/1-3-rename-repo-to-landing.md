@@ -4,7 +4,7 @@ baseline_commit: a8c56c8
 
 # Story 1.3: Rename @repo → @landing
 
-Status: review
+Status: done
 
 ## Story
 

@@ -4,7 +4,7 @@ baseline_commit: 317604b
 
 # Story 1.3b: Scaffold Empty Template & Section Packages
 
-Status: review
+Status: done
 
 ## Story
 

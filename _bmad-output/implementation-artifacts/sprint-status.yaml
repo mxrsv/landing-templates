@@ -23,20 +23,20 @@
 # - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
 
 generated: 2026-06-08
-last_updated: 2026-06-09 (story 1-6 type-coverage-gate → done, review follow-ups fixed)
+last_updated: 2026-06-12 (Epic 1 đóng sổ — 1-1→1-5 review→done sau Senior Dev Review cấp Epic, epic-1 → done)
 project: landing-page-list
 project_key: NOKEY
 tracking_system: file-system
 story_location: "_bmad-output/implementation-artifacts"
 
 development_status:
-  epic-1: in-progress
-  1-1-gate-0-wip-snapshot: review
-  1-2-pnpm-switch-turbo-scaffold: review
-  1-3-rename-repo-to-landing: review
-  1-3b-scaffold-empty-packages: review
-  1-4-migrate-legacy-source: review
-  1-5-wire-routes-redirect-smoke-test: review
+  epic-1: done
+  1-1-gate-0-wip-snapshot: done
+  1-2-pnpm-switch-turbo-scaffold: done
+  1-3-rename-repo-to-landing: done
+  1-3b-scaffold-empty-packages: done
+  1-4-migrate-legacy-source: done
+  1-5-wire-routes-redirect-smoke-test: done
   1-6-type-coverage-gate: done
   epic-1-retrospective: optional
 
