@@ -10,7 +10,6 @@
     "./pixel-blast": "./src/pixel-blast/index.ts",
     "./soft-aurora": "./src/soft-aurora/index.ts",
     "./logo-loop": "./src/logo-loop/index.ts",
-    "./lib/types": "./src/lib/types.ts",
     "./lib/use-reduced-motion": "./src/lib/use-reduced-motion.ts",
     "./lib/error-boundary": "./src/lib/ErrorBoundary.tsx"
   },
