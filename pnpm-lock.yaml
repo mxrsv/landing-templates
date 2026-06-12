@@ -20,6 +20,9 @@ importers:
 
   apps/docs:
     dependencies:
+      '@landing/design-tokens':
+        specifier: workspace:*
+        version: link:../../packages/design-tokens
       '@landing/templates-ternus':
         specifier: workspace:*
         version: link:../../packages/templates-ternus
@@ -75,6 +78,12 @@ importers:
       typescript:
         specifier: 5.9.2
         version: 5.9.2
+
+  packages/design-tokens:
+    devDependencies:
+      tailwindcss:
+        specifier: ^4.1.5
+        version: 4.1.16
 
   packages/eslint-config:
     devDependencies:

@@ -1,0 +1,16 @@
+{
+  "name": "@landing/design-tokens",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/base.css",
+    "./themes/*": "./src/themes/*.css"
+  },
+  "scripts": {
+    "build": "echo \"@landing/design-tokens: no build (CSS-only token floor)\" && exit 0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.1.5"
+  }
+}

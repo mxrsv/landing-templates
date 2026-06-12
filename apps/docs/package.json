@@ -11,6 +11,7 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@landing/design-tokens": "workspace:*",
     "@landing/templates-ternus": "workspace:*",
     "@landing/ui": "workspace:*",
     "next": "16.2.7",

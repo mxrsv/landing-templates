@@ -1,6 +1,6 @@
 # Story 2.1: Base Token Package & @theme Block
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -29,27 +29,27 @@ so that **spacing scale và motion easing floor áp dụng nhất quán mọi Pi
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1 — Scaffold package `packages/design-tokens`** (AC: 1)
-  - [ ] Tạo `packages/design-tokens/package.json`: `name: "@landing/design-tokens"`, `version: "0.0.0"`, `private: true`, `type: "module"`, `exports: { ".": "./src/base.css" }`, script `build` no-op echo (CSS-only, không compile — mirror `packages/sections/package.json`), devDep `tailwindcss: "^4.1.5"` (để IDE/tooling hiểu `@theme`).
-  - [ ] **KHÔNG** thêm `check-types` script (package không có TS) — turbo bỏ qua task này khi package không định nghĩa nó; tránh tạo `tsconfig.json` thừa.
-  - [ ] Xác nhận `@landing/design-tokens` đã nằm sẵn trong `apps/docs/next.config.ts` `transpilePackages` (Epic 1 pre-register — KHÔNG sửa list).
-- [ ] **Task 2 — Viết `src/base.css`** (AC: 1, 2, 3)
-  - [ ] `:root` — spacing vars 4/8px grid (vd `--space-1: 0.25rem … --space-24: 6rem`), type scale vars (eyebrow→display), named easing (`--ease-standard`, `--ease-entrance`, `--ease-exit`) + duration vars. KHÔNG dùng `transition: all` ở bất kỳ đâu.
-  - [ ] `:root` — default palette `--p-*` (floor = infra mood; tham khảo giá trị cyan/near-black đã LOCK: `--p-bg:#07070c`, `--p-primary:#22d3ee`, `--p-accent:#fb923c` dùng cực ít). Đây là default; Story 2.2 override.
-  - [ ] `@theme inline { --color-* : var(--p-*) }` — map đủ token palette sang Tailwind utility namespace (`bg-primary`, `text-ink`, `border-line`…).
-  - [ ] **KHÔNG** `@import "tailwindcss"` trong base.css (apps/docs đã import; double-import gây trùng).
-- [ ] **Task 3 — Wire vào `apps/docs`** (AC: 4)
-  - [ ] `apps/docs/package.json`: thêm `"@landing/design-tokens": "workspace:*"` vào `dependencies`.
-  - [ ] `apps/docs/app/globals.css`: thêm `@import "@landing/design-tokens";` ngay sau `@import "tailwindcss";` và `@import "@landing/tailwind-config";`, trước các `@source`/`@theme inline` cục bộ. Cân nhắc gỡ block `@theme inline` placeholder (`--color-background/foreground`) nếu trùng vai trò — chỉ khi không phá demo home hiện tại.
-  - [ ] `pnpm install` để link workspace dep mới.
-- [ ] **Task 4 — Dọn `@theme` boilerplate `tailwind-config`** (AC: 5)
-  - [ ] `grep -rn "blue-1000\|purple-1000\|red-1000" apps/ packages/ --include=*.tsx --include=*.ts --include=*.css | grep -v node_modules` → nếu 0 kết quả, xoá `@theme { … }` trong `packages/tailwind-config/shared-styles.css` (giữ dòng `@import "tailwindcss"`).
-  - [ ] Nếu có kết quả: GIỮ NGUYÊN, ghi 1 dòng note trong Dev Agent Record (đừng phá class đang dùng).
-- [ ] **Task 5 — Verify gate** (AC: 6)
-  - [ ] `pnpm --filter @landing/design-tokens build` → exit 0.
-  - [ ] `pnpm build` (root) → exit 0; mở `/templates/ternus` xác nhận **không regress** (Ternus dùng `.tn` scoped vars riêng — không phụ thuộc token mới, phải vẫn render đúng).
-  - [ ] `pnpm lint` → exit 0.
-  - [ ] (Smoke nhẹ) Tạm thêm 1 element dùng `bg-primary` trong 1 trang docs để xác nhận `@theme inline` emit `var(--p-primary)` và đổi `data-theme` (manual) đổi màu — **xoá element thử sau khi xác nhận** (route demo theme-switch chính thức là Story 2.2, không làm ở đây).
+- [x] **Task 1 — Scaffold package `packages/design-tokens`** (AC: 1)
+  - [x] Tạo `packages/design-tokens/package.json`: `name: "@landing/design-tokens"`, `version: "0.0.0"`, `private: true`, `type: "module"`, `exports: { ".": "./src/base.css" }`, script `build` no-op echo (CSS-only, không compile — mirror `packages/sections/package.json`), devDep `tailwindcss: "^4.1.5"` (để IDE/tooling hiểu `@theme`).
+  - [x] **KHÔNG** thêm `check-types` script (package không có TS) — turbo bỏ qua task này khi package không định nghĩa nó; tránh tạo `tsconfig.json` thừa.
+  - [x] Xác nhận `@landing/design-tokens` đã nằm sẵn trong `apps/docs/next.config.ts` `transpilePackages` (Epic 1 pre-register — KHÔNG sửa list).
+- [x] **Task 2 — Viết `src/base.css`** (AC: 1, 2, 3)
+  - [x] `:root` — spacing vars 4/8px grid (vd `--space-1: 0.25rem … --space-24: 6rem`), type scale vars (eyebrow→display), named easing (`--ease-standard`, `--ease-entrance`, `--ease-exit`) + duration vars. KHÔNG dùng `transition: all` ở bất kỳ đâu.
+  - [x] `:root` — default palette `--p-*` (floor = infra mood; tham khảo giá trị cyan/near-black đã LOCK: `--p-bg:#07070c`, `--p-primary:#22d3ee`, `--p-accent:#fb923c` dùng cực ít). Đây là default; Story 2.2 override.
+  - [x] `@theme inline { --color-* : var(--p-*) }` — map đủ token palette sang Tailwind utility namespace (`bg-primary`, `text-ink`, `border-line`…).
+  - [x] **KHÔNG** `@import "tailwindcss"` trong base.css (apps/docs đã import; double-import gây trùng).
+- [x] **Task 3 — Wire vào `apps/docs`** (AC: 4)
+  - [x] `apps/docs/package.json`: thêm `"@landing/design-tokens": "workspace:*"` vào `dependencies`.
+  - [x] `apps/docs/app/globals.css`: thêm `@import "@landing/design-tokens";` ngay sau `@import "tailwindcss";` và `@import "@landing/tailwind-config";`, trước các `@source`/`@theme inline` cục bộ. Cân nhắc gỡ block `@theme inline` placeholder (`--color-background/foreground`) nếu trùng vai trò — chỉ khi không phá demo home hiện tại.
+  - [x] `pnpm install` để link workspace dep mới.
+- [x] **Task 4 — Dọn `@theme` boilerplate `tailwind-config`** (AC: 5)
+  - [x] `grep -rn "blue-1000\|purple-1000\|red-1000" apps/ packages/ --include=*.tsx --include=*.ts --include=*.css | grep -v node_modules` → nếu 0 kết quả, xoá `@theme { … }` trong `packages/tailwind-config/shared-styles.css` (giữ dòng `@import "tailwindcss"`).
+  - [x] Nếu có kết quả: GIỮ NGUYÊN, ghi 1 dòng note trong Dev Agent Record (đừng phá class đang dùng).
+- [x] **Task 5 — Verify gate** (AC: 6)
+  - [x] `pnpm --filter @landing/design-tokens build` → exit 0.
+  - [x] `pnpm build` (root) → exit 0; mở `/templates/ternus` xác nhận **không regress** (Ternus dùng `.tn` scoped vars riêng — không phụ thuộc token mới, phải vẫn render đúng).
+  - [x] `pnpm lint` → exit 0.
+  - [x] (Smoke nhẹ) Tạm thêm 1 element dùng `bg-primary` trong 1 trang docs để xác nhận `@theme inline` emit `var(--p-primary)` và đổi `data-theme` (manual) đổi màu — **xoá element thử sau khi xác nhận** (route demo theme-switch chính thức là Story 2.2, không làm ở đây).
 
 ## Dev Notes
 
@@ -119,8 +119,28 @@ so that **spacing scale và motion easing floor áp dụng nhất quán mọi Pi
 
 ### Agent Model Used
 
+claude-opus-4-8 (1M context)
+
 ### Debug Log References
+
+- `pnpm --filter @landing/design-tokens build` → exit 0
+- `pnpm build` (root turbo) → 11/11 successful; routes `/`, `/templates/ternus` render OK (no regress)
+- `pnpm lint` → exit 0
+- Smoke `@theme inline`: tạm thêm `bg-primary text-ink` vào `apps/docs/app/page.tsx`, rebuild → CSS emit `.bg-primary{background-color:var(--p-primary)}` + `.text-ink{color:var(--p-ink)}` (đúng `var()` động). Element thử đã xoá, `page.tsx` restore nguyên trạng.
 
 ### Completion Notes List
 
+- Tạo package `@landing/design-tokens` (CSS-only, build no-op) với `src/base.css`: spacing 4/8px grid, type scale fluid, named easing (`--ease-standard/entrance/exit` + durations), radius/hairline floor, palette `--p-*` default = infra mood.
+- `@theme inline` map `--color-* → var(--p-*)` — verified runtime-swap-ready (xem Debug Log). Variance chủ đích vs wording epics (`@theme` thường sẽ freeze giá trị).
+- Bonus: thêm export `"./themes/*"` trong package.json sẵn cho Story 2.2.
+- Wire `apps/docs`: dep `workspace:*` + `@import` sau tailwindcss. Giữ block `@theme inline` placeholder của docs home (khác vai trò, không trùng).
+- Dọn `@theme` boilerplate create-turbo (`blue/purple/red-1000`) khỏi `tailwind-config/shared-styles.css` — grep xác nhận 0 chỗ dùng.
+- 2 câu hỏi review chọn default: giữ `--p-*` + thang neutral floor (Ternus reconcile ở Epic 3).
+
 ### File List
+
+- `packages/design-tokens/package.json` (NEW)
+- `packages/design-tokens/src/base.css` (NEW)
+- `apps/docs/package.json` (UPDATE — +dep)
+- `apps/docs/app/globals.css` (UPDATE — +import)
+- `packages/tailwind-config/shared-styles.css` (UPDATE — xoá @theme rác)

@@ -1,7 +1,4 @@
 @import "tailwindcss";
 
-@theme {
-  --color-blue-1000: #2a8af6;
-  --color-purple-1000: #a853ba;
-  --color-red-1000: #e92a67;
-}
+/* Palette/@theme lives in @landing/design-tokens (single source of truth).
+   This package only provides the shared Tailwind entry + postcss config. */

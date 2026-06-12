@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@landing/tailwind-config";
+@import "@landing/design-tokens";
 
 /* Scan workspace packages để Tailwind không purge class chỉ dùng trong packages/*. */
 @source "../../../packages/**/src/**/*.{ts,tsx,css}";
