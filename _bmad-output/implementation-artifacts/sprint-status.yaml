@@ -23,7 +23,7 @@
 # - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
 
 generated: 2026-06-08
-last_updated: 2026-06-12 (story 3-2 dev xong → review)
+last_updated: 2026-06-12 (story 3-3 dev xong → review; epic-3 toàn bộ ở review)
 project: landing-page-list
 project_key: NOKEY
 tracking_system: file-system
@@ -50,7 +50,7 @@ development_status:
   epic-3: in-progress
   3-1-complete-ternus-v20-port: review
   3-2-apply-theme-infra-invariant: review
-  3-3-export-ternus-piecemeta: backlog
+  3-3-export-ternus-piecemeta: review
   epic-3-retrospective: optional
 
   epic-4: backlog

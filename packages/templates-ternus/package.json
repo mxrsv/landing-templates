@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/template.tsx"
+    ".": "./src/template.tsx",
+    "./config": "./src/config.ts"
   },
   "scripts": {
     "build": "echo \"@landing/templates-ternus: no build (source package)\" && exit 0",
