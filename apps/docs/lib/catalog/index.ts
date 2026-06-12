@@ -12,6 +12,7 @@
  */
 import { pieceMeta as ternusPieceMeta } from "@landing/templates-ternus/config";
 
+import { manifestSlugs } from "./manifest";
 import type { CopyMode, PieceLayer, PieceMeta, PieceMood } from "./types";
 
 export type {
@@ -102,6 +103,11 @@ function buildCatalog(
     if (seen.has(piece.slug)) {
       throw new Error(
         `[catalog] duplicate slug "${piece.slug}" (${source}) — slug phải duy nhất toàn catalog`,
+      );
+    }
+    if (!manifestSlugs.has(piece.slug)) {
+      throw new Error(
+        `[catalog] slug "${piece.slug}" (${source}) không có trong manifest — thêm vào lib/catalog/manifest.ts trước khi registration (budget FR-10/NFR-9)`,
       );
     }
     seen.add(piece.slug);

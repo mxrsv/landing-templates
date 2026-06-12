@@ -23,7 +23,7 @@
 # - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
 
 generated: 2026-06-08
-last_updated: 2026-06-12 (story 4-4 dev xong → review — còn 4-6)
+last_updated: 2026-06-12 (epic-3 + epic-4 dev xong toàn bộ — 9 stories ở review, chờ code-review)
 project: landing-page-list
 project_key: NOKEY
 tracking_system: file-system
@@ -59,7 +59,7 @@ development_status:
   4-3-dynamic-slug-routes: review
   4-4-copybutton-single-multi: review
   4-5-catalog-aggregator-registration: review
-  4-6-catalog-manifest-budget: backlog
+  4-6-catalog-manifest-budget: review
   epic-4-retrospective: optional
 
   epic-5: backlog
