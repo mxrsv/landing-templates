@@ -46,22 +46,25 @@
   --tr-ui: 0.02em;
   --tr-cap: 0.16em;
   --tr-eye: 0.3em;
-  /* type scale */
-  --t-display: clamp(44px, 6.4vw, 82px);
-  --t-h2: clamp(29px, 4.3vw, 50px);
-  --t-h3: 19px;
-  --t-body: clamp(15px, 1.2vw, 17px);
-  --t-cap: 13px;
-  --t-eye: 12px;
+  /* type scale — v2: resolve qua type floor (giá trị floor port từ chính
+     Ternus nên computed value không đổi), fallback giữ bản standalone */
+  --t-display: var(--text-display, clamp(44px, 6.4vw, 82px));
+  --t-h2: var(--text-h2, clamp(29px, 4.3vw, 50px));
+  --t-h3: var(--text-h3, 19px);
+  --t-body: var(--text-body, clamp(15px, 1.2vw, 17px));
+  --t-cap: var(--text-caption, 13px);
+  --t-eye: var(--text-eyebrow, 12px);
   /* weights ladder */
   --w-display: 400;
   --w-h2: 400;
   --w-body: 400;
   --w-ui: 500;
-  /* spacing */
+  /* spacing — v2 (INVARIANT I-9): section rhythm + container từ layout floor.
+     Computed value đổi nhẹ so với v20 (wrap 1140→1024, pad max 168→128) —
+     đã chấp nhận trong spec Phase 4 nhóm 1, so mắt trước/sau. */
   --nav-h: 72px;
-  --pad-section: clamp(96px, 12vh, 168px);
-  --wrap: 1140px;
+  --pad-section: var(--section-pad-y-lg, clamp(96px, 12vh, 168px));
+  --wrap: var(--container-lg, 1140px);
   /* mono — threefold index + terminal */
   --tn-mono: var(--tn-font-mono), ui-monospace, "SF Mono", Menlo, monospace;
 
