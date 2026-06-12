@@ -23,7 +23,7 @@
 # - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
 
 generated: 2026-06-08
-last_updated: 2026-06-12 (Epic 2 dev xong — 2-1..2-4 → review, chờ code-review)
+last_updated: 2026-06-12 (Epic 2 đóng sổ — code-review 3 agent APPROVE, 2-1..2-4 → done)
 project: landing-page-list
 project_key: NOKEY
 tracking_system: file-system
@@ -40,11 +40,11 @@ development_status:
   1-6-type-coverage-gate: done
   epic-1-retrospective: optional
 
-  epic-2: in-progress
-  2-1-base-token-package: review
-  2-2-four-theme-skeleton-files: review
-  2-3-invariant-checklist-doc: review
-  2-4-shared-errorboundary-reduced-motion: review
+  epic-2: done
+  2-1-base-token-package: done
+  2-2-four-theme-skeleton-files: done
+  2-3-invariant-checklist-doc: done
+  2-4-shared-errorboundary-reduced-motion: done
   epic-2-retrospective: optional
 
   epic-3: backlog

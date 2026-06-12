@@ -1,6 +1,6 @@
 # Story 2.2: Four Theme Skeleton Files
 
-Status: review
+Status: done
 
 ## Story
 

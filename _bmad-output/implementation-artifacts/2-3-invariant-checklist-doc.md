@@ -1,6 +1,6 @@
 # Story 2.3: Invariant Checklist Documentation
 
-Status: review
+Status: done
 
 ## Story
 

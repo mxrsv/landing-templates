@@ -1,6 +1,6 @@
 # Story 2.4: Shared ErrorBoundary & useReducedMotion
 
-Status: review
+Status: done
 
 ## Story
 
