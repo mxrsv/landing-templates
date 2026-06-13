@@ -1,0 +1,107 @@
+/* Memecoin hero + ticker — neon mood, dark refined shell (Fuel/Monad layout).
+   All palette/spacing/type/motion via @landing/design-tokens token v2.
+   Scoped under [data-theme="neon"] wrapper for self-contained copy. */
+
+.mht-root {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--surface-0);
+  color: var(--p-ink);
+}
+
+/* Ambient neon glow — palette via tokens (I-4). */
+.mht-root::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(
+      60% 50% at 50% 0%,
+      color-mix(in srgb, var(--p-primary) 18%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 40% at 85% 30%,
+      color-mix(in srgb, var(--p-accent) 12%, transparent),
+      transparent 70%
+    );
+}
+
+/* top ticker strip */
+.mht-ticker {
+  border-bottom: var(--line-w) solid var(--border-default);
+  background: color-mix(in srgb, var(--surface-1) 70%, transparent);
+  padding-block: var(--space-2);
+}
+
+/* hero body */
+.mht-body {
+  max-width: var(--container-md);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+  padding-block: var(--section-pad-y-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  text-align: center;
+}
+
+.mht-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-eyebrow);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--p-ink-2);
+}
+
+.mht-dot {
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--p-primary);
+}
+
+.mht-title {
+  margin: 0;
+  font-size: var(--text-display);
+  line-height: 1.02;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--p-ink);
+}
+
+.mht-title em {
+  font-style: normal;
+  color: var(--p-primary-bright);
+}
+
+.mht-sub {
+  margin: 0;
+  max-width: var(--container-sm);
+  font-size: var(--text-body);
+  color: var(--p-ink-2);
+}
+
+/* live price slot card */
+.mht-slot {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  border: var(--line-w) solid var(--border-emphasis);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  font-size: var(--text-h3);
+}
+
+.mht-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+}

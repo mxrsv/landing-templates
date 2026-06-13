@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@landing/design-tokens": "workspace:*",
+    "@landing/sections": "workspace:*",
     "@landing/templates-ternus": "workspace:*",
     "@landing/ui": "workspace:*",
     "next": "16.2.7",

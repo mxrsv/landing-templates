@@ -11,6 +11,7 @@
  */
 import type { ComponentType } from "react";
 
+import { pieceMeta as memecoinHeroTickerPieceMeta } from "@landing/sections/memecoin-hero-ticker/config";
 import { pieceMeta as ternusPieceMeta } from "@landing/templates-ternus/config";
 
 export interface PieceRegistration {
@@ -25,6 +26,16 @@ export interface PieceRegistration {
 }
 
 export const pieceRegistrations: readonly PieceRegistration[] = [
+  {
+    slug: "memecoin-hero-ticker",
+    source: "@landing/sections/memecoin-hero-ticker/config",
+    meta: memecoinHeroTickerPieceMeta,
+    packageName: "@landing/sections",
+    loadPreview: () =>
+      import("@landing/sections/memecoin-hero-ticker").then((m) => ({
+        default: m.MemecoinHeroTicker,
+      })),
+  },
   {
     slug: "ternus",
     source: "@landing/templates-ternus/config",
