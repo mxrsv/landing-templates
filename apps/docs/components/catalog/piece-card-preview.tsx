@@ -60,7 +60,10 @@ export function PieceCardPreview({ slug, mood }: PieceCardPreviewProps) {
       className="relative aspect-[16/9] w-full overflow-hidden bg-[var(--surface-1)]"
     >
       {visible && Preview !== undefined ? (
+        // `inert`: preview chỉ để ngắm — gỡ <a>/control bên trong khỏi tab order
+        // và a11y tree, đồng thời chúng không còn là <a> lồng trong card link.
         <div
+          inert
           data-theme={mood}
           className="pointer-events-none h-[400%] w-[400%] origin-top-left scale-[0.25] overflow-hidden"
         >
