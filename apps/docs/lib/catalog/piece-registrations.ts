@@ -12,6 +12,7 @@
 import type { ComponentType } from "react";
 
 import { pieceMeta as communityMarqueePieceMeta } from "@landing/sections/community-marquee/config";
+import { pieceMeta as gamefiHudHeroPieceMeta } from "@landing/sections/gamefi-hud-hero/config";
 import { pieceMeta as memecoinHeroTickerPieceMeta } from "@landing/sections/memecoin-hero-ticker/config";
 import { pieceMeta as tokenStatsStripPieceMeta } from "@landing/sections/token-stats-strip/config";
 import { pieceMeta as memecoinPieceMeta } from "@landing/templates-memecoin/config";
@@ -47,6 +48,16 @@ export const pieceRegistrations: readonly PieceRegistration[] = [
     loadPreview: () =>
       import("@landing/sections/community-marquee").then((m) => ({
         default: m.CommunityMarquee,
+      })),
+  },
+  {
+    slug: "gamefi-hud-hero",
+    source: "@landing/sections/gamefi-hud-hero/config",
+    meta: gamefiHudHeroPieceMeta,
+    packageName: "@landing/sections",
+    loadPreview: () =>
+      import("@landing/sections/gamefi-hud-hero").then((m) => ({
+        default: m.GamefiHudHero,
       })),
   },
   {

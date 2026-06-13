@@ -1,0 +1,286 @@
+/* GameFi HUD hero — game mood, cyber/HUD aesthetic (lime/amber on charcoal).
+   All palette/spacing/type/motion via @landing/design-tokens token v2.
+   Scoped under [data-theme="game"] wrapper for self-contained copy.
+   Motion gated by `.ghh-anim` (added only when motion is allowed). */
+
+.ghh-root {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--surface-0);
+  color: var(--p-ink);
+}
+
+/* ambient corner glow — palette via tokens (I-4) */
+.ghh-root::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(
+      55% 45% at 15% 0%,
+      color-mix(in srgb, var(--p-primary) 16%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      45% 45% at 90% 100%,
+      color-mix(in srgb, var(--p-accent) 12%, transparent),
+      transparent 70%
+    );
+}
+
+/* HUD grid mesh */
+.ghh-root::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(
+      var(--border-default) var(--line-w),
+      transparent var(--line-w)
+    ),
+    linear-gradient(
+      90deg,
+      var(--border-default) var(--line-w),
+      transparent var(--line-w)
+    );
+  background-size: var(--space-12) var(--space-12);
+  mask-image: radial-gradient(70% 60% at 50% 40%, #000, transparent 90%);
+}
+
+/* HUD frame — corner brackets */
+.ghh-frame {
+  position: absolute;
+  inset: var(--space-5);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ghh-corner {
+  position: absolute;
+  width: var(--space-8);
+  height: var(--space-8);
+  border: var(--line-w) solid var(--border-emphasis);
+}
+.ghh-corner-tl {
+  top: 0;
+  left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+.ghh-corner-tr {
+  top: 0;
+  right: 0;
+  border-left: 0;
+  border-bottom: 0;
+}
+.ghh-corner-bl {
+  bottom: 0;
+  left: 0;
+  border-right: 0;
+  border-top: 0;
+}
+.ghh-corner-br {
+  bottom: 0;
+  right: 0;
+  border-left: 0;
+  border-top: 0;
+}
+
+/* sweeping scanline — only while animating */
+.ghh-scanline {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: var(--line-w);
+  z-index: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--p-primary) 70%, transparent),
+    transparent
+  );
+  opacity: 0;
+}
+.ghh-anim .ghh-scanline {
+  animation: ghh-scan 4.8s var(--ease-standard) infinite;
+}
+@keyframes ghh-scan {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(72vh);
+    opacity: 0;
+  }
+}
+
+/* content */
+.ghh-body {
+  position: relative;
+  z-index: 1;
+  max-width: var(--container-lg);
+  margin-inline: auto;
+  padding-inline: var(--space-8);
+  padding-block: var(--section-pad-y-lg);
+  display: grid;
+  gap: var(--space-8);
+}
+
+/* status bar */
+.ghh-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
+  font-size: var(--text-eyebrow);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--p-ink-2);
+}
+
+.ghh-status-online {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--p-primary-bright);
+}
+
+.ghh-pulse {
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--p-primary);
+}
+.ghh-anim .ghh-pulse {
+  animation: ghh-blink var(--duration-slow) var(--ease-standard) infinite
+    alternate;
+}
+@keyframes ghh-blink {
+  from {
+    opacity: 0.3;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* headline cluster */
+.ghh-head {
+  display: grid;
+  gap: var(--space-5);
+  max-width: var(--container-md);
+}
+
+.ghh-eyebrow {
+  font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
+  font-size: var(--text-caption);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--p-accent);
+}
+
+.ghh-title {
+  margin: 0;
+  font-size: var(--text-display);
+  line-height: 0.98;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--p-ink);
+}
+
+.ghh-title em {
+  font-style: normal;
+  color: var(--p-primary-bright);
+}
+
+.ghh-sub {
+  margin: 0;
+  max-width: var(--container-sm);
+  font-size: var(--text-body);
+  color: var(--p-ink-2);
+}
+
+/* HUD readout panel — stat bars */
+.ghh-readout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-6);
+  border: var(--line-w) solid var(--border-emphasis);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--surface-1) 70%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.ghh-stat {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.ghh-stat-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
+  font-size: var(--text-eyebrow);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--p-ink-2);
+}
+
+.ghh-stat-val {
+  color: var(--p-primary-bright);
+  font-weight: 600;
+}
+
+.ghh-track {
+  position: relative;
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.ghh-fill {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: var(--ghh-fill, 0%);
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--p-primary), var(--p-primary-bright));
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.ghh-anim .ghh-fill {
+  animation: ghh-grow var(--duration-slow) var(--ease-entrance) forwards;
+}
+@keyframes ghh-grow {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* CTA row */
+.ghh-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+@media (max-width: 40rem) {
+  .ghh-readout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
