@@ -1,0 +1,115 @@
+/* Price-ticker — all palette/spacing/motion via @landing/design-tokens.
+   Up/down are semantic finance colors (green = gain, red = loss): they are
+   intentionally mood-invariant, so they live as component-scoped tokens rather
+   than theme `--p-*` vars (which exist for runtime mood swap). */
+
+.pt-root {
+  --pt-up: #34d399;
+  --pt-down: #fb7185;
+
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  color: var(--p-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- shared token row ------------------------------------------------ */
+.pt-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding-inline: var(--space-4);
+  border-right: var(--line-w) solid var(--border-default);
+  white-space: nowrap;
+}
+
+.pt-symbol {
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--p-ink);
+}
+
+.pt-price {
+  display: inline-flex;
+  align-items: baseline;
+  font-size: var(--text-body);
+  color: var(--p-ink);
+  line-height: 1;
+}
+
+.pt-change {
+  font-size: var(--text-caption);
+  color: var(--p-ink-3);
+}
+.pt-change[data-dir="up"] {
+  color: var(--pt-up);
+}
+.pt-change[data-dir="down"] {
+  color: var(--pt-down);
+}
+
+/* --- marquee mode --------------------------------------------------- */
+.pt-marquee {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--space-8),
+    #000 calc(100% - var(--space-8)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--space-8),
+    #000 calc(100% - var(--space-8)),
+    transparent
+  );
+}
+
+.pt-marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+/* --- slot mode: rolling digits -------------------------------------- */
+.pt-rolling {
+  display: inline-flex;
+  align-items: baseline;
+  line-height: 1;
+}
+
+.pt-rolling-prefix,
+.pt-sep {
+  display: inline-block;
+}
+
+.pt-digit {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.pt-digit-col {
+  display: flex;
+  flex-direction: column;
+}
+/* Animate only when opted in (reduced motion omits `data-animate`). */
+.pt-digit-col[data-animate] {
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.pt-digit-cell {
+  display: block;
+  height: 1em;
+  line-height: 1em;
+  text-align: center;
+}
