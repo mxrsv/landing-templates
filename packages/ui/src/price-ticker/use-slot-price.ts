@@ -25,11 +25,16 @@ export function useSlotPrice(
     const id = window.setInterval(() => {
       setPrice((prev) => {
         const drift = (Math.random() - 0.5) * 0.01;
-        return Math.round(prev * (1 + drift) * 100) / 100;
+        // Mean-reversion pulls the walk gently back toward basePrice so it stays
+        // bounded; the floor is the last-resort guard against the 0-trap, where
+        // `0 * (1 + drift)` would stick the price at 0 forever.
+        const reverted = prev + (basePrice - prev) * 0.05;
+        const next = Math.round(reverted * (1 + drift) * 100) / 100;
+        return Math.max(next, 0.01);
       });
     }, interval);
     return () => window.clearInterval(id);
-  }, [enabled, interval]);
+  }, [enabled, interval, basePrice]);
 
   return enabled ? price : basePrice;
 }

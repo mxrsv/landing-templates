@@ -44,24 +44,31 @@ interface RollingNumberProps {
  */
 export function RollingNumber({ value, animate }: RollingNumberProps) {
   const formatted = formatPrice(value);
+  const chars = formatted.split("");
+  // Key by place-value from the RIGHT, not string index. Decimals are fixed at 2,
+  // so the rightmost cells keep a stable identity when the integer part grows/shrinks
+  // (crossing the 1000 boundary). Keying from the left would re-bind a cell to a
+  // different glyph on length change → a one-frame wrong-direction roll.
+  const lastIndex = chars.length - 1;
   return (
     <span className="pt-rolling" aria-label={`$${formatted}`}>
       <span className="pt-rolling-prefix" aria-hidden="true">
         $
       </span>
-      {formatted.split("").map((char, index) =>
-        /\d/.test(char) ? (
+      {chars.map((char, index) => {
+        const place = lastIndex - index;
+        return /\d/.test(char) ? (
           <RollingDigit
-            key={`d-${index}`}
+            key={`d-${place}`}
             value={Number(char)}
             animate={animate}
           />
         ) : (
-          <span key={`s-${index}`} className="pt-sep" aria-hidden="true">
+          <span key={`s-${place}`} className="pt-sep" aria-hidden="true">
             {char}
           </span>
-        ),
-      )}
+        );
+      })}
     </span>
   );
 }
