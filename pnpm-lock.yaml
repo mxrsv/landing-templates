@@ -26,6 +26,9 @@ importers:
       '@landing/sections':
         specifier: workspace:*
         version: link:../../packages/sections
+      '@landing/templates-gamefi':
+        specifier: workspace:*
+        version: link:../../packages/templates-gamefi
       '@landing/templates-memecoin':
         specifier: workspace:*
         version: link:../../packages/templates-memecoin
@@ -180,10 +183,38 @@ importers:
         version: 4.1.16
 
   packages/templates-gamefi:
+    dependencies:
+      '@landing/sections':
+        specifier: workspace:*
+        version: link:../sections
+      '@landing/ui':
+        specifier: workspace:*
+        version: link:../ui
+      next:
+        specifier: ^16.2.7
+        version: 16.2.7(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      react:
+        specifier: ^19
+        version: 19.2.4
     devDependencies:
+      '@landing/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
       '@landing/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      '@types/react':
+        specifier: ^19.1.0
+        version: 19.2.2
+      '@types/react-dom':
+        specifier: ^19.1.0
+        version: 19.2.2(@types/react@19.2.2)
+      eslint:
+        specifier: ^9.39.1
+        version: 9.39.1(jiti@2.6.1)
+      typescript:
+        specifier: 5.9.2
+        version: 5.9.2
 
   packages/templates-memecoin:
     dependencies:

@@ -16,6 +16,7 @@ import { pieceMeta as communityMarqueePieceMeta } from "@landing/sections/commun
 import { pieceMeta as gamefiHudHeroPieceMeta } from "@landing/sections/gamefi-hud-hero/config";
 import { pieceMeta as memecoinHeroTickerPieceMeta } from "@landing/sections/memecoin-hero-ticker/config";
 import { pieceMeta as tokenStatsStripPieceMeta } from "@landing/sections/token-stats-strip/config";
+import { pieceMeta as gamefiPieceMeta } from "@landing/templates-gamefi/config";
 import { pieceMeta as memecoinPieceMeta } from "@landing/templates-memecoin/config";
 import { pieceMeta as ternusPieceMeta } from "@landing/templates-ternus/config";
 
@@ -89,6 +90,16 @@ export const pieceRegistrations: readonly PieceRegistration[] = [
     loadPreview: () =>
       import("@landing/templates-memecoin").then((m) => ({
         default: m.MemecoinTemplate,
+      })),
+  },
+  {
+    slug: "gamefi",
+    source: "@landing/templates-gamefi/config",
+    meta: gamefiPieceMeta,
+    packageName: "@landing/templates-gamefi",
+    loadPreview: () =>
+      import("@landing/templates-gamefi").then((m) => ({
+        default: m.GamefiTemplate,
       })),
   },
   {

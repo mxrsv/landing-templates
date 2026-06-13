@@ -1,0 +1,123 @@
+/* GameFi template chrome (nav / closing / footer) — game mood.
+   Sections bring their own surfaces; this styles only the wrapper bands.
+   Palette/spacing/type/motion via @landing/design-tokens token v2. */
+
+.gf-root {
+  background: var(--surface-0);
+  color: var(--p-ink);
+}
+
+/* nav */
+.gf-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: var(--space-4) var(--space-6);
+  background: color-mix(in srgb, var(--surface-0) 80%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: var(--line-w) solid var(--border-default);
+}
+
+.gf-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
+  font-size: var(--text-h3);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--p-ink);
+}
+
+.gf-brand-mark {
+  width: var(--space-5);
+  height: var(--space-5);
+  border-radius: var(--radius-sm);
+  background: var(--p-primary);
+  transform: rotate(45deg);
+}
+
+.gf-nav-links {
+  display: flex;
+  gap: var(--space-5);
+  font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
+  font-size: var(--text-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--p-ink-2);
+}
+
+.gf-nav-links a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+.gf-nav-links a:hover {
+  color: var(--p-primary-bright);
+}
+
+/* closing CTA band */
+.gf-closing {
+  max-width: var(--container-md);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+  padding-block: var(--section-pad-y-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  text-align: center;
+}
+
+.gf-closing-eyebrow {
+  font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
+  font-size: var(--text-caption);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--p-accent);
+}
+
+.gf-closing h2 {
+  margin: 0;
+  font-size: var(--text-h2);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--p-ink);
+}
+
+.gf-closing p {
+  margin: 0;
+  max-width: var(--container-sm);
+  font-size: var(--text-body);
+  color: var(--p-ink-2);
+}
+
+.gf-closing-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+/* footer */
+.gf-footer {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: var(--space-8) var(--space-6);
+  border-top: var(--line-w) solid var(--border-default);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
+  font-size: var(--text-caption);
+  color: var(--p-ink-3);
+}

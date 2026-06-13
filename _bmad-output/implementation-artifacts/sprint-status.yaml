@@ -23,7 +23,7 @@
 # - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
 
 generated: 2026-06-08
-last_updated: 2026-06-13 (epic-5 Memecoin đóng: price-ticker UI + 3 sections neon + template /templates/memecoin; build root exit 0; pieces build trên token v2 + INVARIANT I-1..I-9. Tiếp theo: epic-6 GameFi)
+last_updated: 2026-06-13 (epic-6 GameFi đóng: gamefi-hud-hero + character-showcase skeleton sections (theme-game HUD) + template /templates/gamefi; build root exit 0 15/15; pieces build trên token v2 + INVARIANT I-1..I-9. Tiếp theo: epic-7 NFT)
 project: landing-page-list
 project_key: NOKEY
 tracking_system: file-system
@@ -81,10 +81,10 @@ development_status:
   5-5-memecoin-template-composition: done
   epic-5-retrospective: optional
 
-  epic-6: backlog
-  6-1-gamefi-hud-hero: backlog
-  6-2-character-showcase-skeleton: backlog
-  6-3-gamefi-template-composition: backlog
+  epic-6: done
+  6-1-gamefi-hud-hero: done
+  6-2-character-showcase-skeleton: done
+  6-3-gamefi-template-composition: done
   epic-6-retrospective: optional
 
   epic-7: backlog
