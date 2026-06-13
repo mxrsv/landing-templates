@@ -260,13 +260,19 @@
   width: var(--ghh-fill, 0%);
   border-radius: var(--radius-pill);
   background: linear-gradient(90deg, var(--p-primary), var(--p-primary-bright));
-  transform: scaleX(0);
+  /* Resting state = filled (scaleX(1)) so reduced-motion shows the final
+     value, not an empty bar. The grow-from-0 lives in the keyframe, gated
+     by `.ghh-anim` (added only when motion is allowed). */
+  transform: scaleX(1);
   transform-origin: left center;
 }
 .ghh-anim .ghh-fill {
   animation: ghh-grow var(--duration-slow) var(--ease-entrance) forwards;
 }
 @keyframes ghh-grow {
+  from {
+    transform: scaleX(0);
+  }
   to {
     transform: scaleX(1);
   }
