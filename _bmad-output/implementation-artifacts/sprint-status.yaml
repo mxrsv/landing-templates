@@ -76,7 +76,7 @@ development_status:
   epic-5: in-progress
   5-1-price-ticker-ui: done
   5-2-memecoin-hero-ticker: done
-  5-3-token-stats-strip: backlog
+  5-3-token-stats-strip: done
   5-4-community-marquee: backlog
   5-5-memecoin-template-composition: backlog
   epic-5-retrospective: optional
