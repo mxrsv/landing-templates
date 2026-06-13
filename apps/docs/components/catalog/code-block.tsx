@@ -42,7 +42,12 @@ export function CodeBlock({
       </div>
       <pre
         ref={preRef}
+        // Scroll container có overflow → tabIndex=0 để user bàn phím cuộn được
+        // (đúng WCAG 2.1.1). role=region + aria-label cho screen reader ngữ cảnh.
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- chủ ý: vùng cuộn cần focus bàn phím
         tabIndex={0}
+        role="region"
+        aria-label="Code"
         className="max-h-[480px] overflow-auto rounded-[var(--radius-md)] border border-[var(--border-default)] bg-[var(--surface-1)] p-[var(--space-4)] font-mono text-[length:var(--text-eyebrow)] leading-5 whitespace-pre text-[var(--p-ink-2)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--state-focus-ring)]"
       >
         {content}
