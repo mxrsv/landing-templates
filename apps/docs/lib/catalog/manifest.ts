@@ -29,7 +29,7 @@ export const manifest = {
     "nft-gallery-grid",
     "mint-countdown",
   ],
-  templates: ["ternus", "memecoin", "gamefi", "nft"],
+  templates: ["ternus", "memecoin", "gamefi", "aikit"],
 } as const satisfies Record<"ui" | "sections" | "templates", readonly string[]>;
 
 const MIN_UI_SECTIONS = 8;

@@ -1,0 +1,144 @@
+/* AI-kit testimonial — tokens inherit from [data-theme="aikit"] wrapper. */
+
+.ak-testi {
+  --ak-testi-stars: rgb(255 255 255 / 35%);
+
+  background: var(--ak-bg);
+  color: var(--ak-ink);
+  padding: clamp(40px, 6vw, 80px) var(--ak-gutter) clamp(56px, 8vw, 112px);
+}
+
+/* The wide rounded band that carries the purple wash + starfield. */
+.ak-testi-band {
+  position: relative;
+  max-width: var(--ak-maxw);
+  margin-inline: auto;
+  border: 1px solid var(--ak-line);
+  border-radius: var(--ak-radius);
+  background: var(--ak-bg);
+  overflow: hidden;
+  isolation: isolate;
+  padding: clamp(48px, 6vw, 72px) clamp(28px, 6vw, 80px)
+    clamp(96px, 14vw, 168px);
+}
+
+/* Bright purple radial glow blooming from the top-center, fading to black. */
+.ak-testi-wash {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(
+      62% 78% at 50% 4%,
+      rgb(140 69 255 / 55%) 0%,
+      rgb(74 32 138 / 30%) 38%,
+      rgb(25 13 46 / 12%) 64%,
+      transparent 86%
+    ),
+    var(--ak-bg);
+  pointer-events: none;
+}
+
+/* Faint dotted starfield scattered over the wash. */
+.ak-testi-stars {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(1px 1px at 8% 22%, var(--ak-testi-stars), transparent),
+    radial-gradient(1px 1px at 22% 64%, var(--ak-testi-stars), transparent),
+    radial-gradient(1px 1px at 35% 12%, var(--ak-testi-stars), transparent),
+    radial-gradient(1px 1px at 47% 82%, var(--ak-testi-stars), transparent),
+    radial-gradient(1px 1px at 58% 38%, var(--ak-testi-stars), transparent),
+    radial-gradient(1px 1px at 67% 70%, var(--ak-testi-stars), transparent),
+    radial-gradient(1px 1px at 74% 18%, var(--ak-testi-stars), transparent),
+    radial-gradient(1px 1px at 83% 54%, var(--ak-testi-stars), transparent),
+    radial-gradient(1px 1px at 91% 30%, var(--ak-testi-stars), transparent),
+    radial-gradient(1px 1px at 96% 76%, var(--ak-testi-stars), transparent),
+    radial-gradient(1px 1px at 14% 88%, var(--ak-testi-stars), transparent),
+    radial-gradient(1px 1px at 40% 50%, var(--ak-testi-stars), transparent);
+  background-repeat: no-repeat;
+}
+
+/* avatar (left) + quote/attribution (right) — dossier gap 20px. */
+.ak-testi-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 20px;
+  max-width: 760px;
+  margin-inline: auto;
+
+  opacity: 1;
+  transform: none;
+}
+
+.ak-testi-card:not(.is-revealed) {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.ak-testi-card.is-revealed {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+}
+
+.ak-testi-avatar {
+  display: block;
+  width: 96px;
+  height: 96px;
+  border-radius: var(--ak-radius-sm);
+  object-fit: cover;
+}
+
+.ak-testi-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ak-testi-quote {
+  margin: 0;
+  font-size: 23px;
+  font-weight: 500;
+  line-height: 32.2px;
+  letter-spacing: -0.23px;
+  color: var(--ak-ink);
+  max-width: 22ch;
+}
+
+.ak-testi-cite {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ak-testi-name {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: -0.16px;
+  color: var(--ak-ink);
+}
+
+.ak-testi-role {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 19.2px;
+  color: var(--ak-ink-2);
+  font-family: Switzer, "Switzer Placeholder", Inter, sans-serif;
+}
+
+@media (max-width: 640px) {
+  .ak-testi-card {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 24px;
+  }
+}

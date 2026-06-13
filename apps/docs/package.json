@@ -13,6 +13,7 @@
   "dependencies": {
     "@landing/design-tokens": "workspace:*",
     "@landing/sections": "workspace:*",
+    "@landing/templates-aikit": "workspace:*",
     "@landing/templates-gamefi": "workspace:*",
     "@landing/templates-memecoin": "workspace:*",
     "@landing/templates-ternus": "workspace:*",

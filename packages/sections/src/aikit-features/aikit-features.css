@@ -1,0 +1,244 @@
+/* AI-kit features — tokens inherit from [data-theme="aikit"] wrapper.
+   Section-local custom props for values not in the global token set. */
+
+.ak-feat {
+  --feat-reveal-y: 16px;
+  --feat-reveal-dur: 600ms;
+  --feat-ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+
+  background: var(--ak-bg);
+  color: var(--ak-ink);
+  padding: clamp(64px, 9vw, 128px) var(--ak-gutter);
+}
+
+.ak-feat-inner {
+  max-width: var(--ak-maxw);
+  margin-inline: auto;
+}
+
+/* ── heading ───────────────────────────────────────────────── */
+.ak-feat-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+  margin-bottom: clamp(40px, 6vw, 64px);
+}
+
+/* Eyebrow: purple TEXT only, no pill background. */
+.ak-feat-eyebrow {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19.6px;
+  letter-spacing: -0.1px;
+  color: var(--ak-accent);
+}
+
+.ak-feat-title {
+  margin: 0;
+  max-width: 22ch;
+  font-size: clamp(26px, 3.4vw, 32px);
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  color: var(--ak-ink);
+}
+
+/* ── product/video frame ───────────────────────────────────── */
+.ak-frame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-radius: var(--ak-radius);
+  border: 1px solid var(--ak-line);
+  background: var(--ak-surface);
+  overflow: hidden;
+  margin-bottom: clamp(48px, 7vw, 88px);
+  /* Black depth shadow + a soft purple aura bleeding out around the frame
+     (top + sides emphasised), matching the source where the dashboard sits in
+     an ambient violet glow. box-shadow renders outside the border-box, so the
+     overflow:hidden that clips the image does NOT clip this halo. */
+  box-shadow:
+    0 30px 80px rgb(0 0 0 / 50%),
+    0 -20px 100px -10px rgb(140 69 255 / 35%),
+    0 0 120px 6px rgb(140 69 255 / 26%);
+}
+
+.ak-frame-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Inner purple glow on top of the frame image. */
+.ak-frame-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    42% 46% at 50% 50%,
+    rgb(140 69 255 / 30%) 0%,
+    transparent 68%
+  );
+  pointer-events: none;
+}
+
+/* Centered circular play button with a faint outer ring. */
+.ak-play {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: rgb(20 12 35 / 55%);
+  backdrop-filter: blur(8px);
+  color: var(--ak-ink);
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease;
+}
+
+.ak-play-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px solid rgb(255 255 255 / 22%);
+  pointer-events: none;
+}
+
+.ak-play:hover {
+  background: rgb(35 22 60 / 70%);
+  transform: scale(1.05);
+}
+
+.ak-play:focus-visible {
+  outline: 2px solid var(--ak-accent);
+  outline-offset: 4px;
+}
+
+.ak-play svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  translate: 1px 0;
+}
+
+/* ── feature grid ──────────────────────────────────────────── */
+.ak-feat-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(28px, 4vw, 48px) clamp(40px, 6vw, 72px);
+}
+
+.ak-feat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ak-feat-cardhead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ak-feat-icon {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  color: var(--ak-ink);
+  flex: none;
+}
+
+.ak-feat-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.ak-feat-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20.8px;
+  letter-spacing: -0.16px;
+  color: var(--ak-ink);
+}
+
+/* NEW tag: 8px/700, black text on a light/accent pill. */
+.ak-feat-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 6px;
+  border-radius: 5px;
+  background: var(--ak-accent-2);
+  color: #000;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 8px;
+  letter-spacing: 0.24px;
+  text-transform: uppercase;
+  flex: none;
+}
+
+.ak-feat-body {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: -0.13px;
+  color: var(--ak-ink-2);
+  max-width: 30ch;
+}
+
+/* ── scroll-reveal (fade + translateY); reduced-motion → static ─ */
+.ak-feat-head,
+.ak-frame,
+.ak-feat-card {
+  opacity: 0;
+  transform: translateY(var(--feat-reveal-y));
+  transition:
+    opacity var(--feat-reveal-dur) var(--feat-ease),
+    transform var(--feat-reveal-dur) var(--feat-ease);
+}
+
+.ak-feat-head[data-shown="true"],
+.ak-frame[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Cards stagger off the grid's reveal state. */
+.ak-feat-grid[data-shown="true"] .ak-feat-card {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--ak-i, 0) * 70ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ak-feat-head,
+  .ak-frame,
+  .ak-feat-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .ak-feat-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .ak-feat-grid {
+    grid-template-columns: 1fr;
+  }
+}

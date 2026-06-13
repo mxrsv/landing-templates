@@ -1,0 +1,288 @@
+/* AI-kit pricing comparison — tokens inherit from [data-theme="aikit"]. */
+
+.ak-pr {
+  /* Local scoped values (not editing aikit.css). */
+  --pr-label-fr: 1.55;
+  --pr-plan-fr: 1;
+  --pr-pad: clamp(20px, 3.4vw, 40px);
+  --pr-pro-bg: rgb(140 69 255 / 12%);
+  --pr-pro-border: rgb(140 69 255 / 38%);
+  --pr-pro-extend: 26px;
+
+  background: var(--ak-bg);
+  color: var(--ak-ink);
+  padding: clamp(72px, 10vw, 140px) var(--ak-gutter);
+}
+
+.ak-pr-inner {
+  max-width: var(--ak-maxw);
+  margin-inline: auto;
+}
+
+/* ── heading ───────────────────────────────────────────────── */
+.ak-pr-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  margin-bottom: clamp(40px, 5vw, 64px);
+}
+
+.ak-pr-title {
+  margin: 0;
+  font-size: clamp(38px, 5.2vw, 56px);
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  color: var(--ak-ink);
+}
+
+.ak-pr-sub {
+  margin: 0;
+  max-width: 26ch;
+  font-size: clamp(16px, 1.4vw, 18px);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: var(--ak-ink-2);
+}
+
+/* ── outer card ────────────────────────────────────────────── */
+.ak-pr-card {
+  border: 1px solid var(--ak-line);
+  border-radius: var(--ak-radius);
+  padding: var(--pr-pad);
+  background:
+    radial-gradient(
+      120% 80% at 50% -10%,
+      rgb(140 69 255 / 6%) 0%,
+      transparent 60%
+    ),
+    rgb(255 255 255 / 1.5%);
+}
+
+/* ── table ─────────────────────────────────────────────────── */
+.ak-pr-table {
+  position: relative;
+}
+
+.ak-pr-row {
+  display: grid;
+  /* NOTE: `fr` units cannot be multiplied inside calc() — `calc(1.55 * 1fr)`
+     invalidates the whole track list and collapses the grid to one column.
+     Keep literal fr values here; the --pr-*-fr vars stay as plain numbers for
+     the Pro-highlight percentage math below (kept in sync manually). */
+  grid-template-columns:
+    minmax(0, 1.55fr)
+    repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+}
+
+/* Feature/price rows carry the thin separator on top. */
+.ak-pr-row--price,
+.ak-pr-row:not(.ak-pr-row--plans):not(.ak-pr-row--price) {
+  border-top: 1px solid var(--ak-line-2);
+}
+
+.ak-pr-cell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 9px;
+  padding: 15px 24px;
+  min-height: 58px;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  color: var(--ak-ink);
+}
+
+.ak-pr-cell--label {
+  font-size: 15px;
+  color: var(--ak-ink-2);
+}
+
+/* ── plan header row ───────────────────────────────────────── */
+.ak-pr-row--plans .ak-pr-cell {
+  padding-top: 4px;
+}
+
+.ak-pr-cell--plan {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding-block: 6px 22px;
+}
+
+.ak-pr-planname {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ak-ink);
+}
+
+.ak-pr-amt {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ak-ink);
+}
+
+/* ── per-column buttons ────────────────────────────────────── */
+.ak-pr-btn {
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.ak-pr-btn:focus-visible {
+  outline: 2px solid var(--ak-accent);
+  outline-offset: 2px;
+}
+
+.ak-pr-btn--ghost {
+  background: rgb(255 255 255 / 7%);
+  border-color: rgb(255 255 255 / 10%);
+  color: var(--ak-ink);
+}
+
+.ak-pr-btn--solid {
+  background: var(--ak-accent);
+  color: #fff;
+  box-shadow: 0 8px 22px rgb(140 69 255 / 30%);
+}
+
+/* ── Pro highlight box (floats behind the Pro column) ──────── */
+.ak-pr-prohl {
+  position: absolute;
+  z-index: 0;
+  /* Column geometry: left edge = label track + 1 plan track. */
+  top: calc(-1 * var(--pr-pro-extend));
+  bottom: calc(-1 * var(--pr-pro-extend));
+  left: calc(
+    (100% / (var(--pr-label-fr) + 3 * var(--pr-plan-fr))) *
+      (var(--pr-label-fr) + var(--pr-plan-fr))
+  );
+  width: calc(
+    (100% / (var(--pr-label-fr) + 3 * var(--pr-plan-fr))) * var(--pr-plan-fr)
+  );
+  background: var(--pr-pro-bg);
+  border: 1px solid var(--pr-pro-border);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+/* ── purple check ──────────────────────────────────────────── */
+.ak-pr-check {
+  flex: none;
+  width: 17px;
+  height: 17px;
+  stroke: var(--ak-accent-2);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.ak-pr-cellrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.ak-pr-celltext {
+  color: var(--ak-ink);
+}
+
+.ak-pr-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── scroll-reveal (gated by .ak-pr--anim) ─────────────────── */
+.ak-pr--anim .ak-pr-head,
+.ak-pr--anim .ak-pr-card {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+}
+
+.ak-pr--anim .ak-pr-card {
+  transition-delay: 0.08s;
+}
+
+.ak-pr--anim.is-in .ak-pr-head,
+.ak-pr--anim.is-in .ak-pr-card {
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: hover) {
+  .ak-pr-btn--ghost:hover {
+    background: rgb(255 255 255 / 12%);
+    border-color: rgb(255 255 255 / 18%);
+  }
+  .ak-pr-btn--solid:hover {
+    background: var(--ak-accent-2);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 26px rgb(140 69 255 / 40%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ak-pr-btn {
+    transition: none;
+  }
+}
+
+/* ── responsive ────────────────────────────────────────────── */
+@media (max-width: 760px) {
+  .ak-pr {
+    --pr-label-fr: 1.3;
+    --pr-pro-extend: 16px;
+  }
+  /* keep grid template in sync with the mobile --pr-label-fr */
+  .ak-pr-row {
+    grid-template-columns: minmax(0, 1.3fr) repeat(3, minmax(0, 1fr));
+  }
+  .ak-pr-cell {
+    padding: 13px 12px;
+    font-size: 13px;
+    gap: 6px;
+  }
+  .ak-pr-cell--label {
+    font-size: 13px;
+  }
+  .ak-pr-planname {
+    font-size: 19px;
+  }
+  .ak-pr-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  .ak-pr-check {
+    width: 15px;
+    height: 15px;
+  }
+}
