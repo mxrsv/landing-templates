@@ -13,7 +13,13 @@
 import type { PieceLayer } from "./types";
 
 export const manifest = {
-  ui: ["pixel-blast", "logo-loop", "soft-aurora", "price-ticker"],
+  ui: [
+    "pixel-blast",
+    "logo-loop",
+    "soft-aurora",
+    "price-ticker",
+    "chip-connect",
+  ],
   sections: [
     "memecoin-hero-ticker",
     "token-stats-strip",

@@ -1,0 +1,283 @@
+/* Chip Connect — faithful clone của Revo (revo-template.framer.website) hero
+   "integration chip": một glass chip phát sáng ở giữa, tia sáng ngang, lưới nền
+   mờ dần ra rìa, 6 icon vệ tinh nối vào chip bằng đường mạch cong.
+
+   Tự chứa màu (KHÔNG phụ thuộc token theme) để giữ đúng fidelity tím/navy của
+   bản gốc. Mọi toạ độ dùng % trên một khung khoá `aspect-ratio` → responsive,
+   KHÔNG hardcode px (đường nối luôn dính đúng dù co giãn). */
+
+.cc {
+  --cc-bg-0: #221a52;
+  --cc-bg-1: #140e30;
+  --cc-bg-2: #0c0820;
+  --cc-accent: #7c5df2;
+  --cc-glass: rgba(255, 255, 255, 0.05);
+  --cc-brd: rgba(255, 255, 255, 0.12);
+  --cc-wire: rgba(180, 170, 230, 0.35);
+
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin-inline: auto;
+  aspect-ratio: 2000 / 670;
+  border-radius: clamp(16px, 1.6vw, 24px);
+  overflow: hidden;
+  background: radial-gradient(
+    80% 120% at 50% 50%,
+    var(--cc-bg-0) 0%,
+    var(--cc-bg-1) 45%,
+    var(--cc-bg-2) 100%
+  );
+  isolation: isolate;
+  color: #cfc8f5;
+}
+
+/* ── lưới nền caro, fade về rìa ── */
+.cc-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 3.1% 9.25%;
+  -webkit-mask-image: radial-gradient(
+    70% 80% at 50% 50%,
+    #000 30%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(70% 80% at 50% 50%, #000 30%, transparent 75%);
+  pointer-events: none;
+}
+
+/* ── đường mạch nối chip ↔ icon vệ tinh ── */
+.cc-wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.cc-wire {
+  fill: none;
+  stroke: var(--cc-wire);
+  stroke-width: 1.5;
+}
+
+/* xung sáng trôi dọc dây (satellite → chip). pathLength=100 nên dasharray/offset
+   tính theo % độ dài → mọi dây chạy đều nhau dù dài ngắn khác. */
+.cc-pulse {
+  fill: none;
+  stroke: #efeaff;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 14 86;
+  filter: drop-shadow(0 0 4px var(--cc-accent));
+  animation: cc-flow 2.4s linear infinite;
+}
+.cc-pulses path:nth-child(1) {
+  animation-delay: 0s;
+}
+.cc-pulses path:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.cc-pulses path:nth-child(3) {
+  animation-delay: 0.8s;
+}
+.cc-pulses path:nth-child(4) {
+  animation-delay: 1.2s;
+}
+.cc-pulses path:nth-child(5) {
+  animation-delay: 1.6s;
+}
+.cc-pulses path:nth-child(6) {
+  animation-delay: 2s;
+}
+@keyframes cc-flow {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* glow tím sau chip — "thở" nhẹ */
+.cc-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 34%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(124, 93, 242, 0.55),
+    transparent 70%
+  );
+  filter: blur(8px);
+  pointer-events: none;
+  animation: cc-breathe 3.2s ease-in-out infinite;
+}
+@keyframes cc-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+/* ── chip kính phát sáng ở giữa ── */
+.cc-chip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 18.5%;
+  aspect-ratio: 37 / 36;
+  border-radius: 12%;
+  background: linear-gradient(160deg, #9a8cf5 0%, #6d5cd6 40%, #4b3ba8 100%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 0 90px 10px rgba(124, 93, 242, 0.55),
+    inset 0 2px 14px rgba(255, 255, 255, 0.35);
+  display: grid;
+  place-items: center;
+}
+.cc-chip::after {
+  content: "";
+  position: absolute;
+  inset: 9%;
+  border-radius: 9%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.cc-corner {
+  position: absolute;
+  width: 1.6%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+}
+.cc-corner.tl {
+  top: 4%;
+  left: 4%;
+}
+.cc-corner.tr {
+  top: 4%;
+  right: 4%;
+}
+.cc-corner.bl {
+  bottom: 4%;
+  left: 4%;
+}
+.cc-corner.br {
+  bottom: 4%;
+  right: 4%;
+}
+.cc-logo {
+  width: 33%;
+  color: #fff;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+/* ── tia sáng ngang (gắn tương đối vào chip) ── */
+.cc-beam {
+  position: absolute;
+  top: 50%;
+  height: 3px;
+  width: 62%;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, transparent, #fff);
+  filter: blur(0.5px);
+  box-shadow: 0 0 16px 3px rgba(190, 180, 255, 0.8);
+  pointer-events: none;
+  animation: cc-beam-pulse 2.4s ease-in-out infinite;
+}
+.cc-beam.b2 {
+  animation-delay: 0.3s;
+}
+.cc-beam.b3 {
+  animation-delay: 0.6s;
+}
+@keyframes cc-beam-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.cc-beam.r {
+  left: 100%;
+}
+.cc-beam.l {
+  right: 100%;
+  transform: translateY(-50%) scaleX(-1);
+}
+.cc-beam.b2 {
+  top: 30.5%;
+}
+.cc-beam.b3 {
+  top: 69.5%;
+}
+
+/* ── icon vệ tinh ── */
+.cc-sat {
+  position: absolute;
+  width: 4.2%;
+  aspect-ratio: 1;
+  border-radius: 22%;
+  background: var(--cc-glass);
+  border: 1px solid var(--cc-brd);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  display: grid;
+  place-items: center;
+  color: #cfc8f5;
+}
+.cc-sat svg {
+  width: 45%;
+}
+.cc-sat.s1 {
+  left: 6%;
+  top: 9%;
+}
+.cc-sat.s2 {
+  left: 14%;
+  top: 49.7%;
+  transform: translateY(-50%);
+}
+.cc-sat.s3 {
+  left: 28.5%;
+  top: 77.6%;
+}
+.cc-sat.s4 {
+  right: 6%;
+  top: 9%;
+}
+.cc-sat.s5 {
+  right: 14%;
+  top: 49.7%;
+  transform: translateY(-50%);
+}
+.cc-sat.s6 {
+  right: 28.5%;
+  top: 77.6%;
+}
+
+/* ── tôn trọng "giảm chuyển động": tắt animation, ẩn xung, glow tĩnh ── */
+@media (prefers-reduced-motion: reduce) {
+  .cc-pulse {
+    display: none;
+  }
+  .cc-glow,
+  .cc-beam {
+    animation: none;
+  }
+}

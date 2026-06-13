@@ -12,6 +12,7 @@
 import type { ComponentType } from "react";
 
 import { pieceMeta as characterShowcasePieceMeta } from "@landing/sections/character-showcase/config";
+import { pieceMeta as chipConnectPieceMeta } from "@landing/sections/chip-connect/config";
 import { pieceMeta as communityMarqueePieceMeta } from "@landing/sections/community-marquee/config";
 import { pieceMeta as gamefiHudHeroPieceMeta } from "@landing/sections/gamefi-hud-hero/config";
 import { pieceMeta as memecoinHeroTickerPieceMeta } from "@landing/sections/memecoin-hero-ticker/config";
@@ -32,6 +33,16 @@ export interface PieceRegistration {
 }
 
 export const pieceRegistrations: readonly PieceRegistration[] = [
+  {
+    slug: "chip-connect",
+    source: "@landing/sections/chip-connect/config",
+    meta: chipConnectPieceMeta,
+    packageName: "@landing/sections",
+    loadPreview: () =>
+      import("@landing/sections/chip-connect").then((m) => ({
+        default: m.ChipConnect,
+      })),
+  },
   {
     slug: "memecoin-hero-ticker",
     source: "@landing/sections/memecoin-hero-ticker/config",
