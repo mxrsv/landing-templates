@@ -23,7 +23,7 @@
 # - Dev moves story to 'review', then Dev runs code-review (fresh context, ideally different LLM)
 
 generated: 2026-06-08
-last_updated: 2026-06-12 (epic-3+4 đóng nhanh theo quyết định redesign; thêm epic-10 Design System v2 & Gallery Redesign — spec: docs/superpowers/specs/2026-06-12-design-system-v2-gallery-redesign-design.md; epic-9 bỏ 9-1/9-2 vì đã nuốt vào epic-10; thứ tự mới: 10 → 5 → 6 → 7 → 8 → 9)
+last_updated: 2026-06-13 (epic-5 Memecoin đóng: price-ticker UI + 3 sections neon + template /templates/memecoin; build root exit 0; pieces build trên token v2 + INVARIANT I-1..I-9. Tiếp theo: epic-6 GameFi)
 project: landing-page-list
 project_key: NOKEY
 tracking_system: file-system
@@ -73,12 +73,12 @@ development_status:
   10-4-ternus-retrofit: done
   epic-10-retrospective: optional
 
-  epic-5: in-progress
+  epic-5: done
   5-1-price-ticker-ui: done
   5-2-memecoin-hero-ticker: done
   5-3-token-stats-strip: done
   5-4-community-marquee: done
-  5-5-memecoin-template-composition: backlog
+  5-5-memecoin-template-composition: done
   epic-5-retrospective: optional
 
   epic-6: backlog

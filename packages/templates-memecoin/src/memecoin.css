@@ -1,0 +1,101 @@
+/* Memecoin template chrome (nav / closing / footer) — neon mood.
+   Sections bring their own surfaces; this styles only the wrapper bands.
+   Palette/spacing/type/motion via @landing/design-tokens token v2. */
+
+.mc-root {
+  background: var(--surface-0);
+  color: var(--p-ink);
+}
+
+/* nav */
+.mc-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: var(--space-4) var(--space-6);
+  background: color-mix(in srgb, var(--surface-0) 80%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: var(--line-w) solid var(--border-default);
+}
+
+.mc-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-h3);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--p-ink);
+}
+
+.mc-brand-mark {
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-pill);
+  background: var(--p-primary);
+}
+
+.mc-nav-links {
+  display: flex;
+  gap: var(--space-5);
+  font-size: var(--text-caption);
+  color: var(--p-ink-2);
+}
+
+.mc-nav-links a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+.mc-nav-links a:hover {
+  color: var(--p-ink);
+}
+
+/* closing CTA band */
+.mc-closing {
+  max-width: var(--container-md);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+  padding-block: var(--section-pad-y-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  text-align: center;
+}
+
+.mc-closing h2 {
+  margin: 0;
+  font-size: var(--text-h2);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--p-ink);
+}
+
+.mc-closing p {
+  margin: 0;
+  max-width: var(--container-sm);
+  font-size: var(--text-body);
+  color: var(--p-ink-2);
+}
+
+/* footer */
+.mc-footer {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: var(--space-8) var(--space-6);
+  border-top: var(--line-w) solid var(--border-default);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-size: var(--text-caption);
+  color: var(--p-ink-3);
+}

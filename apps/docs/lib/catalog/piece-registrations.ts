@@ -14,6 +14,7 @@ import type { ComponentType } from "react";
 import { pieceMeta as communityMarqueePieceMeta } from "@landing/sections/community-marquee/config";
 import { pieceMeta as memecoinHeroTickerPieceMeta } from "@landing/sections/memecoin-hero-ticker/config";
 import { pieceMeta as tokenStatsStripPieceMeta } from "@landing/sections/token-stats-strip/config";
+import { pieceMeta as memecoinPieceMeta } from "@landing/templates-memecoin/config";
 import { pieceMeta as ternusPieceMeta } from "@landing/templates-ternus/config";
 
 export interface PieceRegistration {
@@ -56,6 +57,16 @@ export const pieceRegistrations: readonly PieceRegistration[] = [
     loadPreview: () =>
       import("@landing/sections/token-stats-strip").then((m) => ({
         default: m.TokenStatsStrip,
+      })),
+  },
+  {
+    slug: "memecoin",
+    source: "@landing/templates-memecoin/config",
+    meta: memecoinPieceMeta,
+    packageName: "@landing/templates-memecoin",
+    loadPreview: () =>
+      import("@landing/templates-memecoin").then((m) => ({
+        default: m.MemecoinTemplate,
       })),
   },
   {
