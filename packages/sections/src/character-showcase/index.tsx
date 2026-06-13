@@ -7,7 +7,7 @@ interface RosterEntry {
 
 /** Placeholder roster — no live data (skeleton section, v1). */
 const ROSTER: RosterEntry[] = [
-  { name: "Vanguard", klass: "Tank" },
+  { name: "Bulwark", klass: "Tank" },
   { name: "Ember", klass: "Mage" },
   { name: "Specter", klass: "Assassin" },
   { name: "Aegis", klass: "Support" },

@@ -9,6 +9,10 @@
   overflow: hidden;
   background: var(--surface-0);
   color: var(--p-ink);
+  /* Ambient-loop duration for the HUD scanline. Lives outside the global
+     fast/base/slow motion scale on purpose (those cap at 480ms); named here
+     so it has a single source of truth instead of a bare literal. */
+  --ghh-scan-dur: 4.8s;
 }
 
 /* ambient corner glow — palette via tokens (I-4) */
@@ -105,11 +109,13 @@
   opacity: 0;
 }
 .ghh-anim .ghh-scanline {
-  animation: ghh-scan 4.8s var(--ease-standard) infinite;
+  animation: ghh-scan var(--ghh-scan-dur) var(--ease-standard) infinite;
 }
+/* Travel via `top: 0 → 100%` (relative to the root height) so the sweep spans
+   the section at any height — no viewport-magic-number guess. */
 @keyframes ghh-scan {
   0% {
-    transform: translateY(0);
+    top: 0;
     opacity: 0;
   }
   10%,
@@ -117,7 +123,7 @@
     opacity: 0.8;
   }
   100% {
-    transform: translateY(72vh);
+    top: 100%;
     opacity: 0;
   }
 }
