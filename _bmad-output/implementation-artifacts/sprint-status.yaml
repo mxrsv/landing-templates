@@ -66,11 +66,11 @@ development_status:
 
   # epic-10 chen TRƯỚC epic 5-9: pieces mới phải build trên chuẩn design system v2.
   # Spec: docs/superpowers/specs/2026-06-12-design-system-v2-gallery-redesign-design.md
-  epic-10: in-progress
+  epic-10: done
   10-1-design-tokens-v2: done
   10-2-ui-component-library: done
   10-3-gallery-shell-redesign: done
-  10-4-ternus-retrofit: in-progress
+  10-4-ternus-retrofit: done
   epic-10-retrospective: optional
 
   epic-5: backlog

@@ -42,6 +42,13 @@ Allowed token vocabulary (see `base.css` for full list):
 > `pieceMeta.mood`; only `apps/docs` chrome wears it. Accent budget inside
 > chrome: max 1 solid-accent element per viewport.
 
+> **Shader/canvas carve-out (I-4/I-8):** literal hex passed to a WebGL prop or a
+> Canvas2D `fillStyle` (e.g. PixelBlast `color`, donut segment ramp) is exempt —
+> the GPU/canvas cannot read CSS vars, and these values are pinned to the Piece's
+> declared mood (Ternus = `infra`, so `#22d3ee`/`#fb923c` match the theme floor).
+> The carve-out covers shader _data_ only; every CSS surface _around_ the canvas
+> (poster, vignette, scrim, spacing) still resolves through the token bridge.
+
 ## 2. Motion & accessibility
 
 - **`useReducedMotion()` is mandatory** for any Piece with animation (WebGL, GSAP,
