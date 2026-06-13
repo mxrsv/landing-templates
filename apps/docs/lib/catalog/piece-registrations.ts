@@ -11,6 +11,7 @@
  */
 import type { ComponentType } from "react";
 
+import { pieceMeta as characterShowcasePieceMeta } from "@landing/sections/character-showcase/config";
 import { pieceMeta as communityMarqueePieceMeta } from "@landing/sections/community-marquee/config";
 import { pieceMeta as gamefiHudHeroPieceMeta } from "@landing/sections/gamefi-hud-hero/config";
 import { pieceMeta as memecoinHeroTickerPieceMeta } from "@landing/sections/memecoin-hero-ticker/config";
@@ -58,6 +59,16 @@ export const pieceRegistrations: readonly PieceRegistration[] = [
     loadPreview: () =>
       import("@landing/sections/gamefi-hud-hero").then((m) => ({
         default: m.GamefiHudHero,
+      })),
+  },
+  {
+    slug: "character-showcase",
+    source: "@landing/sections/character-showcase/config",
+    meta: characterShowcasePieceMeta,
+    packageName: "@landing/sections",
+    loadPreview: () =>
+      import("@landing/sections/character-showcase").then((m) => ({
+        default: m.CharacterShowcase,
       })),
   },
   {

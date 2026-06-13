@@ -1,0 +1,175 @@
+/* Character showcase (skeleton) — game mood, HUD roster aesthetic.
+   Placeholder character display: featured portrait + roster grid. Static
+   skeleton (no animation) — palette/spacing/type/motion via token v2.
+   Scoped under [data-theme="game"] for self-contained copy. */
+
+.cs-root {
+  position: relative;
+  background: var(--surface-0);
+  color: var(--p-ink);
+}
+
+.cs-inner {
+  max-width: var(--container-lg);
+  margin-inline: auto;
+  padding-inline: var(--space-8);
+  padding-block: var(--section-pad-y-md);
+  display: grid;
+  gap: var(--space-8);
+}
+
+.cs-head {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.cs-eyebrow {
+  font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
+  font-size: var(--text-eyebrow);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--p-accent);
+}
+
+.cs-title {
+  margin: 0;
+  font-size: var(--text-h2);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--p-ink);
+}
+
+/* layout: featured + roster */
+.cs-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 2fr);
+  gap: var(--space-6);
+}
+
+/* featured character panel */
+.cs-featured {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: var(--line-w) solid var(--border-emphasis);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--surface-1) 70%, transparent);
+}
+
+.cs-portrait {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-md);
+  border: var(--line-w) solid var(--border-default);
+  background:
+    radial-gradient(
+      70% 60% at 50% 25%,
+      color-mix(in srgb, var(--p-primary) 22%, transparent),
+      transparent 75%
+    ),
+    var(--surface-2);
+  overflow: hidden;
+}
+
+/* skeleton silhouette block */
+.cs-portrait::after {
+  content: "";
+  position: absolute;
+  inset-inline: 22%;
+  bottom: 0;
+  height: 64%;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: color-mix(in srgb, var(--p-ink-3) 40%, transparent);
+}
+
+.cs-featured-name {
+  margin: 0;
+  font-size: var(--text-h3);
+  font-weight: 700;
+  color: var(--p-ink);
+}
+
+.cs-featured-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.cs-chip {
+  font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
+  font-size: var(--text-eyebrow);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  border: var(--line-w) solid var(--border-default);
+  background: var(--badge-bg);
+  color: var(--badge-fg);
+}
+
+.cs-chip-accent {
+  border-color: var(--badge-accent-fg);
+  background: var(--badge-accent-bg);
+  color: var(--badge-accent-fg);
+}
+
+/* roster grid */
+.cs-roster {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  align-content: start;
+}
+
+.cs-card {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: var(--line-w) solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+.cs-card:hover {
+  border-color: var(--border-emphasis);
+}
+
+.cs-card-thumb {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-sm);
+  background:
+    radial-gradient(
+      80% 70% at 50% 20%,
+      color-mix(in srgb, var(--p-primary) 16%, transparent),
+      transparent 80%
+    ),
+    var(--surface-2);
+}
+
+.cs-card-name {
+  font-size: var(--text-caption);
+  font-weight: 600;
+  color: var(--p-ink);
+}
+
+.cs-card-class {
+  font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
+  font-size: var(--text-eyebrow);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--p-ink-2);
+}
+
+@media (max-width: 64rem) {
+  .cs-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 40rem) {
+  .cs-roster {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
