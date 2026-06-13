@@ -1,0 +1,95 @@
+/* Community marquee — neon mood. Palette/spacing/type/motion via token v2. */
+
+.cm-root {
+  background: var(--surface-0);
+  color: var(--p-ink);
+}
+
+.cm-inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-block: var(--section-pad-y-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.cm-eyebrow {
+  font-size: var(--text-eyebrow);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--p-ink-3);
+  text-align: center;
+  padding-inline: var(--space-6);
+}
+
+/* marquee viewport */
+.cm-marquee {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--space-16),
+    #000 calc(100% - var(--space-16)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--space-16),
+    #000 calc(100% - var(--space-16)),
+    transparent
+  );
+}
+
+.cm-track {
+  display: flex;
+  width: max-content;
+  gap: var(--space-4);
+  padding-inline: var(--space-2);
+  will-change: transform;
+}
+
+/* reduced-motion: single static centered row */
+.cm-static {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-4);
+  padding-inline: var(--space-6);
+}
+
+.cm-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  border: var(--line-w) solid var(--border-default);
+  border-radius: var(--radius-pill);
+  background: var(--surface-1);
+  white-space: nowrap;
+  transition: border-color var(--duration-base) var(--ease-standard);
+}
+
+.cm-pill:hover {
+  border-color: var(--border-emphasis);
+}
+
+.cm-icon {
+  display: inline-flex;
+  color: var(--p-primary-bright);
+}
+
+.cm-name {
+  font-size: var(--text-caption);
+  font-weight: 600;
+  color: var(--p-ink);
+}
+
+.cm-count {
+  font-size: var(--text-caption);
+  color: var(--p-ink-2);
+  font-variant-numeric: tabular-nums;
+}
