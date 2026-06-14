@@ -21,11 +21,11 @@ export function validateEmail(value: string): EmailValidation {
   const trimmed = value.trim();
 
   if (trimmed.length === 0) {
-    return { ok: false, error: "Please enter your email." };
+    return { ok: false, error: "Vui lòng nhập email." };
   }
 
   if (!emailSchema.safeParse(trimmed).success) {
-    return { ok: false, error: "Enter a valid email address." };
+    return { ok: false, error: "Email chưa đúng định dạng." };
   }
 
   return { ok: true };

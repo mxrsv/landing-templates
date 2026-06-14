@@ -1,5 +1,11 @@
+"use client";
+
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { useReducedMotion } from "@landing/ui/lib/use-reduced-motion";
 import "./waitlist.css";
+import { Hero } from "./components/hero";
+import { WaitlistFooter } from "./components/waitlist-footer";
+import { WaitlistNav } from "./components/waitlist-nav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,29 +23,27 @@ const jetbrainsMono = JetBrains_Mono({
 
 /**
  * Waitlist — a "launch a waitlist" landing template (brand demo Aenor, the
- * trust layer for on-chain finance). Infra mood with the Ion skin; flow-knot
- * 3D artifact behind the page; client-only email simple-confirm.
+ * trust layer for on-chain finance). Infra mood with the Ion skin; client-only
+ * email simple-confirm; the flow-knot 3D artifact lands behind the page in
+ * Task 5.
  *
- * Skeleton scaffold (Task 1): sections land in later tasks. The root carries
- * `data-theme="infra"` for the shared `--p-*` floor and class `wl` to scope the
- * private Ion `--wl-*` tokens.
+ * `useReducedMotion()` is called once here (the single source) and passed down
+ * to motion-bearing sections, per the unit-isolation design (spec §10).
  */
 export function WaitlistTemplate() {
+  const reduced = useReducedMotion();
+
   return (
     <div
       className={`wl ${inter.variable} ${jetbrainsMono.variable}`}
       data-theme="infra"
       id="top"
     >
+      <WaitlistNav />
       <main>
-        <section className="wl-placeholder">
-          <div className="wrap">
-            <p className="eyebrow">Aenor · Waitlist</p>
-            <h1>Walking skeleton</h1>
-            <p>Sections land in the next tasks.</p>
-          </div>
-        </section>
+        <Hero reduced={reduced} />
       </main>
+      <WaitlistFooter />
     </div>
   );
 }
