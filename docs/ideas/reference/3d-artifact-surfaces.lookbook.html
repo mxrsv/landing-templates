@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reference — 3D Artifact Surfaces (lookbook)</title>
+    <!--
+      Lookbook tham khảo các bề mặt viên knot (xem 3d-artifact-surfaces.md).
+      Kho ý tưởng, KHÔNG phải component production. Bỏ Plasma Core có chủ đích.
+      Cùng 1 viên knot, đổi vật liệu — bấm nút trên để xoay qua từng bề mặt.
+    -->
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #04080a;
+        color: #ecfff8;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          sans-serif;
+        overflow: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+      #c {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        z-index: 1;
+      }
+      .bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        padding: 14px;
+        background: linear-gradient(180deg, rgba(4, 8, 10, 0.85), transparent);
+      }
+      .bar button {
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.04);
+        color: #dfeee8;
+        font-size: 12.5px;
+        font-weight: 600;
+        padding: 9px 15px;
+        border-radius: 24px;
+        cursor: pointer;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+        white-space: nowrap;
+      }
+      .bar button:hover {
+        border-color: rgba(127, 255, 230, 0.5);
+        background: rgba(127, 255, 230, 0.08);
+      }
+      .bar button.on {
+        background: linear-gradient(120deg, #7fffe6, #18d399 55%, #0bb98a);
+        color: #052029;
+        border-color: transparent;
+      }
+      .cap {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 10;
+        text-align: center;
+        padding: 18px 20px 22px;
+        background: linear-gradient(0deg, rgba(4, 8, 10, 0.9), transparent);
+      }
+      .cap h2 {
+        margin: 0 0 6px;
+        font-size: 18px;
+        letter-spacing: -0.4px;
+      }
+      .cap p {
+        margin: 0 auto;
+        max-width: 560px;
+        font-size: 13px;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.62);
+      }
+      #banner {
+        position: fixed;
+        top: 64px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 11;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.5);
+        background: rgba(8, 12, 15, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        padding: 5px 13px;
+      }
+      #banner.err {
+        color: #ffb4b4;
+        border-color: rgba(255, 120, 120, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bar" id="bar"></div>
+    <div id="banner">⏳ đang tải 3D…</div>
+    <canvas id="c"></canvas>
+    <div class="cap">
+      <h2 id="capt"></h2>
+      <p id="capd"></p>
+    </div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module">
+      import * as THREE from "three";
+      import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+      const B = document.getElementById("banner");
+      const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // Thứ tự: bản ĐÃ CHỌN trước, rồi tới các hướng tham khảo. Plasma Core bị loại có chủ đích.
+      const STYLES = {
+        Wireframe: {
+          label: "🕸 Wireframe Flow ⭐",
+          t: "Wireframe Flow — ĐÃ CHỌN cho Waitlist",
+          d: 'Lưới dây emerald phát sáng quanh lõi tối. Unlit → không bao giờ "ăn màu nền". Nhẹ, kỹ thuật, hợp tinh thần infra.',
+        },
+        Frosted: {
+          label: "🧊 Frosted",
+          t: "Frosted satin (kính mờ)",
+          d: "Kính mờ sương mịn, mềm, bán trong. Sang, trầm — giấu cái phẳng bằng khuếch tán ánh sáng. Cần backdrop đa sắc.",
+        },
+        FrostWire: {
+          label: "✨ Frosted + Wire",
+          t: "Frosted + Wireframe (combo)",
+          d: "Vỏ kính mờ + lưới dây emerald additive bên trong. Mềm của frosted + cấu trúc của wireframe. Bản giàu hơn Wireframe thuần.",
+        },
+        Holographic: {
+          label: "🌈 Holographic",
+          t: "Holographic (oil-slick)",
+          d: "Màng dầu loang — ĐỔI MÀU cầu vồng theo góc nhìn. Không trong suốt nên không lo nền. Premium nhất. Cần env map.",
+        },
+        Chrome: {
+          label: "🪞 Liquid Chrome",
+          t: "Liquid chrome (kim loại gương)",
+          d: 'Kim loại lỏng bóng như gương, ám mint, phản chiếu môi trường. Sang, mạnh mẽ — vibe "thanh khoản kim loại".',
+        },
+        Glass: {
+          label: "💎 Glass (bản gốc)",
+          t: "Glass crystal (đối chiếu)",
+          d: 'Pha lê trong khúc xạ backdrop. Đẹp khi nền nhiều màu; dễ thành "khối đặc" khi nền đơn sắc — chính là vấn đề đã gặp.',
+        },
+      };
+
+      try {
+        const canvas = document.getElementById("c");
+        const renderer = new THREE.WebGLRenderer({
+          canvas,
+          antialias: true,
+          alpha: true,
+        });
+        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.3;
+
+        const scene = new THREE.Scene();
+        const pmrem = new THREE.PMREMGenerator(renderer);
+        scene.environment = pmrem.fromScene(
+          new RoomEnvironment(),
+          0.04,
+        ).texture;
+        const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+        camera.position.set(0, 0, 4.6);
+
+        // backdrop đa sắc (cần cho glass/frosted; ambient nhẹ cho phần còn lại)
+        const bc = document.createElement("canvas");
+        bc.width = bc.height = 512;
+        const g = bc.getContext("2d");
+        g.fillStyle = "#04080a";
+        g.fillRect(0, 0, 512, 512);
+        const pools = [
+          [150, 170, 300, "rgba(150,255,228,.9)"],
+          [385, 250, 230, "rgba(46,196,210,.55)"],
+          [300, 360, 240, "rgba(11,185,138,.5)"],
+          [240, 470, 210, "rgba(255,207,107,.5)"],
+          [440, 430, 150, "rgba(150,120,255,.28)"],
+        ];
+        pools.forEach(([x, y, r, col]) => {
+          const rg = g.createRadialGradient(x, y, 8, x, y, r);
+          rg.addColorStop(0, col);
+          rg.addColorStop(1, "rgba(4,8,10,0)");
+          g.fillStyle = rg;
+          g.fillRect(0, 0, 512, 512);
+        });
+        const tex = new THREE.CanvasTexture(bc);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        const plane = new THREE.Mesh(
+          new THREE.PlaneGeometry(24, 24),
+          new THREE.MeshBasicMaterial({ map: tex, toneMapped: false }),
+        );
+        plane.position.z = -6;
+        scene.add(plane);
+
+        // đèn — rim màu cho bề mặt phản chiếu
+        const key = new THREE.DirectionalLight(0xeafff6, 2.8);
+        key.position.set(4, 5, 6);
+        scene.add(key);
+        const rimGold = new THREE.DirectionalLight(0xffcf6b, 1.3);
+        rimGold.position.set(-5, -3, -4);
+        scene.add(rimGold);
+        const rimAqua = new THREE.DirectionalLight(0x49e0d8, 1.1);
+        rimAqua.position.set(5, -4, -3);
+        scene.add(rimAqua);
+        scene.add(new THREE.AmbientLight(0x183f3a, 0.4));
+
+        const geo = new THREE.TorusKnotGeometry(1.0, 0.33, 240, 36);
+        const group = new THREE.Group();
+        scene.add(group);
+        let current = null;
+
+        function clear() {
+          if (!current) return;
+          group.remove(current);
+          current.traverse?.((o) => {
+            o.geometry?.dispose?.();
+            o.material?.dispose?.();
+          });
+          current = null;
+        }
+
+        function build(name) {
+          clear();
+          if (name === "Wireframe") {
+            const grp = new THREE.Group();
+            const fill = new THREE.Mesh(
+              geo,
+              new THREE.MeshBasicMaterial({ color: 0x021712 }),
+            );
+            fill.scale.setScalar(0.985);
+            const wire = new THREE.Mesh(
+              geo,
+              new THREE.MeshBasicMaterial({
+                color: 0x5dffce,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.9,
+              }),
+            );
+            grp.add(fill, wire);
+            current = grp;
+          } else if (name === "Frosted") {
+            current = new THREE.Mesh(
+              geo,
+              new THREE.MeshPhysicalMaterial({
+                transmission: 1,
+                thickness: 1.6,
+                roughness: 0.5,
+                ior: 1.4,
+                color: 0xeafff6,
+                attenuationColor: 0x9ff0d6,
+                attenuationDistance: 3,
+                clearcoat: 0.4,
+                clearcoatRoughness: 0.5,
+                envMapIntensity: 1.1,
+              }),
+            );
+          } else if (name === "FrostWire") {
+            const grp = new THREE.Group();
+            const shell = new THREE.Mesh(
+              geo,
+              new THREE.MeshPhysicalMaterial({
+                transmission: 1,
+                thickness: 1.4,
+                roughness: 0.42,
+                ior: 1.4,
+                color: 0xeafff6,
+                attenuationColor: 0x9ff0d6,
+                attenuationDistance: 3.2,
+                clearcoat: 0.5,
+                clearcoatRoughness: 0.4,
+                envMapIntensity: 1.15,
+              }),
+            );
+            const wire = new THREE.Mesh(
+              geo,
+              new THREE.MeshBasicMaterial({
+                color: 0x6effd6,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.5,
+                blending: THREE.AdditiveBlending,
+              }),
+            );
+            wire.scale.setScalar(1.004);
+            grp.add(shell, wire);
+            current = grp;
+          } else if (name === "Holographic") {
+            current = new THREE.Mesh(
+              geo,
+              new THREE.MeshPhysicalMaterial({
+                metalness: 0.45,
+                roughness: 0.22,
+                color: 0x07201b,
+                clearcoat: 1,
+                clearcoatRoughness: 0.14,
+                iridescence: 1,
+                iridescenceIOR: 2.1,
+                iridescenceThicknessRange: [100, 900],
+                envMapIntensity: 2.3,
+                sheen: 1,
+                sheenColor: 0x88ffe0,
+              }),
+            );
+          } else if (name === "Chrome") {
+            current = new THREE.Mesh(
+              geo,
+              new THREE.MeshStandardMaterial({
+                metalness: 1,
+                roughness: 0.05,
+                color: 0xc7f3e2,
+                envMapIntensity: 2.1,
+              }),
+            );
+          } else {
+            // Glass
+            current = new THREE.Mesh(
+              geo,
+              new THREE.MeshPhysicalMaterial({
+                transmission: 1,
+                thickness: 0.9,
+                roughness: 0.03,
+                ior: 1.55,
+                color: 0xffffff,
+                attenuationColor: 0xaef5dc,
+                attenuationDistance: 6,
+                clearcoat: 1,
+                clearcoatRoughness: 0.05,
+                iridescence: 1,
+                iridescenceIOR: 1.5,
+                iridescenceThicknessRange: [120, 520],
+                envMapIntensity: 1.9,
+              }),
+            );
+          }
+          group.add(current);
+        }
+
+        // UI
+        const bar = document.getElementById("bar");
+        const capt = document.getElementById("capt"),
+          capd = document.getElementById("capd");
+        function select(name) {
+          build(name);
+          const s = STYLES[name];
+          capt.textContent = s.t;
+          capd.textContent = s.d;
+          [...bar.children].forEach((b) =>
+            b.classList.toggle("on", b.dataset.name === name),
+          );
+        }
+        Object.keys(STYLES).forEach((name) => {
+          const b = document.createElement("button");
+          b.textContent = STYLES[name].label;
+          b.dataset.name = name;
+          b.onclick = () => select(name);
+          bar.appendChild(b);
+        });
+
+        function resize() {
+          const w = innerWidth,
+            h = innerHeight;
+          renderer.setSize(w, h, false);
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+        }
+        resize();
+        addEventListener("resize", resize);
+
+        let raf = 0;
+        function loop() {
+          if (!REDUCE) {
+            group.rotation.y += 0.005;
+            group.rotation.x = Math.sin(Date.now() * 0.0003) * 0.15;
+          }
+          renderer.render(scene, camera);
+          raf = requestAnimationFrame(loop);
+        }
+
+        select("Wireframe"); // mặc định = bản đã chọn
+        B.textContent = "🔮 3D ON — bấm các nút trên để đổi bề mặt";
+        if (REDUCE) {
+          group.rotation.set(0.2, 0.6, 0);
+          renderer.render(scene, camera);
+        } else loop();
+      } catch (err) {
+        B.textContent = "⛔ 3D lỗi: " + ((err && err.message) || err);
+        B.className = "err";
+        console.error(err);
+      }
+    </script>
+  </body>
+</html>
