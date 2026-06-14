@@ -36,5 +36,10 @@ export const pieceMeta: WaitlistPieceMeta = {
   sourcePaths: [
     "packages/templates-waitlist/src/template.tsx",
     "packages/templates-waitlist/src/waitlist.css",
+    "packages/templates-waitlist/src/components/reveal.tsx",
+    "packages/templates-waitlist/src/components/stat-number.tsx",
+    "packages/templates-waitlist/src/lib/use-in-view.ts",
+    "packages/templates-waitlist/src/lib/use-scroll-progress.ts",
+    "packages/templates-waitlist/src/lib/waitlist-email.ts",
   ],
 };

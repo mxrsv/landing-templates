@@ -10,10 +10,12 @@
   "scripts": {
     "build": "echo \"@landing/templates-waitlist: no build (source package)\" && exit 0",
     "lint": "eslint src --max-warnings 0",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "test": "node --test \"src/**/*.test.ts\""
   },
   "dependencies": {
-    "@landing/ui": "workspace:*"
+    "@landing/ui": "workspace:*",
+    "zod": "^4.4.3"
   },
   "peerDependencies": {
     "next": "^16.2.7",
@@ -22,6 +24,7 @@
   "devDependencies": {
     "@landing/eslint-config": "workspace:*",
     "@landing/typescript-config": "workspace:*",
+    "@types/node": "^22.0.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "eslint": "^9.39.1",
