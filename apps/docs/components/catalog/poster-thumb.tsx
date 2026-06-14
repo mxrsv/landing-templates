@@ -33,6 +33,12 @@ function PosterFallback({ mood }: { mood: PieceMood }) {
 interface PosterThumbProps {
   slug: string;
   mood: PieceMood;
+  /**
+   * Hover state controlled từ ngoài (vd GalleryCard bind hover-intent ở
+   * card-level để stretched-link không chặn pointer). Bỏ trống → tự quản
+   * hover-intent trên chính root của thumb.
+   */
+  active?: boolean;
 }
 
 /**
@@ -41,8 +47,15 @@ interface PosterThumbProps {
  * Bỏ qua live khi `prefers-reduced-motion`. Live render `inert` +
  * `pointer-events-none` (chỉ để ngắm, gỡ khỏi tab order / a11y tree).
  */
-export function PosterThumb({ slug, mood }: PosterThumbProps) {
-  const { active, bind } = useHoverIntent();
+export function PosterThumb({
+  slug,
+  mood,
+  active: controlledActive,
+}: PosterThumbProps) {
+  const intent = useHoverIntent();
+  const isControlled = controlledActive !== undefined;
+  const active = isControlled ? controlledActive : intent.active;
+  const bind = isControlled ? {} : intent.bind;
   const [live, setLive] = useState(false);
   const [posterFailed, setPosterFailed] = useState(false);
   const allowMotion = useRef(true);
