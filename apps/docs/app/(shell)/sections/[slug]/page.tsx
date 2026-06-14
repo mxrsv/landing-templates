@@ -1,20 +1,9 @@
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
-import { PieceDetail } from "../../../../components/catalog/piece-detail";
-import { allPieces } from "../../../../lib/catalog";
-
-export function generateStaticParams() {
-  return allPieces
-    .filter((p) => p.layer === "section")
-    .map((p) => ({ slug: p.slug }));
-}
-
-export default async function SectionDetailPage(
+/** Route detail cũ → Unified Explorer deep-link `?piece=` (spec §6). */
+export default async function SectionDetailRedirect(
   props: PageProps<"/sections/[slug]">,
 ) {
   const { slug } = await props.params;
-  const piece = allPieces.find((p) => p.layer === "section" && p.slug === slug);
-  if (piece === undefined) notFound();
-
-  return <PieceDetail piece={piece} />;
+  redirect(`/?piece=${slug}`);
 }

@@ -1,19 +1,6 @@
-import { PieceIndexPage } from "../../../components/catalog/piece-index-page";
+import { redirect } from "next/navigation";
 
-export const metadata = {
-  title: "Templates — Landing Templates",
-};
-
-export default async function TemplatesIndexPage(
-  props: PageProps<"/templates">,
-) {
-  return (
-    <PieceIndexPage
-      layer="template"
-      eyebrow="Templates"
-      title="Landing templates theo mood"
-      searchParams={await props.searchParams}
-      groupByMood
-    />
-  );
+/** Route cũ → Unified Explorer (spec §6). */
+export default function TemplatesIndexRedirect() {
+  redirect("/?layer=template");
 }

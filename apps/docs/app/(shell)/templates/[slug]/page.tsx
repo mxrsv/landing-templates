@@ -1,22 +1,9 @@
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
-import { PieceDetail } from "../../../../components/catalog/piece-detail";
-import { allPieces } from "../../../../lib/catalog";
-
-export function generateStaticParams() {
-  return allPieces
-    .filter((p) => p.layer === "template")
-    .map((p) => ({ slug: p.slug }));
-}
-
-export default async function TemplateDetailPage(
+/** Route detail cũ → Unified Explorer deep-link `?piece=` (spec §6). */
+export default async function TemplateDetailRedirect(
   props: PageProps<"/templates/[slug]">,
 ) {
   const { slug } = await props.params;
-  const piece = allPieces.find(
-    (p) => p.layer === "template" && p.slug === slug,
-  );
-  if (piece === undefined) notFound();
-
-  return <PieceDetail piece={piece} />;
+  redirect(`/?piece=${slug}`);
 }
