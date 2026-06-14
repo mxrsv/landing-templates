@@ -5,10 +5,13 @@ import { useRef } from "react";
 import { useReducedMotion } from "@landing/ui/lib/use-reduced-motion";
 import "./waitlist.css";
 import { Backers } from "./components/backers";
+import { ClosingCta } from "./components/closing-cta";
+import { Faq } from "./components/faq";
 import { FlowKnot } from "./components/flow-knot";
 import { Hero } from "./components/hero";
 import { Perks } from "./components/perks";
 import { Stats } from "./components/stats";
+import { Trust } from "./components/trust";
 import { WaitlistFooter } from "./components/waitlist-footer";
 import { WaitlistNav } from "./components/waitlist-nav";
 import { useScrollProgress } from "./lib/use-scroll-progress";
@@ -57,6 +60,9 @@ export function WaitlistTemplate() {
         <Backers reduced={reduced} />
         <Perks reduced={reduced} />
         <Stats reduced={reduced} />
+        <Trust reduced={reduced} />
+        <ClosingCta reduced={reduced} />
+        <Faq reduced={reduced} />
       </main>
       <WaitlistFooter />
     </div>
