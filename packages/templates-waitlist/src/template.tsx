@@ -11,6 +11,7 @@ import { FlowKnot } from "./components/flow-knot";
 import { Hero } from "./components/hero";
 import { Perks } from "./components/perks";
 import { Stats } from "./components/stats";
+import { Transform } from "./components/transform";
 import { Trust } from "./components/trust";
 import { WaitlistFooter } from "./components/waitlist-footer";
 import { WaitlistNav } from "./components/waitlist-nav";
@@ -58,6 +59,7 @@ export function WaitlistTemplate() {
       <main>
         <Hero reduced={reduced} />
         <Backers reduced={reduced} />
+        <Transform reduced={reduced} />
         <Perks reduced={reduced} />
         <Stats reduced={reduced} />
         <Trust reduced={reduced} />

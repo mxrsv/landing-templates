@@ -44,6 +44,7 @@ export const pieceMeta: WaitlistPieceMeta = {
     "packages/templates-waitlist/src/components/backers.tsx",
     "packages/templates-waitlist/src/components/perks.tsx",
     "packages/templates-waitlist/src/components/stats.tsx",
+    "packages/templates-waitlist/src/components/transform.tsx",
     "packages/templates-waitlist/src/components/trust.tsx",
     "packages/templates-waitlist/src/components/closing-cta.tsx",
     "packages/templates-waitlist/src/components/faq.tsx",
