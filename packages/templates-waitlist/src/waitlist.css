@@ -306,7 +306,7 @@ html:has(.wl) {
 .wl .wl-ok {
   margin-top: var(--space-4, 16px);
   color: var(--wl-cy);
-  font-size: var(--text-body, 14px);
+  font-size: var(--text-body, 15px);
   font-weight: 600;
 }
 
@@ -380,5 +380,10 @@ html:has(.wl) {
 @media (prefers-reduced-motion: reduce) {
   .wl .scrollcue {
     animation: none;
+  }
+
+  /* smooth-scroll is itself motion — honour the user's preference */
+  html:has(.wl) {
+    scroll-behavior: auto;
   }
 }

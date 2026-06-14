@@ -35,10 +35,12 @@ function KnotFallback() {
 function hasWebGL(): boolean {
   try {
     const canvas = document.createElement("canvas");
-    return Boolean(
-      window.WebGLRenderingContext &&
-        (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")),
-    );
+    const gl = (canvas.getContext("webgl") ||
+      canvas.getContext("experimental-webgl")) as WebGLRenderingContext | null;
+    if (!gl) return false;
+    // Release the throwaway probe context at once — browsers cap live contexts.
+    gl.getExtension("WEBGL_lose_context")?.loseContext();
+    return true;
   } catch {
     return false;
   }
@@ -189,12 +191,16 @@ function initScene(
   group.rotation.set(0.2, 0, 0);
   scene.add(group);
 
+  // Forces a draw on the first frame and after every resize (drawing-buffer +
+  // camera aspect just changed), even when the knot has otherwise settled.
+  let needsRender = true;
   const setSize = () => {
     const w = container.clientWidth || 1;
     const h = container.clientHeight || 1;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
+    needsRender = true;
   };
   setSize();
   const ro = new ResizeObserver(setSize);
@@ -205,7 +211,6 @@ function initScene(
   let curPosY = 0;
   let curScale = 0.9;
   let raf = 0;
-  let firstFrame = true;
 
   const animate = () => {
     raf = requestAnimationFrame(animate);
@@ -223,15 +228,16 @@ function initScene(
       Math.abs(curRot - targetRotY) < 1e-4 &&
       Math.abs(curPosY - targetPosY) < 1e-4 &&
       Math.abs(curScale - targetScale) < 1e-4;
-    // Skip the draw once motion has settled — saves GPU on an idle background.
-    if (settled && !firstFrame) return;
+    // Skip the draw once motion has settled AND nothing forced a redraw —
+    // saves GPU on an idle background, but still repaints after a resize.
+    if (settled && !needsRender) return;
 
     group.rotation.y = curRot;
     group.rotation.x = 0.2 + p * 0.5;
     group.position.y = curPosY;
     group.scale.setScalar(curScale);
     renderer.render(scene, camera);
-    firstFrame = false;
+    needsRender = false;
   };
   raf = requestAnimationFrame(animate);
 
