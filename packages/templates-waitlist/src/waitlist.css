@@ -514,6 +514,186 @@ html:has(.wl) {
   color: var(--wl-ink-3);
 }
 
+/* ============ LATENCY GAUGE ============ */
+.wl .gauge-h {
+  font-size: var(--text-h2, clamp(29px, 4.3vw, 50px));
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  color: var(--wl-ink);
+  margin-top: var(--space-3, 12px);
+  max-width: 20ch;
+}
+
+.wl .gauge-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-12, 48px);
+  margin-top: var(--space-12, 48px);
+}
+
+/* the dial: SVG arc with the readout absolutely centred inside the semicircle */
+.wl .gauge-dial {
+  position: relative;
+  max-width: 26rem;
+}
+
+.wl .gauge-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.wl .gauge-track {
+  stroke: var(--wl-line);
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+
+/* SVG (not the WebGL/Canvas2D carve-out) — colour rides the Ion token */
+.wl .gauge-fill {
+  stroke: var(--wl-cy);
+  stroke-width: 10;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px var(--wl-glow-cy));
+}
+
+.wl .gauge-readout {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 100%;
+}
+
+.wl .gauge-num {
+  display: block;
+  font-family: var(--wl-mono);
+  font-size: var(--text-display, clamp(40px, 7vw, 86px));
+  font-weight: 600;
+  line-height: 1;
+  color: var(--wl-ink);
+}
+
+.wl .gauge-unit {
+  font-size: var(--text-h2, 29px);
+  color: var(--wl-cy);
+  margin-left: var(--space-1, 4px);
+}
+
+.wl .gauge-cap {
+  display: block;
+  margin: var(--space-3, 12px) auto 0;
+  max-width: 22ch;
+  font-size: var(--text-caption, 13px);
+  line-height: 1.5;
+  color: var(--wl-ink-3);
+}
+
+.wl .gauge-stats {
+  display: grid;
+  gap: var(--space-6, 24px);
+}
+
+.wl .gauge-stat {
+  padding-left: var(--space-5, 20px);
+  border-left: 1px solid var(--wl-line);
+}
+
+.wl .gauge-stat-v {
+  display: block;
+  font-family: var(--wl-mono);
+  font-size: var(--text-h2, clamp(29px, 4.3vw, 50px));
+  font-weight: 600;
+  line-height: 1;
+  color: var(--wl-ink);
+}
+
+.wl .gauge-stat-l {
+  display: block;
+  margin-top: var(--space-2, 8px);
+  font-size: var(--text-caption, 13px);
+  color: var(--wl-ink-3);
+}
+
+/* ============ REACH GLOBE ============ */
+.wl .globe-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-12, 48px);
+}
+
+.wl .globe-h {
+  font-size: var(--text-h2, clamp(29px, 4.3vw, 50px));
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  color: var(--wl-ink);
+  margin-top: var(--space-3, 12px);
+  max-width: 18ch;
+}
+
+.wl .globe-body {
+  margin-top: var(--space-5, 20px);
+  font-size: var(--text-body, 15px);
+  line-height: 1.6;
+  color: var(--wl-ink-2);
+  max-width: 40ch;
+}
+
+.wl .globe-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8, 32px);
+  margin-top: var(--space-8, 32px);
+}
+
+.wl .globe-stat-v {
+  display: block;
+  font-family: var(--wl-mono);
+  font-size: var(--text-h2, clamp(29px, 4.3vw, 50px));
+  font-weight: 600;
+  line-height: 1;
+  background: var(--wl-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.wl .globe-stat-l {
+  display: block;
+  margin-top: var(--space-2, 8px);
+  font-size: var(--text-caption, 13px);
+  color: var(--wl-ink-3);
+}
+
+/* the canvas stage — a square that holds the rotating sphere */
+.wl .globe-stage {
+  display: flex;
+  justify-content: center;
+}
+
+.wl .globe-canvas {
+  display: block;
+  width: 100%;
+  max-width: 30rem;
+  aspect-ratio: 1;
+}
+
+/* CSS fallback if Canvas2D is unavailable / draw throws — token-driven blob */
+.wl .globe-fallback {
+  border-radius: var(--wl-r-pill);
+  background: radial-gradient(
+    circle at 50% 42%,
+    color-mix(in srgb, var(--wl-cy) 22%, transparent),
+    transparent 68%
+  );
+}
+
 /* ============ TRANSFORM (sticky showpiece) ============ */
 /* Tall outer drives scroll; inner panel pins to the viewport while progress
    advances the three stages. No GSAP pin — just sticky + useScrollProgress. */
@@ -879,6 +1059,21 @@ html:has(.wl) {
   .wl .stats-grid,
   .wl .trust-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wl .gauge-grid,
+  .wl .globe-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-10, 40px);
+  }
+
+  /* globe text reads first, sphere drops below */
+  .wl .globe-stage {
+    order: 2;
+  }
+
+  .wl .gauge-dial {
+    margin: 0 auto;
   }
 }
 

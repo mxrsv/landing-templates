@@ -9,7 +9,9 @@ import { ClosingCta } from "./components/closing-cta";
 import { Faq } from "./components/faq";
 import { FlowKnot } from "./components/flow-knot";
 import { Hero } from "./components/hero";
+import { LatencyGauge } from "./components/latency-gauge";
 import { Perks } from "./components/perks";
+import { ReachGlobe } from "./components/reach-globe";
 import { Stats } from "./components/stats";
 import { Transform } from "./components/transform";
 import { Trust } from "./components/trust";
@@ -61,6 +63,8 @@ export function WaitlistTemplate() {
         <Backers reduced={reduced} />
         <Transform reduced={reduced} />
         <Perks reduced={reduced} />
+        <LatencyGauge reduced={reduced} />
+        <ReachGlobe reduced={reduced} />
         <Stats reduced={reduced} />
         <Trust reduced={reduced} />
         <ClosingCta reduced={reduced} />
