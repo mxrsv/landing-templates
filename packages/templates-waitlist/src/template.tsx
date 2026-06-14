@@ -1,11 +1,14 @@
 "use client";
 
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { useRef } from "react";
 import { useReducedMotion } from "@landing/ui/lib/use-reduced-motion";
 import "./waitlist.css";
+import { FlowKnot } from "./components/flow-knot";
 import { Hero } from "./components/hero";
 import { WaitlistFooter } from "./components/waitlist-footer";
 import { WaitlistNav } from "./components/waitlist-nav";
+import { useScrollProgress } from "./lib/use-scroll-progress";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,16 +32,22 @@ const jetbrainsMono = JetBrains_Mono({
  *
  * `useReducedMotion()` is called once here (the single source) and passed down
  * to motion-bearing sections, per the unit-isolation design (spec §10).
+ * Scroll progress is also measured once on the root and drives the flow-knot
+ * (locked decision: the knot tracks whole-page scroll).
  */
 export function WaitlistTemplate() {
   const reduced = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const progress = useScrollProgress(rootRef);
 
   return (
     <div
+      ref={rootRef}
       className={`wl ${inter.variable} ${jetbrainsMono.variable}`}
       data-theme="infra"
       id="top"
     >
+      <FlowKnot reduced={reduced} progress={progress} />
       <WaitlistNav />
       <main>
         <Hero reduced={reduced} />

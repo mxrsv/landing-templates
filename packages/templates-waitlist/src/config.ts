@@ -31,7 +31,7 @@ export const pieceMeta: WaitlistPieceMeta = {
   useCase: ["waitlist", "crypto", "fintech"],
   stackTags: ["next", "react", "three"],
   animationTags: ["webgl", "scroll-reveal", "count-up"],
-  deps: ["@landing/ui", "next", "react"],
+  deps: ["@landing/ui", "next", "react", "three"],
   copyMode: "multi",
   sourcePaths: [
     "packages/templates-waitlist/src/template.tsx",
@@ -40,6 +40,7 @@ export const pieceMeta: WaitlistPieceMeta = {
     "packages/templates-waitlist/src/components/hero.tsx",
     "packages/templates-waitlist/src/components/email-form.tsx",
     "packages/templates-waitlist/src/components/waitlist-footer.tsx",
+    "packages/templates-waitlist/src/components/flow-knot.tsx",
     "packages/templates-waitlist/src/components/reveal.tsx",
     "packages/templates-waitlist/src/components/stat-number.tsx",
     "packages/templates-waitlist/src/lib/use-in-view.ts",

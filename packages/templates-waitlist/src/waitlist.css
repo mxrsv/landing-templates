@@ -124,6 +124,38 @@ html:has(.wl) {
   transform: none;
 }
 
+/* ============ FLOW-KNOT (3D artifact) ============ */
+/* Full-bleed backdrop layer behind every section. The WebGL canvas mounts
+   into this; content (.wrap z-index 1, nav z-index 20) always sits above it. */
+.wl #scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Static Ion blob — the shared fallback for reduced-motion / no-WebGL / crash.
+   CSS-only, so colors resolve through the `--wl-*` tokens (INVARIANT I-4: the
+   literal-hex carve-out is for the WebGL/Canvas2D paths, not here). */
+.wl .fknot {
+  background:
+    radial-gradient(
+      42vw 42vw at 62% 32%,
+      color-mix(in srgb, var(--wl-cy) 26%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      36vw 36vw at 38% 64%,
+      color-mix(in srgb, var(--wl-vi) 22%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      28vw 28vw at 72% 72%,
+      color-mix(in srgb, var(--wl-pop) 18%, transparent),
+      transparent 70%
+    );
+}
+
 /* ============ NAV ============ */
 .wl .wl-nav {
   position: fixed;
