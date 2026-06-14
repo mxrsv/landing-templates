@@ -4,8 +4,11 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import { useRef } from "react";
 import { useReducedMotion } from "@landing/ui/lib/use-reduced-motion";
 import "./waitlist.css";
+import { Backers } from "./components/backers";
 import { FlowKnot } from "./components/flow-knot";
 import { Hero } from "./components/hero";
+import { Perks } from "./components/perks";
+import { Stats } from "./components/stats";
 import { WaitlistFooter } from "./components/waitlist-footer";
 import { WaitlistNav } from "./components/waitlist-nav";
 import { useScrollProgress } from "./lib/use-scroll-progress";
@@ -51,6 +54,9 @@ export function WaitlistTemplate() {
       <WaitlistNav />
       <main>
         <Hero reduced={reduced} />
+        <Backers reduced={reduced} />
+        <Perks reduced={reduced} />
+        <Stats reduced={reduced} />
       </main>
       <WaitlistFooter />
     </div>
