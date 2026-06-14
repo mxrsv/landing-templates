@@ -17,15 +17,15 @@ export interface HeroContent {
 }
 
 const DEFAULT_CONTENT: HeroContent = {
-  eyebrow: "◷ Mainnet ra mắt Q3 2026",
+  eyebrow: "◷ Mainnet launching Q3 2026",
   title: "The trust layer for",
   titleAccent: "on-chain finance",
-  sub: "Audited, non-custodial, sub-second settlement. Tham gia waitlist để onboard trước công chúng.",
+  sub: "Audited, non-custodial, sub-second settlement. Join the waitlist to onboard ahead of the public.",
   emailPlaceholder: "you@email.com",
   submitLabel: "Join waitlist",
-  confirm: "✓ You're on the list — hẹn gặp lúc early access mở.",
-  proof: "★★★★★  2,431 builders đã tham gia",
-  scrollCue: "CUỘN ĐỂ XEM ↓",
+  confirm: "✓ You're on the list — see you when early access opens.",
+  proof: "★★★★★  2,431 builders already joined",
+  scrollCue: "SCROLL TO EXPLORE ↓",
 };
 
 interface HeroProps {

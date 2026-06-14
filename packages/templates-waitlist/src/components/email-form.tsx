@@ -24,7 +24,7 @@ interface EmailFormProps {
 export function EmailForm({
   placeholder = "you@email.com",
   submitLabel = "Join waitlist",
-  confirm = "✓ You're on the list — hẹn gặp lúc early access mở.",
+  confirm = "✓ You're on the list — see you when early access opens.",
   proof,
 }: EmailFormProps) {
   const [email, setEmail] = useState("");
