@@ -38,6 +38,9 @@ importers:
       '@landing/templates-ternus':
         specifier: workspace:*
         version: link:../../packages/templates-ternus
+      '@landing/templates-waitlist':
+        specifier: workspace:*
+        version: link:../../packages/templates-waitlist
       '@landing/ui':
         specifier: workspace:*
         version: link:../../packages/ui

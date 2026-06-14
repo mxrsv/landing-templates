@@ -7,8 +7,12 @@
  *
  * Floors (enforce fail-fast lúc module init):
  * - (ui + sections).length ≥ 8 — KHÔNG tính templates
- * - templates.length === 4 (mỗi mood một template)
- * - tổng ≤ 16 (exception >16 cần rationale trong PR)
+ * - templates.length === 5 (4 mood gốc + Waitlist JTBD trên mood infra)
+ * - tổng ≤ 17 (exception >16 cần rationale trong PR)
+ *
+ * Rationale bump 4→5 / 16→17 (giả định #3 template-factory): chuyển khỏi tư
+ * duy "tổng ≤16" sang "đủ chiều sâu mỗi kind". Waitlist là template JTBD chính
+ * đáng ("launch a waitlist"), không phải phình tuỳ tiện — story kiểm chứng cap.
  */
 import type { PieceLayer } from "./types";
 
@@ -29,12 +33,12 @@ export const manifest = {
     "nft-gallery-grid",
     "mint-countdown",
   ],
-  templates: ["ternus", "memecoin", "gamefi", "aikit"],
+  templates: ["ternus", "memecoin", "gamefi", "aikit", "waitlist"],
 } as const satisfies Record<"ui" | "sections" | "templates", readonly string[]>;
 
 const MIN_UI_SECTIONS = 8;
-const EXACT_TEMPLATES = 4;
-const MAX_TOTAL = 16;
+const EXACT_TEMPLATES = 5;
+const MAX_TOTAL = 17;
 
 function assertManifestBudget(): void {
   const uiSections = manifest.ui.length + manifest.sections.length;

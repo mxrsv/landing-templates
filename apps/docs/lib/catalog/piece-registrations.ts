@@ -21,6 +21,7 @@ import { pieceMeta as aikitPieceMeta } from "@landing/templates-aikit/config";
 import { pieceMeta as gamefiPieceMeta } from "@landing/templates-gamefi/config";
 import { pieceMeta as memecoinPieceMeta } from "@landing/templates-memecoin/config";
 import { pieceMeta as ternusPieceMeta } from "@landing/templates-ternus/config";
+import { pieceMeta as waitlistPieceMeta } from "@landing/templates-waitlist/config";
 
 export interface PieceRegistration {
   /** Khoá định danh — phải khớp `meta.slug`, dùng để map preview loader. */
@@ -132,6 +133,16 @@ export const pieceRegistrations: readonly PieceRegistration[] = [
     loadPreview: () =>
       import("@landing/templates-aikit").then((m) => ({
         default: m.AikitTemplate,
+      })),
+  },
+  {
+    slug: "waitlist",
+    source: "@landing/templates-waitlist/config",
+    meta: waitlistPieceMeta,
+    packageName: "@landing/templates-waitlist",
+    loadPreview: () =>
+      import("@landing/templates-waitlist").then((m) => ({
+        default: m.WaitlistTemplate,
       })),
   },
 ];
