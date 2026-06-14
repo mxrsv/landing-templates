@@ -1,4 +1,5 @@
 import { EmptyState } from "@landing/ui/components/empty-state";
+import type { ReactNode } from "react";
 
 import {
   allPieces,
@@ -25,6 +26,8 @@ interface PieceIndexPageProps {
   searchParams: SearchParamsRecord;
   /** Group cards theo mood[0] khi KHÔNG có filter active (dùng cho /templates). */
   groupByMood?: boolean;
+  /** Slot tuỳ chọn bên phải header (vd link sang trang reference). */
+  headerAction?: ReactNode;
 }
 
 function groupPiecesByMood(
@@ -60,6 +63,7 @@ export function PieceIndexPage({
   title,
   searchParams,
   groupByMood = false,
+  headerAction,
 }: PieceIndexPageProps) {
   const layerPieces = allPieces.filter((piece) => piece.layer === layer);
   const options = collectFilterOptions(layerPieces);
@@ -69,13 +73,16 @@ export function PieceIndexPage({
 
   return (
     <main className="mx-auto w-full max-w-[var(--container-max)] px-[var(--space-6)] py-[var(--space-10)]">
-      <header>
-        <p className="text-[length:var(--text-eyebrow)] font-medium tracking-[0.3em] text-[var(--p-ink-3)] uppercase">
-          {eyebrow}
-        </p>
-        <h1 className="mt-[var(--space-2)] text-[length:var(--text-h2)] font-semibold tracking-tight text-[var(--p-ink)]">
-          {title}
-        </h1>
+      <header className="flex flex-wrap items-end justify-between gap-[var(--space-3)]">
+        <div>
+          <p className="text-[length:var(--text-eyebrow)] font-medium tracking-[0.3em] text-[var(--p-ink-3)] uppercase">
+            {eyebrow}
+          </p>
+          <h1 className="mt-[var(--space-2)] text-[length:var(--text-h2)] font-semibold tracking-tight text-[var(--p-ink)]">
+            {title}
+          </h1>
+        </div>
+        {headerAction}
       </header>
 
       {layerPieces.length === 0 ? (
