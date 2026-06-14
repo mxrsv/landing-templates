@@ -1,0 +1,123 @@
+/* ============================================================
+   Waitlist (Aenor) — scoped styles
+   Every rule is namespaced under `.wl` so this stylesheet never
+   collides with the catalog home or other templates.
+
+   Ion is a private *skin* of this template: the literal hexes below
+   live ONLY inside the `.wl` token block (INVARIANT I-4 carve-out for
+   the declaration block, same convention as Ternus `.tn`). We do NOT
+   touch `infra.css` — root keeps `data-theme="infra"` for the shared
+   `--p-*` / `--space-*` / `--text-*` floor; Ion rides on top via `--wl-*`.
+   ============================================================ */
+
+.wl {
+  /* ---- Ion palette (spec §4) — private skin tokens ---- */
+  --wl-bg: #0a0b16;
+  --wl-ink: #eaf2ff;
+  --wl-cy: #5fd6ff; /* primary */
+  --wl-cy-soft: #9ce8ff;
+  --wl-vi: #6f8bff; /* indigo phụ */
+  --wl-pop: #b58bff; /* violet pop */
+  --wl-grad: linear-gradient(120deg, #9ce8ff 0%, #5fd6ff 46%, #6f8bff 100%);
+  --wl-glow-cy: rgba(95, 214, 255, 0.5);
+  --wl-glow-vi: rgba(111, 139, 255, 0.5);
+  --wl-glow-pop: rgba(181, 139, 255, 0.45);
+
+  /* ---- ink ramp (derived from Ion ink) ---- */
+  --wl-ink-2: rgba(234, 242, 255, 0.66);
+  --wl-ink-3: rgba(234, 242, 255, 0.42);
+  /* ---- hairlines ---- */
+  --wl-line: rgba(95, 214, 255, 0.16);
+  --wl-line-soft: rgba(95, 214, 255, 0.09);
+
+  /* ---- motion: named easing from the token floor (INVARIANT I-2) ---- */
+  --wl-ease: var(--ease-standard, cubic-bezier(0.4, 0, 0.2, 1));
+  --wl-ease-enter: var(--ease-entrance, cubic-bezier(0.16, 1, 0.3, 1));
+
+  /* ---- radius from the floor (INVARIANT I-6) ---- */
+  --wl-r: var(--radius-md, 8px);
+  --wl-r-pill: var(--radius-pill, 999px);
+
+  /* ---- layout rhythm (INVARIANT I-9) ---- */
+  --wl-nav-h: 72px;
+  --wl-pad-section: var(--section-pad-y-lg, clamp(96px, 12vh, 168px));
+  --wl-wrap: var(--container-lg, 1140px);
+
+  /* ---- fonts ---- */
+  --wl-mono: var(--wl-font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  background: var(--wl-bg);
+  color: var(--wl-ink);
+  font-family:
+    var(--wl-font),
+    "Inter",
+    -apple-system,
+    "Segoe UI",
+    system-ui,
+    sans-serif;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.wl *,
+.wl *::before,
+.wl *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html:has(.wl) {
+  scroll-behavior: smooth;
+}
+
+/* Unified focus ring from the state floor (INVARIANT I-7). */
+.wl a:focus-visible,
+.wl button:focus-visible,
+.wl input:focus-visible {
+  outline: 2px solid var(--state-focus-ring, var(--wl-cy));
+  outline-offset: 2px;
+}
+
+/* ============ PRIMITIVES ============ */
+.wl .wrap {
+  width: min(var(--wl-wrap), 92vw);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.wl section {
+  position: relative;
+  padding: var(--wl-pad-section) 0;
+}
+
+.wl .eyebrow {
+  font-size: var(--text-eyebrow, 12px);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--wl-ink-2);
+  font-weight: 500;
+  margin-bottom: var(--space-5, 20px);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2, 8px);
+}
+
+/* ---- Task 1 skeleton placeholder (replaced by Hero in Task 4) ---- */
+.wl-placeholder h1 {
+  font-size: var(--text-display, clamp(44px, 6.4vw, 82px));
+  font-weight: 600;
+  line-height: 1.05;
+  margin-bottom: var(--space-4, 16px);
+  background: var(--wl-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.wl-placeholder p:last-child {
+  color: var(--wl-ink-2);
+  font-size: var(--text-body, clamp(15px, 1.2vw, 17px));
+}
