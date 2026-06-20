@@ -40,12 +40,3 @@ export interface PieceMeta {
    */
   sourcePaths?: string[];
 }
-
-/** Params filter đa trục cho FilterBar (Epic 9) — mỗi trục là OR, giữa các trục là AND. */
-export interface PieceFilterParams {
-  layer?: PieceLayer[];
-  mood?: PieceMood[];
-  useCase?: string[];
-  stack?: string[];
-  animation?: string[];
-}

@@ -9,13 +9,7 @@ import { pieceRegistrations } from "./piece-registrations";
 import { manifestSlugs } from "./manifest";
 import type { CopyMode, PieceLayer, PieceMeta, PieceMood } from "./types";
 
-export type {
-  CopyMode,
-  PieceFilterParams,
-  PieceLayer,
-  PieceMeta,
-  PieceMood,
-} from "./types";
+export type { CopyMode, PieceLayer, PieceMeta, PieceMood } from "./types";
 
 const LAYERS: readonly PieceLayer[] = ["ui", "section", "template"];
 const MOODS: readonly PieceMood[] = ["infra", "neon", "game", "nft"];

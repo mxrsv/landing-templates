@@ -5,53 +5,21 @@ import Link from "next/link";
 import { DetailPreview } from "../../components/catalog/detail-preview";
 import { GalleryGrid } from "../../components/catalog/gallery-grid";
 import { PieceSourcePanel } from "../../components/catalog/piece-source-panel";
-import { FilterBar } from "../../components/shell/filter-bar";
-import { allPieces, type PieceLayer } from "../../lib/catalog";
-import {
-  type CatalogFilter,
-  collectFilterOptions,
-  FILTER_AXES,
-  filterPieces,
-  parseCatalogFilter,
-} from "../../lib/catalog/filter-params";
-
-const LAYERS: readonly PieceLayer[] = ["ui", "section", "template"];
+import { allPieces } from "../../lib/catalog";
 
 function firstParam(value: string | string[] | undefined): string {
   if (Array.isArray(value)) return value[0] ?? "";
   return value ?? "";
 }
 
-function parseLayer(raw: string): PieceLayer | undefined {
-  return LAYERS.includes(raw as PieceLayer) ? (raw as PieceLayer) : undefined;
-}
-
-/** Query giữ lại khi điều hướng (layer + 4 trục filter + q), chưa gồm `piece`. */
-function buildCarryParams(
-  layer: PieceLayer | undefined,
-  filter: CatalogFilter,
-): URLSearchParams {
-  const params = new URLSearchParams();
-  if (layer) params.set("layer", layer);
-  for (const axis of FILTER_AXES) {
-    if (filter[axis].length > 0) params.set(axis, filter[axis].join(","));
-  }
-  if (filter.q.length > 0) params.set("q", filter.q);
-  return params;
-}
-
 /**
- * Unified Catalog Explorer — master–detail ở `/`. Right pane 2 trạng thái
- * (spec §3.2): chưa chọn = gallery poster + filter bar; đã chọn `?piece=` =
- * detail (preview rẽ nhánh Layer + source). URL = source of truth, resolve
- * server-side. Sidebar nav ở `(shell)/layout.tsx`.
+ * Catalog Explorer — master–detail ở `/`. Right pane 2 trạng thái: chưa chọn =
+ * lưới Templates; đã chọn `?piece=slug` = detail (preview + source). Repo chỉ
+ * trưng Templates nên gallery/sidebar bỏ qua layer UI/Sections. URL = source of
+ * truth, resolve server-side. Sidebar nav ở `(shell)/layout.tsx`.
  */
 export default async function Explorer(props: PageProps<"/">) {
   const sp = await props.searchParams;
-  const options = collectFilterOptions(allPieces);
-  const filter = parseCatalogFilter(sp, options);
-  const layer = parseLayer(firstParam(sp.layer));
-  const carry = buildCarryParams(layer, filter);
 
   const pieceSlug = firstParam(sp.piece);
   const selected = pieceSlug
@@ -60,14 +28,13 @@ export default async function Explorer(props: PageProps<"/">) {
 
   // Trạng thái detail — đã chọn Piece hợp lệ.
   if (selected !== undefined) {
-    const backHref = carry.toString() ? `/?${carry.toString()}` : "/";
     return (
       <main className="flex w-full flex-col gap-[var(--space-6)] py-[var(--space-8)]">
         <Link
-          href={backHref}
+          href="/"
           className="self-start text-[length:var(--text-eyebrow)] text-[var(--p-ink-3)] hover:text-[var(--p-ink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--state-focus-ring)]"
         >
-          ← Tất cả Pieces
+          ← Tất cả Templates
         </Link>
 
         <header>
@@ -115,23 +82,16 @@ export default async function Explorer(props: PageProps<"/">) {
     );
   }
 
-  // Trạng thái gallery — chưa chọn Piece.
-  const base = layer
-    ? allPieces.filter((piece) => piece.layer === layer)
-    : allPieces;
-  const filtered = filterPieces(base, filter);
-  const hrefForPiece = (slug: string): string => {
-    const params = new URLSearchParams(carry);
-    params.set("piece", slug);
-    return `/?${params.toString()}`;
-  };
+  // Trạng thái gallery — chưa chọn Piece. Chỉ trưng Templates, lưới phẳng.
+  const templates = allPieces.filter((piece) => piece.layer === "template");
+  const hrefForPiece = (slug: string): string =>
+    `/?piece=${encodeURIComponent(slug)}`;
 
   return (
     <main className="flex w-full flex-col gap-[var(--space-6)] py-[var(--space-8)]">
-      <FilterBar options={options} resultCount={filtered.length} />
       <GalleryGrid
-        pieces={filtered}
-        groupByLayer={layer === undefined}
+        pieces={templates}
+        groupByLayer={false}
         hrefForPiece={hrefForPiece}
       />
     </main>
