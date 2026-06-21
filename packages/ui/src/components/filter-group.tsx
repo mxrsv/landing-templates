@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { Eyebrow } from "./text";
+
 export interface FilterGroupProps {
   /** Axis label, e.g. "Mood", "Stack". */
   title: string;
@@ -13,9 +15,9 @@ export interface FilterGroupProps {
 export function FilterGroup({ title, children }: FilterGroupProps) {
   return (
     <fieldset className="flex flex-col gap-[var(--space-2)]">
-      <legend className="text-[length:var(--text-eyebrow)] uppercase tracking-[0.1em] text-[var(--p-ink-3)] mb-[var(--space-2)]">
+      <Eyebrow as="legend" marker={false} className="mb-[var(--space-2)]">
         {title}
-      </legend>
+      </Eyebrow>
       {children}
     </fieldset>
   );

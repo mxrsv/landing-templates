@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { Eyebrow } from "@landing/ui/components/text";
+
 import { posterSrc } from "../../lib/catalog/posters";
 import type { PieceMood } from "../../lib/catalog";
 import { previewLoaders } from "../../lib/catalog/preview-loaders";
@@ -23,9 +25,7 @@ function PosterFallback({ mood }: { mood: PieceMood }) {
       className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${MOOD_GRADIENT[mood]}`}
       aria-hidden
     >
-      <span className="text-[length:var(--text-eyebrow)] tracking-[0.25em] text-[var(--p-ink-3)] uppercase">
-        Preview
-      </span>
+      <Eyebrow marker={false}>Preview</Eyebrow>
     </div>
   );
 }

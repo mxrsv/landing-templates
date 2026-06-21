@@ -1,6 +1,7 @@
 "use client";
 
 import { ARTIFACT_SURFACES } from "@landing/ui/artifact-surface/surfaces";
+import { Badge } from "@landing/ui/components/badge";
 import dynamic from "next/dynamic";
 
 /**
@@ -43,11 +44,7 @@ export function SurfacesGallery() {
               <p className="text-[length:var(--text-caption)] font-medium text-[var(--p-ink)]">
                 {surface.label}
               </p>
-              {surface.chosen ? (
-                <span className="rounded-[var(--radius-sm)] border border-[var(--border-default)] px-[var(--space-2)] py-[2px] text-[length:var(--text-eyebrow)] font-medium tracking-[0.1em] text-[var(--p-ink-2)] uppercase">
-                  Đã chọn
-                </span>
-              ) : null}
+              {surface.chosen ? <Badge variant="outline">Đã chọn</Badge> : null}
             </div>
             <p className="mt-[var(--space-1)] text-[length:var(--text-caption)] text-[var(--p-ink-3)]">
               {surface.blurb}

@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { THEME_MOODS, type ThemeMood } from "@landing/design-tokens/theme";
+import { Eyebrow } from "@landing/ui/components/text";
 
 export default function ThemeSwitchPage() {
   const [theme, setTheme] = useState<ThemeMood>("infra");
@@ -42,9 +43,7 @@ export default function ThemeSwitchPage() {
         className="mt-8 rounded-lg border border-line p-[var(--space-6)]"
         style={{ background: "var(--p-bg)" }}
       >
-        <p className="text-[length:var(--text-eyebrow)] tracking-[0.3em] text-accent uppercase">
-          {theme} mood
-        </p>
+        <Eyebrow as="p">{theme} mood</Eyebrow>
         <h2 className="mt-[var(--space-3)] text-[length:var(--text-h2)] text-ink">
           Same spacing floor, different palette
         </h2>

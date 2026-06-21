@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Eyebrow } from "@landing/ui/components/text";
 
 import type { PieceLayer, PieceMeta } from "../../lib/catalog";
 
@@ -52,9 +53,9 @@ function SidebarNav({
         if (group.length === 0) return null;
         return (
           <div key={layer} className="flex flex-col gap-[var(--space-2)]">
-            <p className="text-[length:var(--text-eyebrow)] font-medium tracking-[0.2em] text-[var(--p-ink-3)] uppercase">
+            <Eyebrow as="p" marker={false}>
               {label}
-            </p>
+            </Eyebrow>
             <ul className="flex flex-col gap-[var(--space-1)]">
               {group.map((piece) => {
                 const active = piece.slug === activeSlug;

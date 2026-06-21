@@ -1,4 +1,5 @@
 import { EmptyState } from "@landing/ui/components/empty-state";
+import { Eyebrow } from "@landing/ui/components/text";
 
 import type { PieceLayer, PieceMeta } from "../../lib/catalog";
 import { GalleryCard } from "./gallery-card";
@@ -63,9 +64,7 @@ export function GalleryGrid({
         if (group.length === 0) return null;
         return (
           <section key={layer} className="flex flex-col gap-[var(--space-3)]">
-            <h2 className="text-[length:var(--text-eyebrow)] font-medium tracking-[0.2em] text-[var(--p-ink-3)] uppercase">
-              {label}
-            </h2>
+            <Eyebrow as="h2">{label}</Eyebrow>
             <CardGrid pieces={group} hrefForPiece={hrefForPiece} />
           </section>
         );

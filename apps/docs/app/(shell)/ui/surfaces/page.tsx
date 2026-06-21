@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Body, Eyebrow, Heading } from "@landing/ui/components/text";
 
 import { SurfacesGallery } from "./surfaces-gallery";
 
@@ -22,19 +23,19 @@ export default function SurfacesPage() {
         >
           ← UI
         </Link>
-        <p className="mt-[var(--space-3)] text-[length:var(--text-eyebrow)] font-medium tracking-[0.3em] text-[var(--p-ink-3)] uppercase">
+        <Eyebrow as="p" className="mt-[var(--space-3)]">
           Lab
-        </p>
-        <h1 className="mt-[var(--space-2)] text-[length:var(--text-h2)] font-semibold tracking-tight text-[var(--p-ink)]">
+        </Eyebrow>
+        <Heading level={2} as="h1" className="mt-[var(--space-2)]">
           3D artifact surfaces
-        </h1>
-        <p className="mt-[var(--space-3)] max-w-[60ch] text-[length:var(--text-body)] text-[var(--p-ink-2)]">
+        </Heading>
+        <Body className="mt-[var(--space-3)] max-w-[60ch]">
           Kho bề mặt tham khảo cho viên flow knot (TorusKnot) — mỗi bề mặt xử lý
           ánh sáng theo cách khác nhau (unlit / khúc xạ / phản chiếu / phát xạ).
           Sinh từ brainstorm Waitlist template, giữ ở dạng recipe theo mô hình
           harvest-later — tham khảo material, không phải UI component
           copy-paste.
-        </p>
+        </Body>
       </header>
 
       <div className="mt-[var(--space-8)]">

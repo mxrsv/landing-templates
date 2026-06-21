@@ -4,6 +4,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@landing/ui/components/tabs";
+import { Eyebrow } from "@landing/ui/components/text";
 
 import type { PieceMeta } from "../../lib/catalog";
 import {
@@ -39,9 +40,7 @@ export async function PieceSourcePanel({ piece }: { piece: PieceMeta }) {
   return (
     <section className="flex flex-col gap-[var(--space-3)]">
       <div className="flex items-center justify-between gap-[var(--space-3)]">
-        <h2 className="text-[length:var(--text-eyebrow)] font-medium tracking-[0.2em] text-[var(--p-ink-3)] uppercase">
-          Source
-        </h2>
+        <Eyebrow as="h2">Source</Eyebrow>
         <CopyButton
           text={copyPayload}
           label={single ? "Copy source" : "Copy all files"}
