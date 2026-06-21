@@ -59,6 +59,23 @@
   --text-h2: clamp(1.8125rem, 4.3vw, 3.125rem); /* 29→50px */
   --text-display: clamp(2.75rem, 6.4vw, 5.125rem); /* 44→82px */
 
+  /* --- letter-spacing (one ladder — no per-Piece magic) ---- */
+  --tracking-tight: -0.02em; /* display / large headings */
+  --tracking-normal: 0; /* body, default            */
+  --tracking-label: 0.02em; /* eyebrow slash micro-tag  */
+  --tracking-wide: 0.08em; /* legacy uppercase labels  */
+
+  /* --- font-weight ----------------------------------------- */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* --- line-height ----------------------------------------- */
+  --leading-none: 1; /* label / stat figure      */
+  --leading-tight: 1.12; /* display / heading        */
+  --leading-snug: 1.35; /* subhead / h3             */
+  --leading-normal: 1.6; /* body                     */
+
   /* --- motion — named easing + durations ------------------- */
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);

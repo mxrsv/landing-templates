@@ -11,22 +11,31 @@ its story.
 
 ## 1. Invariant rules
 
-| #   | Rule                                | Why                                            | Wrong                                            | Right                                                                      |
-| --- | ----------------------------------- | ---------------------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------- | --- | --------------------- |
-| I-1 | **Spacing on the 4/8px grid**       | Vertical rhythm stays consistent across Pieces | `margin: 13px`, `gap: 1.1rem`                    | `gap: var(--space-2)` (8px), `--space-6` …                                 |
-| I-2 | **Named easing only**               | Motion personality is theme-controlled         | `transition: …200ms cubic-bezier(0.1,0.7,1,0.1)` | `transition: … var(--duration-base) var(--ease-standard)`                  |
-| I-3 | **Never `transition: all`**         | `all` animates layout props → jank + a11y cost | `transition: all 0.3s`                           | `transition: color var(--duration-fast) var(--ease-standard)`              |
-| I-4 | **Palette via tokens**              | Runtime theme swap depends on `var(--p-*)`     | `color: #22d3ee`                                 | `text-primary` / `color: var(--p-primary)`                                 |
-| I-5 | **Type from the scale**             | One type ladder, not per-Piece sizes           | `font-size: 27px`                                | `var(--text-h2)`, `--text-body` …                                          |
-| I-6 | **Radius/hairline from floor**      | Consistent edges                               | `border-radius: 5px`                             | `var(--radius-sm                                                           | md  | lg)`, `--radius-pill` |
-| I-7 | **States via `--state-*`** (v2)     | Interactive feedback is theme-controlled       | `:hover { background: #1a1a22 }`                 | `:hover { background: var(--state-hover-bg) }`                             |
-| I-8 | **Surfaces via `--surface-*`** (v2) | One elevation ramp, no hand-rolled nesting     | `background: #0e0e16` on a card                  | `background: var(--surface-1)` / `bg-surface-1`                            |
-| I-9 | **Layout via rhythm tokens** (v2)   | Sections share one container/padding rhythm    | `max-width: 1140px`, `padding: 72px 0`           | `max-width: var(--container-lg)`, `padding-block: var(--section-pad-y-md)` |
+| #    | Rule                                         | Why                                                | Wrong                                                          | Right                                                                                       |
+| ---- | -------------------------------------------- | -------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | --- | --------------------- |
+| I-1  | **Spacing on the 4/8px grid**                | Vertical rhythm stays consistent across Pieces     | `margin: 13px`, `gap: 1.1rem`                                  | `gap: var(--space-2)` (8px), `--space-6` …                                                  |
+| I-2  | **Named easing only**                        | Motion personality is theme-controlled             | `transition: …200ms cubic-bezier(0.1,0.7,1,0.1)`               | `transition: … var(--duration-base) var(--ease-standard)`                                   |
+| I-3  | **Never `transition: all`**                  | `all` animates layout props → jank + a11y cost     | `transition: all 0.3s`                                         | `transition: color var(--duration-fast) var(--ease-standard)`                               |
+| I-4  | **Palette via tokens**                       | Runtime theme swap depends on `var(--p-*)`         | `color: #22d3ee`                                               | `text-primary` / `color: var(--p-primary)`                                                  |
+| I-5  | **Type/weight/leading/tracking from tokens** | One type ladder, not per-Piece sizes               | `font-size: 27px`, `letter-spacing: 0.2em`, `font-weight: 600` | `var(--text-h2)`, `var(--tracking-label)`, `var(--weight-semibold)`, `var(--leading-snug)`  |
+| I-6  | **Radius/hairline from floor**               | Consistent edges                                   | `border-radius: 5px`                                           | `var(--radius-sm                                                                            | md  | lg)`, `--radius-pill` |
+| I-7  | **States via `--state-*`** (v2)              | Interactive feedback is theme-controlled           | `:hover { background: #1a1a22 }`                               | `:hover { background: var(--state-hover-bg) }`                                              |
+| I-8  | **Surfaces via `--surface-*`** (v2)          | One elevation ramp, no hand-rolled nesting         | `background: #0e0e16` on a card                                | `background: var(--surface-1)` / `bg-surface-1`                                             |
+| I-9  | **Layout via rhythm tokens** (v2)            | Sections share one container/padding rhythm        | `max-width: 1140px`, `padding: 72px 0`                         | `max-width: var(--container-lg)`, `padding-block: var(--section-pad-y-md)`                  |
+| I-10 | **Text via primitives** (v2)                 | One eyebrow/heading/body/caption look, agent-proof | hand-rolled `text-[…] tracking-[…] uppercase` label string     | `<Eyebrow>` / `<Heading level>` / `<Body>` / `<Caption>` from `@landing/ui/components/text` |
+
+> **Font floor:** the catalog uses **one** typeface — Inter (`--font-sans`). No
+> mono / display second face. Text primitives inherit it; never declare a
+> per-Piece `font-family`.
 
 Allowed token vocabulary (see `base.css` for full list):
 
 - spacing `--space-0 … --space-32` (4/8px grid)
 - type `--text-eyebrow|caption|body|h3|h2|display`
+- tracking `--tracking-tight|normal|label|wide`
+- weight `--weight-regular|medium|semibold`
+- leading `--leading-none|tight|snug|normal`
+- font `--font-sans` (Inter — one face only)
 - motion `--ease-standard|entrance|exit`, `--duration-fast|base|slow`
 - palette `--p-*` (consume via Tailwind utilities: `bg-primary`, `text-ink`, `border-line`, …)
 - radius `--radius-sm|md|lg|pill`, hairline `--line-w`
@@ -68,11 +77,12 @@ Allowed token vocabulary (see `base.css` for full list):
 - [ ] I-2 Named easing only (`--ease-*`) — no inline cubic-bezier literals
 - [ ] I-3 No `transition: all` anywhere
 - [ ] I-4 Colors via `--p-*` / theme utilities — no hardcoded hex
-- [ ] I-5 Type via `--text-*` scale
+- [ ] I-5 Type/weight/leading/tracking via tokens (`--text-*`, `--weight-*`, `--leading-*`, `--tracking-*`) — no `font-size`/`font-weight`/`letter-spacing` literals
 - [ ] I-6 Radius/hairline via `--radius-*` / `--line-w`
 - [ ] I-7 Interactive states via `--state-*` — no hand-rolled hover/focus colors
 - [ ] I-8 Backgrounds via `--surface-*` ramp — no ad-hoc nested bg hexes
 - [ ] I-9 Section layout via `--container-*` / `--section-pad-y-*`
+- [ ] I-10 Eyebrow/heading/body/caption via `@landing/ui` text primitives — no hand-rolled label class strings
 - [ ] Animated? `useReducedMotion()` honored + static fallback
 - [ ] Animated? wrapped in `@landing/ui` `ErrorBoundary`
 - [ ] Renders under all applicable `data-theme` moods without layout shift
