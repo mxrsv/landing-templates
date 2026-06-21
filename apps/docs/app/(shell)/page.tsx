@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import { DetailPreview } from "../../components/catalog/detail-preview";
 import { GalleryGrid } from "../../components/catalog/gallery-grid";
-import { PieceSourcePanel } from "../../components/catalog/piece-source-panel";
 import { allPieces } from "../../lib/catalog";
 
 function firstParam(value: string | string[] | undefined): string {
@@ -14,9 +13,9 @@ function firstParam(value: string | string[] | undefined): string {
 
 /**
  * Catalog Explorer — master–detail ở `/`. Right pane 2 trạng thái: chưa chọn =
- * lưới Templates; đã chọn `?piece=slug` = detail (preview + source). Repo chỉ
- * trưng Templates nên gallery/sidebar bỏ qua layer UI/Sections. URL = source of
- * truth, resolve server-side. Sidebar nav ở `(shell)/layout.tsx`.
+ * lưới Templates; đã chọn `?piece=slug` = detail (chỉ preview, không source).
+ * Repo chỉ trưng Templates nên gallery/sidebar bỏ qua layer UI/Sections. URL =
+ * source of truth, resolve server-side. Sidebar nav ở `(shell)/layout.tsx`.
  */
 export default async function Explorer(props: PageProps<"/">) {
   const sp = await props.searchParams;
@@ -77,7 +76,6 @@ export default async function Explorer(props: PageProps<"/">) {
         </header>
 
         <DetailPreview key={selected.slug} piece={selected} />
-        <PieceSourcePanel piece={selected} />
       </main>
     );
   }
