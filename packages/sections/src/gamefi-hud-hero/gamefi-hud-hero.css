@@ -149,7 +149,7 @@
   gap: var(--space-3);
   font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
   font-size: var(--text-eyebrow);
-  letter-spacing: 0.14em;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--p-ink-2);
 }
@@ -190,7 +190,7 @@
 .ghh-eyebrow {
   font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
   font-size: var(--text-caption);
-  letter-spacing: 0.18em;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--p-accent);
 }
@@ -200,7 +200,7 @@
   font-size: var(--text-display);
   line-height: 0.98;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-tight);
   text-transform: uppercase;
   color: var(--p-ink);
 }
@@ -241,7 +241,7 @@
   gap: var(--space-2);
   font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
   font-size: var(--text-eyebrow);
-  letter-spacing: 0.1em;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--p-ink-2);
 }

@@ -108,7 +108,7 @@
   font-size: 23px;
   font-weight: 500;
   line-height: 32.2px;
-  letter-spacing: -0.23px;
+  letter-spacing: var(--tracking-tight);
   color: var(--ak-ink);
   max-width: 22ch;
 }
@@ -123,7 +123,7 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
-  letter-spacing: -0.16px;
+  letter-spacing: var(--tracking-tight);
   color: var(--ak-ink);
 }
 

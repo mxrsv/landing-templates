@@ -31,7 +31,7 @@
   font-size: 14px;
   font-weight: 500;
   line-height: 19.6px;
-  letter-spacing: -0.1px;
+  letter-spacing: var(--tracking-tight);
   color: var(--ak-accent);
 }
 
@@ -41,7 +41,7 @@
   font-size: clamp(26px, 3.4vw, 32px);
   line-height: 1.1;
   font-weight: 500;
-  letter-spacing: -0.04em;
+  letter-spacing: var(--tracking-tight);
   color: var(--ak-ink);
 }
 
@@ -168,7 +168,7 @@
   font-size: 16px;
   font-weight: 500;
   line-height: 20.8px;
-  letter-spacing: -0.16px;
+  letter-spacing: var(--tracking-tight);
   color: var(--ak-ink);
 }
 
@@ -183,7 +183,7 @@
   font-size: 8px;
   font-weight: 700;
   line-height: 8px;
-  letter-spacing: 0.24px;
+  letter-spacing: var(--tracking-normal);
   text-transform: uppercase;
   flex: none;
 }
@@ -192,7 +192,7 @@
   margin: 0;
   font-size: 13px;
   line-height: 1.5;
-  letter-spacing: -0.13px;
+  letter-spacing: var(--tracking-tight);
   color: var(--ak-ink-2);
   max-width: 30ch;
 }

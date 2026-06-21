@@ -18,7 +18,7 @@
 
 .tss-eyebrow {
   font-size: var(--text-eyebrow);
-  letter-spacing: 0.14em;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--p-ink-3);
   text-align: center;
@@ -45,17 +45,20 @@
 }
 
 .tss-value {
-  font-size: var(--text-display);
+  /* Hero-scale display would overflow a 4-up cell (~226px @ container-lg) and
+     collide with neighbours — cap to a size that fits while staying oversized. */
+  font-size: clamp(2.25rem, 5vw, 3.5rem); /* 36→56px */
   line-height: 1;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: var(--tracking-tight);
+  white-space: nowrap;
   color: var(--p-primary-bright);
   font-variant-numeric: tabular-nums;
 }
 
 .tss-label {
   font-size: var(--text-caption);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--p-ink-2);
 }

@@ -26,7 +26,7 @@
 .cs-eyebrow {
   font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
   font-size: var(--text-eyebrow);
-  letter-spacing: 0.16em;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--p-accent);
 }
@@ -35,7 +35,7 @@
   margin: 0;
   font-size: var(--text-h2);
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-tight);
   text-transform: uppercase;
   color: var(--p-ink);
 }
@@ -99,7 +99,7 @@
 .cs-chip {
   font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
   font-size: var(--text-eyebrow);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-pill);
@@ -157,7 +157,7 @@
 .cs-card-class {
   font-family: ui-monospace, "SF Mono", "Roboto Mono", monospace;
   font-size: var(--text-eyebrow);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--p-ink-2);
 }
