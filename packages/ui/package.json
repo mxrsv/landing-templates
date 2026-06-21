@@ -26,7 +26,8 @@
     "./components/filter-group": "./src/components/filter-group.tsx",
     "./components/input": "./src/components/input.tsx",
     "./components/empty-state": "./src/components/empty-state.tsx",
-    "./components/tooltip": "./src/components/tooltip.tsx"
+    "./components/tooltip": "./src/components/tooltip.tsx",
+    "./components/text": "./src/components/text/index.ts"
   },
   "license": "MIT",
   "scripts": {

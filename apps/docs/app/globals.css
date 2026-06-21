@@ -6,13 +6,13 @@
 @source "../../../packages/**/src/**/*.{ts,tsx,css}";
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* One face for the whole catalog — Inter (next/font var on <html>). */
+  --font-sans: var(--font-inter);
 }
 
 /* Shell chrome — theme đặt qua data-theme trên <html> (mặc định "chrome"). */
 body {
   background: var(--surface-0);
   color: var(--p-ink);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
