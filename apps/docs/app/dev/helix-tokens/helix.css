@@ -1,0 +1,456 @@
+@import url("https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap");
+
+/* PROTOTYPE — throwaway. Helix = làn template ĐỘC LẬP (token/font/CSS riêng, KHÔNG
+   import @landing/design-tokens, KHÔNG chịu floor INVARIANT). Artifact Phase-1 token
+   specimen. Direction v3 (refs = Polygon, user-steered): palette IRIDESCENT
+   blue/purple/pink (override gu 'chỉ green', riêng làn này) · edge CHAMFER (cắt góc) ·
+   tag [ BRACKET ] uppercase · blueprint grid · bento lệch · 1 font Clash Display.
+   Subject = liquid restaking ("Helix"). Scope .helix / [data-theme="helix"].
+   Xoá cả folder helix-tokens/ khi token đã chốt + fold vào hero. */
+
+[data-theme="helix"] {
+  /* ── surface ramp — cool indigo-near-black ───────────────────────── */
+  --hx-void: #08070f;
+  --hx-s1: #0e0d1a;
+  --hx-s2: #151327;
+  --hx-s3: #1d1a34;
+
+  /* ── ink — opacity ramp, no pure white (95/66/40) ───────────────── */
+  --hx-ink: rgba(238, 238, 248, 0.95);
+  --hx-ink-2: rgba(238, 238, 248, 0.66);
+  --hx-ink-3: rgba(238, 238, 248, 0.4);
+
+  /* ── accent — iridescent blue→violet→pink (system, MỀM, lock ở P3) ─ */
+  --hx-violet: #7c5cff; /* primary */
+  --hx-violet-bright: #957dff;
+  --hx-blue: #5b8def;
+  --hx-pink: #c77dff;
+  --hx-teal: #34e0c4;
+  --hx-irid: linear-gradient(120deg, #5b8def 0%, #7c5cff 45%, #c77dff 100%);
+  --hx-violet-tint: rgba(124, 92, 255, 0.14);
+
+  /* ── hairline — precise edge, low-alpha ──────────────────────────── */
+  --hx-line: rgba(238, 238, 248, 0.12);
+  --hx-line-soft: rgba(238, 238, 248, 0.06);
+
+  /* ── chamfer — cut-corner geometry (signature edge) ──────────────── */
+  --hx-cut: 12px;
+  --hx-cut-sm: 7px;
+
+  /* ── type — 1 font: Clash Display ────────────────────────────────── */
+  --hx-display: "Clash Display", ui-sans-serif, system-ui, sans-serif;
+  --hx-eyebrow: 0.75rem; /* 12px */
+  --hx-caption: 0.8125rem; /* 13px */
+  --hx-body: clamp(0.9375rem, 1.2vw, 1.0625rem); /* 15→17 */
+  --hx-h3: 1.1875rem; /* 19px */
+  --hx-h2: clamp(1.8125rem, 4.3vw, 3.125rem); /* 29→50 */
+  --hx-disp: clamp(2.875rem, 7vw, 5.75rem); /* 46→92 */
+  --hx-track-tight: -0.03em;
+
+  /* ── motion ──────────────────────────────────────────────────────── */
+  --hx-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --hx-fast: 160ms;
+  --hx-base: 280ms;
+  --hx-slow: 560ms;
+
+  /* ── rhythm ──────────────────────────────────────────────────────── */
+  --hx-maxw: 1120px;
+  --hx-gutter: clamp(20px, 5vw, 56px);
+
+  /* chamfer clip — cut top-left + bottom-right (Polygon signature) */
+  --hx-clip: polygon(
+    var(--hx-cut) 0,
+    100% 0,
+    100% calc(100% - var(--hx-cut)),
+    calc(100% - var(--hx-cut)) 100%,
+    0 100%,
+    0 var(--hx-cut)
+  );
+  --hx-clip-sm: polygon(
+    var(--hx-cut-sm) 0,
+    100% 0,
+    100% calc(100% - var(--hx-cut-sm)),
+    calc(100% - var(--hx-cut-sm)) 100%,
+    0 100%,
+    0 var(--hx-cut-sm)
+  );
+}
+
+.helix {
+  position: relative;
+  min-height: 100dvh;
+  background: var(--hx-void);
+  color: var(--hx-ink);
+  font-family: var(--hx-display);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  isolation: isolate;
+}
+
+/* iridescent glow wash — proxy cho volumetric light / 3D focal (mood) */
+.helix::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      54% 44% at 82% 4%,
+      rgba(124, 92, 255, 0.32),
+      transparent 70%
+    ),
+    radial-gradient(
+      46% 40% at 6% 102%,
+      rgba(91, 141, 239, 0.2),
+      transparent 70%
+    );
+}
+
+/* blueprint grid — faint technical field, faded by mask */
+.hx-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(238, 238, 248, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(238, 238, 248, 0.045) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 26%,
+    #000 28%,
+    transparent 84%
+  );
+  mask-image: radial-gradient(circle at 50% 26%, #000 28%, transparent 84%);
+}
+
+.helix-wrap {
+  max-width: var(--hx-maxw);
+  margin-inline: auto;
+  padding: clamp(48px, 8vw, 96px) var(--hx-gutter);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 6vw, 72px);
+}
+
+/* ── section frame ──────────────────────────────────────────────────── */
+.hx-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.hx-section__label {
+  font-size: var(--hx-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--hx-ink-3);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--hx-line-soft);
+}
+
+/* ── bracket tag [ TAG ] — chamfered hairline, uppercase Clash ──────── */
+.hx-tag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 7px 14px;
+  font-size: var(--hx-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--hx-ink-2);
+  background: var(--hx-line);
+  clip-path: var(--hx-clip-sm);
+}
+.hx-tag::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: var(--hx-void);
+  clip-path: var(--hx-clip-sm);
+  z-index: 0;
+}
+.hx-tag > span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── type ladder ────────────────────────────────────────────────────── */
+.hx-display {
+  font-size: var(--hx-disp);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: var(--hx-track-tight);
+  color: var(--hx-ink);
+  max-width: 16ch;
+}
+.hx-display em {
+  font-style: normal;
+  color: var(--hx-ink-3); /* two-tone de-emphasis (refs: white + grey) */
+}
+.hx-h2 {
+  font-size: var(--hx-h2);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.hx-h3 {
+  font-size: var(--hx-h3);
+  font-weight: 500;
+  line-height: 1.3;
+}
+.hx-body {
+  font-size: var(--hx-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--hx-ink-2);
+  max-width: 52ch;
+}
+.hx-caption {
+  font-size: var(--hx-caption);
+  color: var(--hx-ink-3);
+}
+
+/* ── surface ramp swatches ──────────────────────────────────────────── */
+.hx-ramp {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.hx-ramp__cell {
+  border: 1px solid var(--hx-line-soft);
+  padding: 18px 16px;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+  font-size: var(--hx-caption);
+  color: var(--hx-ink-3);
+  clip-path: var(--hx-clip-sm);
+}
+.hx-ramp__name {
+  color: var(--hx-ink);
+  font-weight: 500;
+}
+
+/* ── accent system: iridescent + violet states ─────────────────────── */
+.hx-accent-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+.hx-chip {
+  height: 56px;
+  min-width: 110px;
+  clip-path: var(--hx-clip-sm);
+  display: flex;
+  align-items: flex-end;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #0a0816;
+}
+.hx-chip--irid {
+  background: var(--hx-irid);
+}
+.hx-chip--violet {
+  background: var(--hx-violet);
+  color: #fff;
+}
+.hx-chip--blue {
+  background: var(--hx-blue);
+}
+.hx-chip--pink {
+  background: var(--hx-pink);
+}
+.hx-chip--tint {
+  background: var(--hx-violet-tint);
+  color: var(--hx-violet-bright);
+}
+
+/* ── buttons — chamfer + arrow ──────────────────────────────────────── */
+.hx-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+.hx-btn {
+  font-family: var(--hx-display);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px;
+  cursor: pointer;
+  border: 0;
+  clip-path: var(--hx-clip-sm);
+  transition:
+    transform var(--hx-fast) var(--hx-ease),
+    filter var(--hx-base) var(--hx-ease);
+}
+.hx-btn__arrow {
+  transition: transform var(--hx-fast) var(--hx-ease);
+}
+.hx-btn:hover .hx-btn__arrow {
+  transform: translateX(3px);
+}
+.hx-btn--primary {
+  background: var(--hx-violet);
+  color: #fff;
+}
+.hx-btn--primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.12);
+}
+.hx-btn--ghost {
+  position: relative;
+  background: var(--hx-line);
+  color: var(--hx-ink);
+}
+.hx-btn--ghost::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: var(--hx-s1);
+  clip-path: var(--hx-clip-sm);
+  z-index: 0;
+}
+.hx-btn--ghost > * {
+  position: relative;
+  z-index: 1;
+}
+.hx-btn--ghost:hover {
+  transform: translateY(-2px);
+}
+
+/* ── bento panels (benefit style) — chamfer hairline ───────────────── */
+.hx-bento {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.hx-panel {
+  position: relative;
+  background: var(--hx-line);
+  clip-path: var(--hx-clip);
+  transition: filter var(--hx-base) var(--hx-ease);
+}
+.hx-panel::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: var(--hx-s1);
+  clip-path: var(--hx-clip);
+  z-index: 0;
+}
+.hx-panel:hover {
+  filter: brightness(1.25);
+}
+.hx-panel__inner {
+  position: relative;
+  z-index: 1;
+  padding: 22px 22px 26px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.hx-panel__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.hx-panel__cat {
+  font-size: var(--hx-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hx-ink-3);
+}
+.hx-panel__glyph {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--hx-irid);
+  flex: none;
+}
+.hx-panel__body {
+  margin-top: auto;
+  display: flex;
+  gap: 14px;
+  font-size: var(--hx-body);
+  line-height: 1.5;
+  color: var(--hx-ink-2);
+}
+.hx-panel__idx {
+  font-variant-numeric: tabular-nums;
+  color: var(--hx-ink-3);
+  flex: none;
+}
+
+/* ── stats · hairline ledger (iridescent tick) ─────────────────────── */
+.hx-ledger {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--hx-line);
+}
+.hx-ledger__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 28px 24px 4px;
+  border-left: 1px solid var(--hx-line-soft);
+}
+.hx-ledger__item:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+.hx-ledger__num {
+  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 0.95;
+  font-variant-numeric: tabular-nums;
+}
+.hx-ledger__num .u {
+  background: var(--hx-irid);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hx-ledger__tick {
+  width: 26px;
+  height: 2px;
+  background: var(--hx-irid);
+}
+.hx-ledger__label {
+  font-size: var(--hx-caption);
+  color: var(--hx-ink-2);
+}
+
+@media (max-width: 720px) {
+  .hx-ramp,
+  .hx-ledger,
+  .hx-bento {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hx-ledger__item {
+    padding: 24px 16px 4px;
+  }
+  .hx-ledger__item:nth-child(2n + 1) {
+    border-left: 0;
+    padding-left: 0;
+  }
+}

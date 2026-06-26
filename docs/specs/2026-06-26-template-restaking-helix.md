@@ -21,6 +21,15 @@
 - Gu **bất biến** (không bàn lại): nền đen cinematic · accent **chỉ xanh neon** · focal volumetric light + 3D iridescent · bold geometric sans headline + mono label. Reject: serif, nền sáng/trắng, console/data-viz, card UI glass.
 - Giai đoạn này = **prototype hero trước** theo eye-review gate, CHƯA productionize vào `packages/templates-*`.
 
+**Cập nhật 2026-06-26 (Phase 0 refs-first + Phase 1 token steering — user lái):**
+
+- **Làn ĐỘC LẬP:** Helix KHÔNG import `@landing/design-tokens`, KHÔNG chịu floor INVARIANT (Inter-only). Token/font/CSS riêng. Gate còn áp dụng = chất lượng (gu mood + Production Bar + eye-review), không phải coupling token.
+- **Reference:** user đưa Polygon redesign làm anchor. Chắt SYSTEM (không clone skin): panel **chamfer/cắt góc**, tag `[ TAG ]` bracket, vật thể **3D iridescent**, **blueprint grid**, bố cục **bento lệch** + index, headline grotesque tròn two-tone, CTA fill cắt góc + arrow.
+- **Palette (override gu 'chỉ green' — RIÊNG làn này):** ngả **iridescent blue/purple/pink** như refs; primary = violet. Lime-green bị bỏ. KHÔNG sửa `frontend-taste-profile` global (lanes độc lập).
+- **Font:** 1 font = **Clash Display** (Fontshare). Bỏ mono. Uppercase CHỈ cho tag bracket nhỏ; phần còn lại case thường.
+- **Edge:** **chamfer** (cắt góc), bỏ bo tròn r6.
+- **Accent dùng như hệ thống** + giá trị màu chính xác (iridescent stops, violet) vẫn MỀM, lock bằng mắt ở Phase 3.
+
 ## 2. Nguồn dữ liệu chuẩn
 
 **Canonical**:
