@@ -1,0 +1,157 @@
+/* PROTOTYPE — throwaway. Helix HERO skeleton (frontend-design-bar Phase 2):
+   cấu trúc + content thật + states, CHƯA motion/polish. Layout lệch (P-6), focal
+   bên phải (P-2) — hiện là CSS proxy cho torus-knot WebGL (Focal track song song,
+   user verify live). Foundation token ở helix-tokens.css. Xoá khi fold vào template. */
+
+/* ── nav ────────────────────────────────────────────────────────────── */
+.hx-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px var(--hx-gutter);
+  border-bottom: 1px solid var(--hx-line-soft);
+  background: color-mix(in srgb, var(--hx-void) 72%, transparent);
+  backdrop-filter: blur(12px);
+}
+.hx-nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.hx-nav__mark {
+  width: 18px;
+  height: 18px;
+  background: var(--hx-irid);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+.hx-nav__links {
+  display: flex;
+  gap: 28px;
+  font-size: 0.875rem;
+  color: var(--hx-ink-2);
+}
+.hx-nav__links a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--hx-fast) var(--hx-ease);
+}
+.hx-nav__links a:hover {
+  color: var(--hx-ink);
+}
+.hx-nav__right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* ── hero ───────────────────────────────────────────────────────────── */
+.hx-hero {
+  max-width: var(--hx-maxw);
+  margin-inline: auto;
+  padding: clamp(48px, 8vw, 104px) var(--hx-gutter) clamp(32px, 5vw, 56px);
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: clamp(28px, 5vw, 64px);
+  align-items: center;
+}
+.hx-hero__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+.hx-hero__headline {
+  max-width: 14ch;
+}
+.hx-hero__sub {
+  max-width: 44ch;
+}
+.hx-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+/* ── focal zone — CSS proxy cho torus-knot WebGL ────────────────────── */
+.hx-focal {
+  position: relative;
+  min-height: clamp(320px, 38vw, 460px);
+  display: grid;
+  place-items: center;
+}
+.hx-focal__glow {
+  position: absolute;
+  width: 80%;
+  aspect-ratio: 1;
+  background: var(--hx-irid);
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.42;
+}
+.hx-focal__gem {
+  position: relative;
+  width: clamp(190px, 24vw, 268px);
+  aspect-ratio: 1;
+  background: var(--hx-irid);
+  clip-path: polygon(50% 0, 100% 38%, 78% 100%, 22% 100%, 0 38%);
+  box-shadow: inset 0 0 60px rgba(255, 255, 255, 0.28);
+}
+.hx-focal__gem::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 0, 100% 38%, 50% 56%, 0 38%);
+  background: rgba(255, 255, 255, 0.18);
+}
+.hx-focal__note {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-size: var(--hx-eyebrow);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--hx-ink-3);
+  white-space: nowrap;
+}
+
+/* WebGL canvas (Focal track) — đè proxy; proxy ẩn khi knot ready */
+.hx-focal__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.hx-focal__canvas[data-ready="true"] ~ .hx-focal__gem {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* ── proof strip (ledger, full-width under hero) ────────────────────── */
+.hx-proof {
+  max-width: var(--hx-maxw);
+  margin-inline: auto;
+  padding: 0 var(--hx-gutter) clamp(56px, 8vw, 96px);
+}
+
+@media (max-width: 860px) {
+  .hx-hero {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .hx-focal {
+    order: -1;
+    min-height: 300px;
+  }
+  .hx-nav__links {
+    display: none;
+  }
+}

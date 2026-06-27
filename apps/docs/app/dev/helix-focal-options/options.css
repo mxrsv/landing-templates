@@ -1,0 +1,72 @@
+/* PROTOTYPE — Helix focal options demo layout. Token ở helix-hero/helix-tokens.css. */
+
+.hxo-wrap {
+  max-width: var(--hx-maxw);
+  margin-inline: auto;
+  padding: clamp(40px, 7vw, 80px) var(--hx-gutter);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 5vw, 48px);
+}
+.hxo-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.hxo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.hxo-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.hxo-stage {
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+  clip-path: var(--hx-clip);
+  background:
+    radial-gradient(
+      circle at 50% 44%,
+      rgba(124, 92, 255, 0.12),
+      transparent 68%
+    ),
+    var(--hx-s1);
+}
+.hxo-canvas {
+  position: absolute;
+  inset: 0;
+}
+.hxo-label {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: var(--hx-caption);
+}
+.hxo-idx {
+  font-variant-numeric: tabular-nums;
+  color: var(--hx-violet-bright);
+}
+.hxo-name {
+  color: var(--hx-ink);
+  font-weight: 500;
+}
+.hxo-note {
+  color: var(--hx-ink-3);
+}
+
+@media (max-width: 860px) {
+  .hxo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 520px) {
+  .hxo-grid {
+    grid-template-columns: 1fr;
+  }
+}

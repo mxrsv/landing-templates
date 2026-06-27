@@ -1,0 +1,338 @@
+@import url("https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap");
+
+/* Helix FOUNDATION — token + reusable Pieces (chốt Phase 1, 2026-06-26).
+   Làn ĐỘC LẬP: KHÔNG import @landing/design-tokens, KHÔNG floor INVARIANT.
+   Direction: iridescent blue/violet/pink · chamfer · 1 font Clash · blueprint grid.
+   Scope .helix / [data-theme="helix"]. Hero layout ở helix-hero.css. */
+
+[data-theme="helix"] {
+  --hx-void: #08070f;
+  --hx-s1: #0e0d1a;
+  --hx-s2: #151327;
+  --hx-s3: #1d1a34;
+
+  --hx-ink: rgba(238, 238, 248, 0.95);
+  --hx-ink-2: rgba(238, 238, 248, 0.66);
+  --hx-ink-3: rgba(238, 238, 248, 0.4);
+
+  --hx-violet: #7c5cff;
+  --hx-violet-bright: #957dff;
+  --hx-blue: #5b8def;
+  --hx-pink: #c77dff;
+  --hx-teal: #34e0c4;
+  --hx-irid: linear-gradient(120deg, #5b8def 0%, #7c5cff 45%, #c77dff 100%);
+  --hx-violet-tint: rgba(124, 92, 255, 0.14);
+
+  --hx-line: rgba(238, 238, 248, 0.12);
+  --hx-line-soft: rgba(238, 238, 248, 0.06);
+
+  --hx-cut: 12px;
+  --hx-cut-sm: 7px;
+
+  --hx-display: "Clash Display", ui-sans-serif, system-ui, sans-serif;
+  --hx-eyebrow: 0.75rem;
+  --hx-caption: 0.8125rem;
+  --hx-body: clamp(0.9375rem, 1.2vw, 1.0625rem);
+  --hx-h3: 1.1875rem;
+  --hx-h2: clamp(1.8125rem, 4.3vw, 3.125rem);
+  --hx-disp: clamp(2.875rem, 7vw, 5.75rem);
+  --hx-track-tight: -0.03em;
+
+  --hx-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --hx-fast: 160ms;
+  --hx-base: 280ms;
+  --hx-slow: 560ms;
+
+  --hx-maxw: 1180px;
+  --hx-gutter: clamp(20px, 5vw, 56px);
+
+  --hx-clip: polygon(
+    var(--hx-cut) 0,
+    100% 0,
+    100% calc(100% - var(--hx-cut)),
+    calc(100% - var(--hx-cut)) 100%,
+    0 100%,
+    0 var(--hx-cut)
+  );
+  --hx-clip-sm: polygon(
+    var(--hx-cut-sm) 0,
+    100% 0,
+    100% calc(100% - var(--hx-cut-sm)),
+    calc(100% - var(--hx-cut-sm)) 100%,
+    0 100%,
+    0 var(--hx-cut-sm)
+  );
+}
+
+.helix {
+  position: relative;
+  min-height: 100dvh;
+  background: var(--hx-void);
+  color: var(--hx-ink);
+  font-family: var(--hx-display);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  isolation: isolate;
+}
+.helix::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      54% 44% at 82% 4%,
+      rgba(124, 92, 255, 0.32),
+      transparent 70%
+    ),
+    radial-gradient(
+      46% 40% at 6% 102%,
+      rgba(91, 141, 239, 0.2),
+      transparent 70%
+    );
+}
+.hx-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(238, 238, 248, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(238, 238, 248, 0.045) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 26%,
+    #000 28%,
+    transparent 84%
+  );
+  mask-image: radial-gradient(circle at 50% 26%, #000 28%, transparent 84%);
+}
+
+/* ── type ladder ────────────────────────────────────────────────────── */
+.hx-display {
+  font-size: var(--hx-disp);
+  font-weight: 700; /* clause-1 đậm (weight contrast) */
+  line-height: 1.02;
+  letter-spacing: var(--hx-track-tight);
+  color: var(--hx-ink);
+}
+.hx-display em {
+  font-style: normal;
+  font-weight: 500; /* clause-2 nhẹ + muted (two-tone) */
+  color: var(--hx-ink-3);
+}
+.hx-h2 {
+  font-size: var(--hx-h2);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.hx-h3 {
+  font-size: var(--hx-h3);
+  font-weight: 500;
+  line-height: 1.3;
+}
+.hx-body {
+  font-size: var(--hx-body);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--hx-ink-2);
+  max-width: 52ch;
+}
+.hx-caption {
+  font-size: var(--hx-caption);
+  color: var(--hx-ink-3);
+}
+
+/* ── bracket tag [ TAG ] ────────────────────────────────────────────── */
+.hx-tag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 7px 14px;
+  font-size: var(--hx-eyebrow);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--hx-ink-2);
+  background: var(--hx-line);
+  clip-path: var(--hx-clip-sm);
+}
+.hx-tag::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: var(--hx-void);
+  clip-path: var(--hx-clip-sm);
+  z-index: 0;
+}
+.hx-tag > span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── buttons — chamfer + arrow ──────────────────────────────────────── */
+.hx-btn {
+  font-family: var(--hx-display);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px;
+  cursor: pointer;
+  border: 0;
+  position: relative;
+  clip-path: var(--hx-clip-sm);
+  transition:
+    transform var(--hx-fast) var(--hx-ease),
+    box-shadow var(--hx-base) var(--hx-ease),
+    filter var(--hx-base) var(--hx-ease);
+}
+/* corner tick — vạt tam giác góc trên-trái (signature Polygon) */
+.hx-btn::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 6px;
+  height: 6px;
+  z-index: 2;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  background: rgba(255, 255, 255, 0.7);
+}
+.hx-btn--ghost::after {
+  background: var(--hx-violet-bright);
+}
+.hx-btn__arrow {
+  transition: transform var(--hx-fast) var(--hx-ease);
+}
+.hx-btn:hover .hx-btn__arrow {
+  transform: translateX(3px);
+}
+.hx-btn--primary {
+  background: var(--hx-violet);
+  color: #fff;
+}
+.hx-btn--primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.12);
+  box-shadow: 0 10px 38px -8px rgba(124, 92, 255, 0.6);
+}
+.hx-btn--ghost {
+  position: relative;
+  background: var(--hx-line);
+  color: var(--hx-ink);
+}
+.hx-btn--ghost::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: var(--hx-s1);
+  clip-path: var(--hx-clip-sm);
+  z-index: 0;
+}
+.hx-btn--ghost > * {
+  position: relative;
+  z-index: 1;
+}
+.hx-btn--ghost:hover {
+  transform: translateY(-2px);
+}
+
+/* ── bento panel — chamfer hairline (2-layer) ───────────────────────── */
+.hx-panel {
+  position: relative;
+  background: var(--hx-line);
+  clip-path: var(--hx-clip);
+  transition: filter var(--hx-base) var(--hx-ease);
+}
+.hx-panel::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: var(--hx-s1);
+  clip-path: var(--hx-clip);
+  z-index: 0;
+}
+.hx-panel:hover {
+  filter: brightness(1.25);
+}
+.hx-panel__inner {
+  position: relative;
+  z-index: 1;
+  padding: 22px 22px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+/* corner tick — vạt tam giác góc trên-trái (signature Polygon) */
+.hx-panel__inner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  background: var(--hx-violet-bright);
+}
+
+/* ── stats ledger ───────────────────────────────────────────────────── */
+.hx-ledger {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--hx-line);
+}
+.hx-ledger__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 24px 22px 4px;
+  border-left: 1px solid var(--hx-line-soft);
+}
+.hx-ledger__item:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+.hx-ledger__num {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 0.95;
+  font-variant-numeric: tabular-nums;
+}
+.hx-ledger__num .u {
+  background: var(--hx-irid);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hx-ledger__tick {
+  width: 24px;
+  height: 2px;
+  background: var(--hx-irid);
+}
+.hx-ledger__label {
+  font-size: var(--hx-caption);
+  color: var(--hx-ink-2);
+}
+
+@media (max-width: 720px) {
+  .hx-ledger {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hx-ledger__item {
+    padding: 20px 14px 4px;
+  }
+  .hx-ledger__item:nth-child(2n + 1) {
+    border-left: 0;
+    padding-left: 0;
+  }
+}

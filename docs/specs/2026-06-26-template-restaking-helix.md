@@ -29,6 +29,8 @@
 - **Font:** 1 font = **Clash Display** (Fontshare). Bỏ mono. Uppercase CHỈ cho tag bracket nhỏ; phần còn lại case thường.
 - **Edge:** **chamfer** (cắt góc), bỏ bo tròn r6.
 - **Accent dùng như hệ thống** + giá trị màu chính xác (iridescent stops, violet) vẫn MỀM, lock bằng mắt ở Phase 3.
+- **Focal ĐỔI (user eye-review live qua demo `/dev/helix-focal-options`, chọn #05):** bỏ torus-knot → **Shards** = cụm tinh thể octahedron iridescent bay (1 mảnh trội + các mảnh nhỏ vây). Narrative restaking: nhiều mảnh = một dòng vốn bảo chứng nhiều mạng. WebGL three.js, user verify live (headless không có WebGL). Brand "Helix" giữ nguyên.
+- **Treatment Phase 3 (đang áp):** corner tick (vạt tam giác góc — signature Polygon) trên panel/button; primary button = violet solid (KHÔNG gradient).
 
 ## 2. Nguồn dữ liệu chuẩn
 
