@@ -9,6 +9,11 @@ These rules keep a multi-library, multi-author catalog visually coherent. A Piec
 that breaks the bar does **not** ship — no exceptions without a written waiver in
 its story.
 
+> **INVARIANT is the token/consistency floor (coherent), not the design-quality
+> ceiling (finished).** A Piece can pass every rule here and still look
+> vibe-coded. Assembled templates must ALSO pass the
+> [Production Bar](../../docs/PRODUCTION-BAR.md) to ship as `production`.
+
 ## 1. Invariant rules
 
 | #    | Rule                                         | Why                                                | Wrong                                                          | Right                                                                                       |
