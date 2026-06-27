@@ -10,6 +10,7 @@
     "./price-ticker": "./src/price-ticker/index.ts",
     "./price-ticker/config": "./src/price-ticker/config.ts",
     "./pixel-blast": "./src/pixel-blast/index.ts",
+    "./coin-mint": "./src/coin-mint/index.ts",
     "./glass-shape": "./src/glass-shape/index.ts",
     "./glass-shape/shapes": "./src/glass-shape/shapes.ts",
     "./artifact-surface": "./src/artifact-surface/index.ts",

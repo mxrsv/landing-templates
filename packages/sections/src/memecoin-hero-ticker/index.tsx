@@ -1,4 +1,5 @@
 import { Button } from "@landing/ui/components/button";
+import { CoinMint } from "@landing/ui/coin-mint";
 import { PriceTicker } from "@landing/ui/price-ticker";
 import type { PriceTickerToken } from "@landing/ui/price-ticker";
 
@@ -28,27 +29,35 @@ export function MemecoinHeroTicker() {
       </div>
 
       <div className="mht-body">
-        <span className="mht-eyebrow">
-          <span className="mht-dot" aria-hidden />
-          Live on Monad
-        </span>
+        <div className="mht-copy">
+          <span className="mht-eyebrow">
+            <span className="mht-dot" aria-hidden />
+            Live on Monad
+          </span>
 
-        <h1 className="mht-title">
-          The coin that <em>actually</em> sends it
-        </h1>
+          <h1 className="mht-title">
+            The coin that <em>actually</em>{" "}
+            <span className="mht-nowrap">sends it</span>
+          </h1>
 
-        <p className="mht-sub">
-          Fair launch, no presale, 100% community-owned. $MEME is the
-          degen-grade memecoin with infra-grade polish.
-        </p>
+          <p className="mht-sub">
+            Fair launch, no presale, 100% community-owned. $MEME is the
+            degen-grade memecoin with infra-grade polish.
+          </p>
 
-        <div className="mht-slot">
-          <PriceTicker mode="slot" tokens={TICKER_TOKENS} />
+          <div className="mht-slot">
+            <PriceTicker mode="slot" tokens={TICKER_TOKENS} />
+          </div>
+
+          <div className="mht-cta">
+            <Button variant="solid">Buy $MEME</Button>
+            <Button variant="ghost">Read the litepaper</Button>
+          </div>
         </div>
 
-        <div className="mht-cta">
-          <Button variant="solid">Buy $MEME</Button>
-          <Button variant="ghost">Read the litepaper</Button>
+        {/* Focal artifact — đồng $MEME minted, bleed off mép phải, neo cả hero */}
+        <div className="mht-stage">
+          <CoinMint className="mht-coin" />
         </div>
       </div>
     </section>

@@ -57,17 +57,42 @@
   color: var(--p-ink);
 }
 
-/* closing CTA band */
+/* closing CTA — card surface-1 + neon glow, asymmetric (copy trái / CTA phải) */
 .mc-closing {
-  max-width: var(--container-md);
-  margin-inline: auto;
-  padding-inline: var(--space-6);
-  padding-block: var(--section-pad-y-lg);
+  position: relative;
+  overflow: hidden;
+  max-width: var(--container-lg);
+  margin: var(--section-pad-y-md) auto;
+  padding: var(--section-pad-y-md) var(--space-10);
+  border: var(--line-w) solid var(--border-emphasis);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(
+      90% 140% at 0% 0%,
+      color-mix(in srgb, var(--p-primary) 18%, transparent),
+      transparent 70%
+    ),
+    var(--surface-1);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-6);
-  text-align: center;
+  align-items: flex-start;
+  gap: var(--space-8);
+  text-align: left;
+}
+
+@media (min-width: 64rem) {
+  .mc-closing {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-10);
+  }
+}
+
+.mc-closing-copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
 .mc-closing h2 {

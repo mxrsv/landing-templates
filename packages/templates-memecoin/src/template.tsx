@@ -36,11 +36,13 @@ export function MemecoinTemplate() {
         </div>
 
         <section id="buy" className="mc-closing">
-          <h2>Ready to send it?</h2>
-          <p>
-            Grab $MEME on your favorite DEX. Fair launch, no presale, liquidity
-            locked — just vibes and a verified contract.
-          </p>
+          <div className="mc-closing-copy">
+            <h2>Ready to send it?</h2>
+            <p>
+              Grab $MEME on your favorite DEX. Fair launch, no presale,
+              liquidity locked — just vibes and a verified contract.
+            </p>
+          </div>
           <Button variant="solid">Buy $MEME now</Button>
         </section>
       </main>

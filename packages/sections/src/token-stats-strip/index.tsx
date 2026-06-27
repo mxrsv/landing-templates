@@ -102,7 +102,12 @@ export function TokenStatsStrip() {
   return (
     <section data-theme="neon" className="tss-root">
       <div className="tss-inner">
-        <p className="tss-eyebrow">By the numbers</p>
+        <div className="tss-head">
+          <p className="tss-eyebrow">By the numbers</p>
+          <h2 className="tss-heading">
+            On-chain, <em>verifiable</em>, no cap
+          </h2>
+        </div>
         <div className="tss-grid">
           {STATS.map((stat) => (
             <div key={stat.label} className="tss-cell">

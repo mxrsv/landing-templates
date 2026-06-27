@@ -81,7 +81,10 @@ export function CommunityMarquee() {
   return (
     <section data-theme="neon" className="cm-root">
       <div className="cm-inner">
-        <p className="cm-eyebrow">Join the community</p>
+        <div className="cm-head">
+          <p className="cm-eyebrow">Join the community</p>
+          <p className="cm-headline">280K+ degens, five platforms</p>
+        </div>
 
         {animate ? (
           <div className="cm-marquee">

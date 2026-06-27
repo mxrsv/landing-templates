@@ -36,17 +36,94 @@
   padding-block: var(--space-2);
 }
 
-/* hero body */
+/* Đồng bộ độ fade mép với community marquee (--space-16) — PriceTicker mặc
+   định fade --space-8 hơi gắt cho strip full-bleed này. */
+.mht-ticker .pt-marquee {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--space-16),
+    #000 calc(100% - var(--space-16)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--space-16),
+    #000 calc(100% - var(--space-16)),
+    transparent
+  );
+}
+
+/* hero body — asymmetric editorial split: copy trái, focal coin phải */
 .mht-body {
-  max-width: var(--container-md);
+  position: relative;
+  max-width: var(--container-max);
   margin-inline: auto;
   padding-inline: var(--space-6);
   padding-block: var(--section-pad-y-lg);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  align-items: center;
+}
+
+@media (min-width: 64rem) {
+  .mht-body {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: var(--space-10);
+  }
+}
+
+.mht-copy {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-6);
-  text-align: center;
+  text-align: left;
+}
+
+/* stage chứa focal coin — bleed off mép phải/trên, mask fade dissolve vào nền */
+.mht-stage {
+  position: relative;
+  order: -1; /* mobile: coin lên trên copy */
+  width: 100%;
+  height: clamp(17rem, 64vw, 22rem);
+  /* fade cả 4 mép → dissolve canvas vào nền section, không lộ rectangle */
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent),
+    linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent),
+    linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+  mask-composite: intersect;
+}
+
+@media (min-width: 64rem) {
+  .mht-stage {
+    order: 0;
+    height: clamp(30rem, 42vw, 40rem);
+    /* bleed chạm mép phải viewport (clip bởi .mht-root overflow:hidden) */
+    margin-right: calc(
+      -1 * (max(0px, (100vw - var(--container-max)) * 0.5) + var(--space-12))
+    );
+    margin-block: calc(var(--space-10) * -1);
+    /* desktop: giữ mép phải đặc (bleed off-canvas), fade trên/dưới/trái */
+    -webkit-mask-image:
+      linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent),
+      linear-gradient(to right, transparent, #000 20%, #000 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent),
+      linear-gradient(to right, transparent, #000 20%, #000 100%);
+    mask-composite: intersect;
+  }
+}
+
+.mht-coin {
+  position: absolute;
+  inset: 0;
 }
 
 .mht-eyebrow {
@@ -80,6 +157,11 @@
   color: var(--p-primary-bright);
 }
 
+/* tránh chữ mồ côi cuối headline */
+.mht-nowrap {
+  white-space: nowrap;
+}
+
 .mht-sub {
   margin: 0;
   max-width: var(--container-sm);
@@ -102,6 +184,6 @@
 .mht-cta {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--space-3);
 }
