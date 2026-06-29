@@ -4,7 +4,7 @@
    Imported by apps/docs `globals.css` AFTER `@import "tailwindcss"`.
    This is the ONLY place that owns the `@theme` palette mapping.
 
-   Layering contract (Story 2.1 → 2.2):
+   Layering contract (Story 2.1 → 2.2 → 2.4 cascade fix):
      :root              → default --p-* values (floor = infra mood)
      [data-theme="…"]   → theme files override ONLY --p-* (Story 2.2)
      @theme inline      → --color-* : var(--p-*)  (Tailwind utility ↔ swappable var)
@@ -15,159 +15,261 @@
      emits the raw `var(--p-*)` reference into each utility, so a runtime change
      to --p-* recolors instantly. Required for the theme-swap in Story 2.2.
 
+   WHY the `@layer tokens.floor / tokens.theme` split (Story 2.4 cascade fix):
+     The component-token mapping (`--btn-*`, `--card-*`, …) derives from
+     `var(--p-*)`. A custom property carrying `var()` is substituted at
+     computed-value time on the element where it is DECLARED. Declaring the
+     mapping on `:root` only froze it to the `:root` (infra) palette, then the
+     resolved value inherited down — so a `[data-theme="game"]` child kept the
+     infra cyan instead of its own lime. The fix declares the derived layer on
+     `:root, [data-theme]` so `var(--p-*)` re-resolves against the themed
+     element's palette. To keep theme-specific overrides (e.g. chrome's
+     `--btn-solid-fg`) winning over this floor regardless of source order
+     (theme files are `@import`-ed BEFORE the floor block per the CSS @import
+     rule, so they would otherwise lose the same-specificity source-order tie),
+     the floor lives in `@layer tokens.floor` and the theme files in the later
+     `@layer tokens.theme`. Layer order > specificity/source-order, so themes
+     always win the floor. New themes auto-resolve correctly with no
+     per-theme re-declaration.
+
    Invariants (enforced doc = Story 2.3 INVARIANT.md):
      - spacing strictly on a 4/8px grid (no arbitrary magic numbers downstream)
      - named easing curves only — never `transition: all`
    ============================================================ */
 
+/* Layer order: floor (defaults) first, theme (per-mood overrides) last, so a
+   theme always wins the floor regardless of @import source order below. A bare
+   `@layer` statement is allowed before `@import` per the CSS cascade-layers spec. */
+@layer tokens.floor, tokens.theme;
+
 /* Theme palette overrides — each sets ONLY --p-* under [data-theme="…"].
-   MUST stay at the top (CSS @import ordering rule). They use plain
-   [data-theme] selectors and are applied on a wrapper element (a div in
-   Epic 4 previews, or the demo wrapper in /dev/theme-switch) — NOT on the
-   same element that carries the :root defaults below, so there is no
-   same-element specificity tie. Consumers keep a single
-   `@import "@landing/design-tokens"`. */
-@import "./themes/infra.css";
-@import "./themes/neon.css";
-@import "./themes/game.css";
-@import "./themes/nft.css";
+   MUST stay at the top (CSS @import ordering rule). Imported INTO the
+   `tokens.theme` layer so any theme-specific token customization (e.g. chrome's
+   `--btn-solid-fg` / `--badge-accent-bg`) beats the floor mapping below.
+   Consumers keep a single `@import "@landing/design-tokens"`. */
+@import "./themes/infra.css" layer(tokens.theme);
+@import "./themes/neon.css" layer(tokens.theme);
+@import "./themes/game.css" layer(tokens.theme);
+@import "./themes/nft.css" layer(tokens.theme);
 /* `chrome` is NOT a catalog mood — gallery-shell-only neutral frame (v2). */
-@import "./themes/chrome.css";
+@import "./themes/chrome.css" layer(tokens.theme);
 
-:root {
-  /* --- spacing — 4/8px grid -------------------------------- */
-  --space-0: 0;
-  --space-1: 0.25rem; /* 4px */
-  --space-2: 0.5rem; /* 8px */
-  --space-3: 0.75rem; /* 12px */
-  --space-4: 1rem; /* 16px */
-  --space-5: 1.25rem; /* 20px */
-  --space-6: 1.5rem; /* 24px */
-  --space-8: 2rem; /* 32px */
-  --space-10: 2.5rem; /* 40px */
-  --space-12: 3rem; /* 48px */
-  --space-16: 4rem; /* 64px */
-  --space-20: 5rem; /* 80px */
-  --space-24: 6rem; /* 96px */
-  --space-32: 8rem; /* 128px */
+@layer tokens.floor {
+  :root {
+    /* --- spacing — 4/8px grid -------------------------------- */
+    --space-0: 0;
+    --space-1: 0.25rem; /* 4px */
+    --space-2: 0.5rem; /* 8px */
+    --space-3: 0.75rem; /* 12px */
+    --space-4: 1rem; /* 16px */
+    --space-5: 1.25rem; /* 20px */
+    --space-6: 1.5rem; /* 24px */
+    --space-8: 2rem; /* 32px */
+    --space-10: 2.5rem; /* 40px */
+    --space-12: 3rem; /* 48px */
+    --space-16: 4rem; /* 64px */
+    --space-20: 5rem; /* 80px */
+    --space-24: 6rem; /* 96px */
+    --space-32: 8rem; /* 128px */
 
-  /* --- type scale (fluid floor) ---------------------------- */
-  --text-eyebrow: 0.75rem; /* 12px */
-  --text-caption: 0.8125rem; /* 13px */
-  --text-body: clamp(0.9375rem, 1.2vw, 1.0625rem); /* 15→17px */
-  --text-h3: 1.1875rem; /* 19px */
-  --text-h2: clamp(1.8125rem, 4.3vw, 3.125rem); /* 29→50px */
-  --text-display: clamp(2.75rem, 6.4vw, 5.125rem); /* 44→82px */
+    /* --- type scale (fluid floor) ---------------------------- */
+    --text-eyebrow: 0.75rem; /* 12px */
+    --text-caption: 0.8125rem; /* 13px */
+    --text-body: clamp(0.9375rem, 1.2vw, 1.0625rem); /* 15→17px */
+    --text-h3: 1.1875rem; /* 19px */
+    --text-h2: clamp(1.8125rem, 4.3vw, 3.125rem); /* 29→50px */
+    --text-display: clamp(2.75rem, 6.4vw, 5.125rem); /* 44→82px */
 
-  /* --- letter-spacing (one ladder — no per-Piece magic) ---- */
-  --tracking-tight: -0.02em; /* display / large headings */
-  --tracking-normal: 0; /* body, default            */
-  --tracking-label: 0.02em; /* eyebrow slash micro-tag  */
-  --tracking-wide: 0.08em; /* legacy uppercase labels  */
+    /* --- letter-spacing (one ladder — no per-Piece magic) ---- */
+    --tracking-tight: -0.02em; /* display / large headings */
+    --tracking-normal: 0; /* body, default            */
+    --tracking-label: 0.02em; /* eyebrow slash micro-tag  */
+    --tracking-wide: 0.08em; /* legacy uppercase labels  */
 
-  /* --- font-weight ----------------------------------------- */
-  --weight-regular: 400;
-  --weight-medium: 500;
-  --weight-semibold: 600;
+    /* --- font-weight ----------------------------------------- */
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
 
-  /* --- line-height ----------------------------------------- */
-  --leading-none: 1; /* label / stat figure      */
-  --leading-tight: 1.12; /* display / heading        */
-  --leading-snug: 1.35; /* subhead / h3             */
-  --leading-normal: 1.6; /* body                     */
+    /* --- line-height ----------------------------------------- */
+    --leading-none: 1; /* label / stat figure      */
+    --leading-tight: 1.12; /* display / heading        */
+    --leading-snug: 1.35; /* subhead / h3             */
+    --leading-normal: 1.6; /* body                     */
 
-  /* --- motion — named easing + durations ------------------- */
-  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
-  --duration-fast: 160ms;
-  --duration-base: 240ms;
-  --duration-slow: 480ms;
+    /* --- motion — named easing + durations ------------------- */
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+    --duration-fast: 160ms;
+    --duration-base: 240ms;
+    --duration-slow: 480ms;
 
-  /* --- radius / hairline floor ----------------------------- */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-pill: 999px;
-  --line-w: 1px;
+    /* --- radius / hairline floor ----------------------------- */
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px; /* audit gap — large panel/feature card floor */
+    --radius-pill: 999px;
+    --line-w: 1px;
 
-  /* --- v2: surface elevation ramp --------------------------- */
-  /* 0 = page, 1 = card, 2 = popover/dropdown, 3 = modal.
-     Themes may override; floor mirrors the infra near-black ramp. */
-  --surface-0: #07070c;
-  --surface-1: #0c0d14;
-  --surface-2: #12131c;
-  --surface-3: #181a25;
+    /* --- v2: surface elevation ramp --------------------------- */
+    /* 0 = page, 1 = card, 2 = popover/dropdown, 3 = modal.
+       Themes may override; floor mirrors the infra near-black ramp. */
+    --surface-0: #07070c;
+    --surface-1: #0c0d14;
+    --surface-2: #12131c;
+    --surface-3: #181a25;
 
-  /* --- v2: semantic interactive states ---------------------- */
-  /* Every interactive element consumes these — no per-piece
-     hand-rolled hover/focus (INVARIANT I-7). */
-  --state-hover-bg: rgba(255, 255, 255, 0.05);
-  --state-active-bg: rgba(255, 255, 255, 0.03);
-  --state-focus-ring: var(--p-primary);
-  --state-disabled-opacity: 0.4;
-  --overlay: rgba(0, 0, 0, 0.6);
-  --border-default: var(--p-line-soft);
-  --border-emphasis: var(--p-line);
+    /* --- v2: semantic interactive states (raw) ---------------- */
+    /* Every interactive element consumes these — no per-piece
+       hand-rolled hover/focus (INVARIANT I-7). The --p-*-derived
+       members (--state-focus-ring, --border-*) live in the derived
+       block below so they re-resolve per theme. */
+    --state-hover-bg: rgba(255, 255, 255, 0.05);
+    --state-active-bg: rgba(255, 255, 255, 0.03);
+    --state-disabled-opacity: 0.4;
+    --overlay: rgba(0, 0, 0, 0.6);
 
-  /* --- v2: layout rhythm ------------------------------------ */
-  /* Sections consume these instead of self-declared max-widths
-     (INVARIANT I-9). Breakpoints = Tailwind 4 defaults. */
-  --container-sm: 40rem; /* 640px */
-  --container-md: 48rem; /* 768px */
-  --container-lg: 64rem; /* 1024px */
-  --container-max: 80rem; /* 1280px */
-  --section-pad-y-sm: var(--space-12); /* 48px */
-  --section-pad-y-md: var(--space-20); /* 80px */
-  --section-pad-y-lg: var(--space-32); /* 128px */
+    /* --- v2: layout rhythm ------------------------------------ */
+    /* Sections consume these instead of self-declared max-widths
+       (INVARIANT I-9). Breakpoints = Tailwind 4 defaults. */
+    --container-sm: 40rem; /* 640px */
+    --container-md: 48rem; /* 768px */
+    --container-lg: 64rem; /* 1024px */
+    --container-max: 80rem; /* 1280px */
+    --section-pad-y-sm: var(--space-12); /* 48px */
+    --section-pad-y-md: var(--space-20); /* 80px */
+    --section-pad-y-lg: var(--space-32); /* 128px */
 
-  /* --- v2: component tokens (mapping layer ONLY) ------------ */
-  /* Values must map from floor/surface tokens — never raw hex.
-     Themes restyle shared components by overriding this layer. */
-  --btn-bg: var(--surface-2);
-  --btn-fg: var(--p-ink);
-  --btn-border: var(--border-default);
-  --btn-radius: var(--radius-md);
-  --btn-solid-bg: var(--p-primary);
-  --btn-solid-fg: var(--p-bg);
-  --card-bg: var(--surface-1);
-  --card-border: var(--border-default);
-  --card-border-hover: var(--border-emphasis);
-  --card-radius: var(--radius-lg);
-  --tab-active-fg: var(--p-ink);
-  --tab-inactive-fg: var(--p-ink-2);
-  --tab-indicator: var(--p-primary);
-  --input-bg: var(--surface-0);
-  --input-border: var(--border-default);
-  --input-fg: var(--p-ink);
-  --input-placeholder: var(--p-ink-3);
-  --badge-bg: var(--surface-2);
-  --badge-fg: var(--p-ink-2);
-  --badge-accent-bg: color-mix(in srgb, var(--p-primary) 14%, transparent);
-  --badge-accent-fg: var(--p-primary);
-  --tooltip-bg: var(--surface-3);
-  --tooltip-fg: var(--p-ink);
-  --tooltip-border: var(--border-emphasis);
+    /* --- v2: elevation shadow ramp (neutral — NOT palette) ---- */
+    /* Black ambient depth only; the COLOURED focal glow lives in the
+       --p-*-derived block below as --glow-* (re-resolves per theme).
+       1 = resting card, 2 = popover / sticky nav, 3 = modal / big lift.
+       Generalises the hand-rolled `0 8–30px rgb(0 0 0 / …)` shadows in
+       waitlist / aikit / aikit-features. Raw black rgba is allowed here
+       (neutral, not derived from --p-*). */
+    --shadow-1: 0 1px 2px rgb(0 0 0 / 0.2), 0 2px 6px rgb(0 0 0 / 0.16);
+    --shadow-2: 0 4px 12px rgb(0 0 0 / 0.28), 0 8px 24px rgb(0 0 0 / 0.22);
+    --shadow-3: 0 12px 32px rgb(0 0 0 / 0.36), 0 30px 80px rgb(0 0 0 / 0.3);
 
-  /* --- palette tokens — DEFAULT = infra mood --------------- */
-  /* Story 2.2 overrides these under [data-theme="neon|game|nft"].
-     Keep calm/premium infra floor: cyan-dominant on near-black,
-     orange used sparingly (micro-accent only). */
-  --p-bg: #07070c;
-  --p-surface: #0c0d14;
-  --p-primary: #22d3ee;
-  --p-primary-bright: #7fe9ff;
-  --p-primary-soft: #bdf6ff;
-  --p-accent: #fb923c; /* micro-accent — use 1–2 meaningful spots only */
-  --p-ink: rgba(255, 255, 255, 0.92);
-  --p-ink-2: rgba(255, 255, 255, 0.62);
-  --p-ink-3: rgba(255, 255, 255, 0.42);
-  --p-line: rgba(127, 233, 255, 0.18);
-  --p-line-soft: rgba(127, 233, 255, 0.1);
+    /* --- v2: blur ramp (backdrop-filter / ambient) ------------ */
+    /* Generalises the 5/6/8/12px blur used for glass nav + soft halos. */
+    --blur-sm: 6px;
+    --blur-md: 8px;
+    --blur-lg: 12px;
+
+    /* --- v2: z-index ladder ----------------------------------- */
+    /* One ordered ladder so Pieces stop inventing raw 10/20/30.
+       base = in-flow lift, raised = cards/dots, overlay = sticky nav /
+       floating pill, modal = dialog, toast = transient top-most. */
+    --z-base: 1;
+    --z-raised: 10;
+    --z-overlay: 20;
+    --z-modal: 40;
+    --z-toast: 50;
+
+    /* --- v2: font family — mono face (2-face flag) ------------ */
+    /* INVARIANT "one font" exception, PENDING owner sign-off: waitlist +
+       ternus already load JetBrains Mono via private vars. This token gives
+       ONE canonical mono with a system fallback stack. The webfont itself is
+       injected by the app/template layout (next/font sets --font-jetbrains-mono),
+       and is NEVER loaded inside design-tokens. Sans stays app-injected
+       (--font-inter); no --font-sans token is added here. */
+    --font-mono: var(
+      --font-jetbrains-mono,
+      ui-monospace,
+      SFMono-Regular,
+      Menlo,
+      monospace
+    );
+
+    /* --- palette tokens — DEFAULT = infra mood --------------- */
+    /* Story 2.2 overrides these under [data-theme="neon|game|nft"].
+       Keep calm/premium infra floor: cyan-dominant on near-black,
+       orange used sparingly (micro-accent only). */
+    --p-bg: #07070c;
+    --p-surface: #0c0d14;
+    --p-primary: #22d3ee;
+    --p-primary-bright: #7fe9ff;
+    --p-primary-soft: #bdf6ff;
+    --p-accent: #fb923c; /* micro-accent — use 1–2 meaningful spots only */
+    --p-ink: rgba(255, 255, 255, 0.92);
+    --p-ink-2: rgba(255, 255, 255, 0.62);
+    --p-ink-3: rgba(255, 255, 255, 0.42);
+    --p-line: rgba(127, 233, 255, 0.18);
+    --p-line-soft: rgba(127, 233, 255, 0.1);
+  }
+
+  /* --- v2: --p-*-derived layer (re-resolves per theme) -------- */
+  /* Declared on `:root` AND every `[data-theme]` element so the `var(--p-*)`
+     references are substituted against the themed element's palette, not
+     frozen at `:root`. WITHOUT the [data-theme] selector these would compute
+     once on :root (infra cyan) and inherit that frozen value into themed
+     subtrees. Theme-specific overrides (chrome's --btn-solid-fg /
+     --badge-accent-bg) live in the later `tokens.theme` layer and win this
+     floor regardless of source order — so customization survives, defaults
+     auto-resolve, and new themes need no re-declaration.
+     Mapping values map from floor/surface tokens — never raw hex (INVARIANT). */
+  :root,
+  [data-theme] {
+    /* derived interactive states + borders */
+    --state-focus-ring: var(--p-primary);
+    --border-default: var(--p-line-soft);
+    --border-emphasis: var(--p-line);
+
+    /* derived ambient effects — COLOURED focal glow + brand gradients.
+       Live here (not :root) so var(--p-*) re-resolves per theme, exactly
+       like the component tokens below; declaring them on :root only would
+       freeze the infra hue into themed subtrees (the Story 2.4 bug).
+       Generalises hand-rolled `0 0 14–16px <accent>` glows + radial/linear
+       brand washes in ternus / aikit / waitlist / chip-connect. Neutral
+       black elevation stays in :root as --shadow-* (not palette-derived). */
+    --glow-primary: 0 0 16px
+      color-mix(in srgb, var(--p-primary) 55%, transparent);
+    --glow-soft: 0 0 48px color-mix(in srgb, var(--p-primary) 26%, transparent);
+    --gradient-primary: linear-gradient(
+      135deg,
+      var(--p-primary),
+      var(--p-primary-bright)
+    );
+    --gradient-surface: radial-gradient(
+      120% 120% at 50% 0%,
+      color-mix(in srgb, var(--p-primary) 10%, transparent),
+      transparent 70%
+    );
+
+    /* component tokens (mapping layer ONLY) — themes restyle shared
+       components by overriding --p-* (auto) or this layer (chrome). */
+    --btn-bg: var(--surface-2);
+    --btn-fg: var(--p-ink);
+    --btn-border: var(--border-default);
+    --btn-radius: var(--radius-md);
+    --btn-solid-bg: var(--p-primary);
+    --btn-solid-fg: var(--p-bg);
+    --card-bg: var(--surface-1);
+    --card-border: var(--border-default);
+    --card-border-hover: var(--border-emphasis);
+    --card-radius: var(--radius-lg);
+    --tab-active-fg: var(--p-ink);
+    --tab-inactive-fg: var(--p-ink-2);
+    --tab-indicator: var(--p-primary);
+    --input-bg: var(--surface-0);
+    --input-border: var(--border-default);
+    --input-fg: var(--p-ink);
+    --input-placeholder: var(--p-ink-3);
+    --badge-bg: var(--surface-2);
+    --badge-fg: var(--p-ink-2);
+    --badge-accent-bg: color-mix(in srgb, var(--p-primary) 14%, transparent);
+    --badge-accent-fg: var(--p-primary);
+    --tooltip-bg: var(--surface-3);
+    --tooltip-fg: var(--p-ink);
+    --tooltip-border: var(--border-emphasis);
+  }
 }
 
 /* Map Tailwind's utility namespace onto the swappable palette vars.
-   MUST stay `@theme inline` — see header note. */
+   MUST stay `@theme inline` and UNLAYERED — see header note. */
 @theme inline {
   --color-bg: var(--p-bg);
   --color-surface: var(--p-surface);

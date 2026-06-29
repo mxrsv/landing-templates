@@ -29,9 +29,15 @@ its story.
 | I-9  | **Layout via rhythm tokens** (v2)            | Sections share one container/padding rhythm        | `max-width: 1140px`, `padding: 72px 0`                         | `max-width: var(--container-lg)`, `padding-block: var(--section-pad-y-md)`                  |
 | I-10 | **Text via primitives** (v2)                 | One eyebrow/heading/body/caption look, agent-proof | hand-rolled `text-[…] tracking-[…] uppercase` label string     | `<Eyebrow>` / `<Heading level>` / `<Body>` / `<Caption>` from `@landing/ui/components/text` |
 
-> **Font floor:** the catalog uses **one** typeface — Inter (`--font-sans`). No
-> mono / display second face. Text primitives inherit it; never declare a
-> per-Piece `font-family`.
+> **Font floor:** the catalog uses **one** text typeface — Inter (`--font-sans`).
+> Text primitives inherit it; never declare a per-Piece `font-family`.
+>
+> ⏳ **PENDING (owner sign-off):** a second **mono** face is proposed. `--font-mono`
+> now exists in the floor (system fallback stack only; the JetBrains Mono webfont is
+> injected by the app/template layout via `--font-jetbrains-mono`, never by
+> `@landing/design-tokens`). Rationale: waitlist + ternus already ship mono privately
+> (`--wl-mono`, `--tn-mono`) — this formalizes 1 sans + 1 mono instead of rogue fonts.
+> **Until ratified, Pieces must NOT adopt `--font-mono`; Inter stays the single face.**
 
 Allowed token vocabulary (see `base.css` for full list):
 
@@ -40,16 +46,19 @@ Allowed token vocabulary (see `base.css` for full list):
 - tracking `--tracking-tight|normal|label|wide`
 - weight `--weight-regular|medium|semibold`
 - leading `--leading-none|tight|snug|normal`
-- font `--font-sans` (Inter — one face only)
+- font `--font-sans` (Inter — single text face); `--font-mono` (⏳ pending sign-off — see Font floor)
 - motion `--ease-standard|entrance|exit`, `--duration-fast|base|slow`
 - palette `--p-*` (consume via Tailwind utilities: `bg-primary`, `text-ink`, `border-line`, …)
-- radius `--radius-sm|md|lg|pill`, hairline `--line-w`
+- radius `--radius-sm|md|lg|xl|pill`, hairline `--line-w`
 - surfaces `--surface-0 … --surface-3` (v2 — utilities `bg-surface-*`)
 - states `--state-hover-bg|active-bg|focus-ring|disabled-opacity`, `--overlay` (v2)
 - borders `--border-default|emphasis` (v2 — utilities `border-edge`, `border-edge-strong`)
 - layout `--container-sm|md|lg|max`, `--section-pad-y-sm|md|lg` (v2)
 - component tokens `--btn-*`, `--card-*`, `--tab-*`, `--input-*`, `--badge-*`, `--tooltip-*`
   (v2 — mapping layer only; shared components in `@landing/ui` consume these)
+- effects (v3) `--shadow-1|2|3` (neutral black elevation — exempt from I-4), `--blur-sm|md|lg`,
+  `--glow-primary|soft` + `--gradient-primary|surface` (palette-derived — re-resolve per theme)
+- z-index `--z-base|raised|overlay|modal|toast` (v3 — one ladder, no ad-hoc `z-index`)
 
 > **Theme `chrome`** (`data-theme="chrome"`) is the gallery shell's neutral
 > "Warm graphite" frame — it is NOT a catalog mood. Pieces never declare it in
@@ -100,3 +109,8 @@ Allowed token vocabulary (see `base.css` for full list):
 - **Build-level:** `pnpm build` + `pnpm lint` + `check-types` gate (turbo) catch
   type/lint regressions. Token/spacing discipline is review-enforced (no automated
   linter for magic numbers yet — candidate for a future stylelint rule).
+- **Catalog budget:** the "depth over volume" gate lives in
+  [`apps/docs/lib/catalog/manifest.ts`](../../apps/docs/lib/catalog/manifest.ts) —
+  soft-warn above the curated target (16), hard-throw only on runaway (>32); see the
+  file header for migrated PRD provenance (FR-10 / Glossary / SM-C1). A valid new Piece
+  must never fail the build; changing a threshold needs a rationale in the PR.

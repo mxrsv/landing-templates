@@ -16,6 +16,7 @@ const MOOD_GRADIENT: Record<PieceMood, string> = {
   neon: "from-fuchsia-900/80 to-zinc-950",
   game: "from-emerald-900/80 to-zinc-950",
   nft: "from-amber-900/80 to-zinc-950",
+  defi: "from-teal-900/80 to-zinc-950",
 };
 
 /** Fallback khi poster chưa sinh (404) — gradient theo mood, không live. */

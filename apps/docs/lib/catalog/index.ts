@@ -7,13 +7,26 @@
  */
 import { pieceRegistrations } from "./piece-registrations";
 import { manifestSlugs } from "./manifest";
-import type { CopyMode, PieceLayer, PieceMeta, PieceMood } from "./types";
+import type {
+  CopyMode,
+  PieceLayer,
+  PieceMeta,
+  PieceMood,
+  PieceStatus,
+} from "./types";
 
-export type { CopyMode, PieceLayer, PieceMeta, PieceMood } from "./types";
+export type {
+  CopyMode,
+  PieceLayer,
+  PieceMeta,
+  PieceMood,
+  PieceStatus,
+} from "./types";
 
 const LAYERS: readonly PieceLayer[] = ["ui", "section", "template"];
-const MOODS: readonly PieceMood[] = ["infra", "neon", "game", "nft"];
+const MOODS: readonly PieceMood[] = ["infra", "neon", "game", "nft", "defi"];
 const COPY_MODES: readonly CopyMode[] = ["single", "multi"];
+const STATUSES: readonly PieceStatus[] = ["draft", "production", "planned"];
 
 function assertPieceMeta(input: unknown, source: string): PieceMeta {
   if (typeof input !== "object" || input === null) {
@@ -59,6 +72,17 @@ function assertPieceMeta(input: unknown, source: string): PieceMeta {
   if (meta.sourcePaths !== undefined && !isStringArray(meta.sourcePaths)) {
     fail("`sourcePaths` (nếu có) phải là mảng string");
   }
+  if (
+    meta.status !== undefined &&
+    !STATUSES.includes(meta.status as PieceStatus)
+  ) {
+    fail(
+      `\`status\` "${String(meta.status)}" không thuộc ${STATUSES.join("|")}`,
+    );
+  }
+  if (meta.offSystem !== undefined && typeof meta.offSystem !== "boolean") {
+    fail("`offSystem` (nếu có) phải là boolean");
+  }
 
   return {
     slug: meta.slug as string,
@@ -70,8 +94,12 @@ function assertPieceMeta(input: unknown, source: string): PieceMeta {
     animationTags: meta.animationTags as string[],
     deps: meta.deps as string[],
     copyMode: meta.copyMode as CopyMode,
+    status: (meta.status as PieceStatus | undefined) ?? "production",
     ...(meta.sourcePaths !== undefined
       ? { sourcePaths: meta.sourcePaths as string[] }
+      : {}),
+    ...(meta.offSystem !== undefined
+      ? { offSystem: meta.offSystem as boolean }
       : {}),
   };
 }

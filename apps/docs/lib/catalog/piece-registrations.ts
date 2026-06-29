@@ -17,7 +17,6 @@ import { pieceMeta as communityMarqueePieceMeta } from "@landing/sections/commun
 import { pieceMeta as gamefiHudHeroPieceMeta } from "@landing/sections/gamefi-hud-hero/config";
 import { pieceMeta as memecoinHeroTickerPieceMeta } from "@landing/sections/memecoin-hero-ticker/config";
 import { pieceMeta as tokenStatsStripPieceMeta } from "@landing/sections/token-stats-strip/config";
-import { pieceMeta as aikitPieceMeta } from "@landing/templates-aikit/config";
 import { pieceMeta as gamefiPieceMeta } from "@landing/templates-gamefi/config";
 import { pieceMeta as memecoinPieceMeta } from "@landing/templates-memecoin/config";
 import { pieceMeta as ternusPieceMeta } from "@landing/templates-ternus/config";
@@ -123,16 +122,6 @@ export const pieceRegistrations: readonly PieceRegistration[] = [
     loadPreview: () =>
       import("@landing/templates-ternus").then((m) => ({
         default: m.TernusTemplate,
-      })),
-  },
-  {
-    slug: "aikit",
-    source: "@landing/templates-aikit/config",
-    meta: aikitPieceMeta,
-    packageName: "@landing/templates-aikit",
-    loadPreview: () =>
-      import("@landing/templates-aikit").then((m) => ({
-        default: m.AikitTemplate,
       })),
   },
   {

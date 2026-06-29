@@ -17,16 +17,8 @@
   /* motion personality — snappy */
   --duration-base: 160ms;
 
-  /* Re-resolve mapping layer dưới scope neon. base.css declare các token này ở
-     `:root` nên var(--p-*) bị substitute MỘT LẦN tại :root (= palette base cyan)
-     rồi inherit giá trị đã-đông-cứng xuống con — đổi --p-primary ở đây KHÔNG tự
-     lan tới chúng. Re-declare để substitute lại bằng neon palette (magenta).
-     Pattern giống themes/chrome.css. (Token-floor: lý tưởng fix gốc ở base bằng
-     selector `:root, [data-theme]`, nhưng khu trú neon để tránh regression.) */
-  --border-default: var(--p-line-soft);
-  --border-emphasis: var(--p-line);
-  --btn-border: var(--border-default);
-  --btn-solid-bg: var(--p-primary);
-  --btn-solid-fg: var(--p-bg);
-  --state-focus-ring: var(--p-primary);
+  /* No mapping re-declaration needed: base.css now declares the --p-*-derived
+     layer on `:root, [data-theme]` inside `@layer tokens.floor`, so every
+     component token (--btn-solid-bg, --border-*, --tab-indicator, --badge-*, …)
+     re-resolves against this neon palette automatically. */
 }

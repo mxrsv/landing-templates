@@ -10,8 +10,11 @@
 /** Tầng của Piece trong catalog — quyết định route prefix (/ui, /sections, /templates). */
 export type PieceLayer = "ui" | "section" | "template";
 
-/** 4 mood theme khớp `[data-theme=…]` của @landing/design-tokens. */
-export type PieceMood = "infra" | "neon" | "game" | "nft";
+/** Mood theme khớp `[data-theme=…]` của @landing/design-tokens. `defi` cho lane restaking (Helix). */
+export type PieceMood = "infra" | "neon" | "game" | "nft" | "defi";
+
+/** Trạng thái Production Bar — gallery chỉ surface `production` (Phase 2 B4). */
+export type PieceStatus = "draft" | "production" | "planned";
 
 /**
  * Cơ chế copy của Piece (Story 4.4):
@@ -39,4 +42,8 @@ export interface PieceMeta {
    * Optional: single-file UI piece có thể dùng `?raw` import thay vì sourcePaths.
    */
   sourcePaths?: string[];
+  /** Production Bar status — vắng = "production" (default ở buildCatalog). Skeleton phải set "draft"/"planned". */
+  status?: PieceStatus;
+  /** Piece lane riêng KHÔNG import design-tokens (vd Helix/Strata) — mood chỉ là facet filter, không bind data-theme. */
+  offSystem?: boolean;
 }

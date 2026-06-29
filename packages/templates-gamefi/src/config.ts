@@ -13,6 +13,7 @@ interface TemplatePieceMeta {
   deps: string[];
   copyMode: "single" | "multi";
   sourcePaths: string[];
+  status?: "draft" | "production" | "planned";
 }
 
 export const pieceMeta: TemplatePieceMeta = {
@@ -25,6 +26,8 @@ export const pieceMeta: TemplatePieceMeta = {
   animationTags: ["scanline", "bar-grow"],
   deps: ["@landing/ui", "@landing/sections", "next", "react"],
   copyMode: "multi",
+  // Skeleton chưa qua Production Bar (character-showcase còn blank box) — Phase 2 B4.
+  status: "draft",
   sourcePaths: [
     "packages/templates-gamefi/src/template.tsx",
     "packages/templates-gamefi/src/gamefi.css",
