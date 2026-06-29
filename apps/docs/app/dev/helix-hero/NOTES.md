@@ -23,6 +23,17 @@
 
 three@0.184 · @types/three · gsap · split-type.
 
+## Harden một phần (frontend-design-bar gate, 2026-06-29)
+
+- **Nav mobile** ✅: links + CTA gập vào hamburger menu (`hero-nav.tsx`, client) —
+  trước đây links chỉ `display:none` (mất navigation). Giữ chamfer/corner-tick.
+- **Focus-visible** ✅: button dùng inset ring (clip-path nuốt outline), nav/menu
+  link dùng outline violet. Ở `helix-tokens.css` + `helix-hero.css`.
+- **Gỡ label dev** ✅: bỏ "Shards focal · WEBGL LIVE" khỏi focal.
+- Lint + check-types pass. Focal WebGL + motion vẫn phải verify LIVE ở Chrome.
+- **CHƯA chốt (taste, chờ user)**: two-tone `.hx-display em` đang `--hx-ink-3` (0.4)
+  đọc khá mờ — cân nhắc nâng ~0.5–0.55. User chốt số.
+
 ## Còn lại (pipeline)
 
 - Dựng các section dưới hero (how-it-works, AVS, operators, CTA, footer): skeleton →

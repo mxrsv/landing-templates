@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GameFi — Character Showcase · minimal (shadcn) greybox</title>
+    <style>
+      /* ── THROWAWAY greybox · hướng MINIMAL/shadcn (clean shell, ít ornament,
+         nhiều khoảng thở, accent xanh tiết chế). Ô focal = placeholder calm,
+         WebGL/art dựng in-stack sau. ── */
+      :root {
+        --bg: #09090b;
+        --card: #101012;
+        --card-2: #161618;
+        --border: #27272a;
+        --border-2: #323237;
+        --fg: #fafafa;
+        --muted: #a1a1aa;
+        --muted-2: #71717a;
+        --accent: #a3e635; /* dùng RẤT tiết chế */
+        --accent-fg: #0a0a0a;
+        --radius: 12px;
+        --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+        --mono: ui-monospace, "SF Mono", monospace;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: var(--sans);
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 40px 28px 120px;
+      }
+
+      .topbar {
+        margin-bottom: 44px;
+      }
+      .topbar h1 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0 0 4px;
+      }
+      .topbar p {
+        margin: 0;
+        color: var(--muted-2);
+        font-size: 12.5px;
+      }
+
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted-2);
+      }
+
+      /* calm focal placeholder — không dashed, không stripe */
+      .focal {
+        display: grid;
+        place-content: center;
+        place-items: center;
+        gap: 6px;
+        text-align: center;
+        background: linear-gradient(180deg, var(--card-2), var(--card));
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        color: var(--muted-2);
+      }
+      .focal .m {
+        font-size: 18px;
+        color: var(--muted);
+        opacity: 0.8;
+      }
+      .focal small {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.04em;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+      }
+      .name {
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+      .meta {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: var(--accent);
+        margin-right: 6px;
+        vertical-align: middle;
+      }
+
+      .btn {
+        font-size: 13.5px;
+        font-weight: 500;
+        padding: 9px 18px;
+        border-radius: 8px;
+        border: 1px solid var(--border-2);
+        background: transparent;
+        color: var(--fg);
+        cursor: pointer;
+      }
+      .btn.solid {
+        background: var(--accent);
+        color: var(--accent-fg);
+        border-color: var(--accent);
+        font-weight: 600;
+      }
+
+      /* ── HERO (minimal) ── */
+      .hero {
+        padding: 56px 0 52px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 8px;
+      }
+      .hero .eyebrow {
+        display: block;
+        margin-bottom: 16px;
+      }
+      .hero h2 {
+        font-size: 44px;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        font-weight: 700;
+        margin: 0 0 16px;
+        max-width: 16ch;
+      }
+      .hero h2 .g {
+        color: var(--accent);
+      }
+      .hero p.sub {
+        color: var(--muted);
+        font-size: 16px;
+        max-width: 52ch;
+        margin: 0 0 28px;
+      }
+      .hero .stats {
+        display: flex;
+        gap: 36px;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+      }
+      .hero .stat .n {
+        font-size: 22px;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+      }
+      .hero .stat .l {
+        font-size: 12px;
+        color: var(--muted-2);
+      }
+      .hero .cta {
+        display: flex;
+        gap: 12px;
+      }
+
+      /* ── tabs ── */
+      .tabs {
+        display: flex;
+        gap: 8px;
+        margin: 48px 0 6px;
+      }
+      .tab {
+        font-size: 13px;
+        padding: 8px 16px;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--muted);
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      .tab[aria-selected="true"] {
+        border-color: var(--border-2);
+        color: var(--fg);
+        background: var(--card);
+      }
+      .vcap {
+        color: var(--muted);
+        font-size: 13.5px;
+        margin: 12px 0 28px;
+        max-width: 68ch;
+      }
+      .vcap b {
+        color: var(--fg);
+        font-weight: 600;
+      }
+      .variant {
+        display: none;
+      }
+      .variant.active {
+        display: block;
+      }
+
+      .sec-head {
+        margin-bottom: 24px;
+      }
+      .sec-head .eyebrow {
+        display: block;
+        margin-bottom: 8px;
+      }
+      .sec-head .t {
+        font-size: 26px;
+        font-weight: 650;
+        letter-spacing: -0.02em;
+        margin: 0;
+      }
+
+      /* Variant A — clean split */
+      .vA .grid {
+        display: grid;
+        grid-template-columns: 0.85fr 1.15fr;
+        gap: 40px;
+        align-items: start;
+      }
+      .vA .feat .focal {
+        aspect-ratio: 4/5;
+        width: 100%;
+        margin-bottom: 16px;
+      }
+      .vA .feat .name {
+        font-size: 20px;
+      }
+      .vA .list {
+        display: flex;
+        flex-direction: column;
+      }
+      .vA .row {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        gap: 14px;
+        align-items: center;
+        padding: 14px 6px;
+        border-bottom: 1px solid var(--border);
+      }
+      .vA .row:last-child {
+        border-bottom: 0;
+      }
+      .vA .row .focal {
+        aspect-ratio: 1/1;
+        border-radius: 8px;
+      }
+      .vA .row .focal .m {
+        font-size: 13px;
+      }
+      .vA .row .name {
+        font-size: 15px;
+      }
+
+      /* Variant B — centered minimal */
+      .vB {
+        text-align: center;
+      }
+      .vB .sec-head {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .vB .stage {
+        max-width: 380px;
+        margin: 0 auto 36px;
+      }
+      .vB .stage .focal {
+        aspect-ratio: 1/1;
+        width: 100%;
+        margin-bottom: 18px;
+      }
+      .vB .stage .name {
+        font-size: 22px;
+      }
+      .vB .roster {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .vB .av {
+        width: 88px;
+      }
+      .vB .av .focal {
+        aspect-ratio: 1/1;
+        border-radius: 10px;
+        margin-bottom: 8px;
+      }
+      .vB .av .focal .m {
+        font-size: 13px;
+      }
+      .vB .av .name {
+        font-size: 13px;
+        display: block;
+      }
+      .vB .av .meta {
+        font-size: 11px;
+      }
+
+      @media (max-width: 720px) {
+        .vA .grid {
+          grid-template-columns: 1fr;
+          gap: 28px;
+        }
+        .hero h2 {
+          font-size: 34px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="topbar">
+        <h1>GameFi — Character Showcase · greybox (minimal / shadcn)</h1>
+        <p>
+          Throwaway · shell sạch, accent xanh tiết chế · ô focal = placeholder
+          calm (WebGL/art dựng in-stack sau) · chốt bố cục.
+        </p>
+      </div>
+
+      <!-- HERO minimal -->
+      <header class="hero">
+        <span class="eyebrow">Open Beta · Season 01</span>
+        <h2>Enter the <span class="g">Arena</span></h2>
+        <p class="sub">
+          Squad up, climb the ladder, earn on every match. Loadout của bạn — sở
+          hữu, trade, flex.
+        </p>
+        <div class="stats">
+          <div class="stat">
+            <div class="n">92%</div>
+            <div class="l">Power</div>
+          </div>
+          <div class="stat">
+            <div class="n">67%</div>
+            <div class="l">Shield</div>
+          </div>
+          <div class="stat">
+            <div class="n">Lv 24</div>
+            <div class="l">Season XP</div>
+          </div>
+        </div>
+        <div class="cta">
+          <button class="btn solid">Play now</button
+          ><button class="btn">Watch trailer</button>
+        </div>
+      </header>
+
+      <!-- tabs -->
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" aria-selected="true" data-v="A">
+          A · Clean split
+        </button>
+        <button class="tab" role="tab" aria-selected="false" data-v="B">
+          B · Centered minimal
+        </button>
+      </div>
+
+      <!-- VARIANT A -->
+      <section class="variant vA active" data-v="A">
+        <p class="vcap">
+          <b>A — Clean split.</b> Featured trái + roster dạng list gọn phải.
+          Nhiều khoảng thở, 1 focal chính, dễ quét mắt. An toàn, đọc tốt.
+        </p>
+        <div class="sec-head">
+          <span class="eyebrow">Roster · Season 01</span>
+          <h3 class="t">Pick your fighter</h3>
+        </div>
+        <div class="grid">
+          <div class="feat">
+            <div class="focal">
+              <span class="m">◇</span><small>focal · featured</small>
+            </div>
+            <div class="name">Vanguard</div>
+            <div class="meta">
+              <span class="dot"></span>Legendary · Tank · Lv 24
+            </div>
+          </div>
+          <div class="list">
+            <div class="row">
+              <div class="focal"><span class="m">◇</span></div>
+              <div>
+                <div class="name">Bulwark</div>
+                <div class="meta">Tank</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="focal"><span class="m">◇</span></div>
+              <div>
+                <div class="name">Ember</div>
+                <div class="meta">Mage</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="focal"><span class="m">◇</span></div>
+              <div>
+                <div class="name">Specter</div>
+                <div class="meta">Assassin</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="focal"><span class="m">◇</span></div>
+              <div>
+                <div class="name">Aegis</div>
+                <div class="meta">Support</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="focal"><span class="m">◇</span></div>
+              <div>
+                <div class="name">Rook</div>
+                <div class="meta">Marksman</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="focal"><span class="m">◇</span></div>
+              <div>
+                <div class="name">Drift</div>
+                <div class="meta">Scout</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VARIANT B -->
+      <section class="variant vB" data-v="B">
+        <p class="vcap">
+          <b>B — Centered minimal.</b> 1 focal giữa, roster là hàng avatar nhỏ
+          bên dưới. Tối giản nhất, ít phần tử nhất — gọn gàng, đỡ rối.
+        </p>
+        <div class="sec-head">
+          <span class="eyebrow">Roster · Season 01</span>
+          <h3 class="t">Pick your fighter</h3>
+        </div>
+        <div class="stage">
+          <div class="focal">
+            <span class="m">◇</span><small>focal · featured (Vanguard)</small>
+          </div>
+          <div class="name">Vanguard</div>
+          <div class="meta">
+            <span class="dot"></span>Legendary · Tank · Lv 24
+          </div>
+        </div>
+        <div class="roster">
+          <div class="av">
+            <div class="focal"><span class="m">◇</span></div>
+            <span class="name">Bulwark</span><span class="meta">Tank</span>
+          </div>
+          <div class="av">
+            <div class="focal"><span class="m">◇</span></div>
+            <span class="name">Ember</span><span class="meta">Mage</span>
+          </div>
+          <div class="av">
+            <div class="focal"><span class="m">◇</span></div>
+            <span class="name">Specter</span><span class="meta">Assassin</span>
+          </div>
+          <div class="av">
+            <div class="focal"><span class="m">◇</span></div>
+            <span class="name">Aegis</span><span class="meta">Support</span>
+          </div>
+          <div class="av">
+            <div class="focal"><span class="m">◇</span></div>
+            <span class="name">Rook</span><span class="meta">Marksman</span>
+          </div>
+          <div class="av">
+            <div class="focal"><span class="m">◇</span></div>
+            <span class="name">Drift</span><span class="meta">Scout</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const tabs = document.querySelectorAll(".tab");
+      const variants = document.querySelectorAll(".variant");
+      tabs.forEach((t) => {
+        t.addEventListener("click", () => {
+          tabs.forEach((x) => x.setAttribute("aria-selected", String(x === t)));
+          variants.forEach((s) =>
+            s.classList.toggle("active", s.dataset.v === t.dataset.v),
+          );
+        });
+      });
+    </script>
+  </body>
+</html>

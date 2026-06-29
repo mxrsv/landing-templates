@@ -1,0 +1,1059 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Strata — Liquid restaking protocol · Holographic Membrane</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ============================================================
+         RESET — bóc sạch mọi skin mặc định của browser
+         ============================================================ */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+      body {
+        min-height: 100vh;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button {
+        font: inherit;
+        color: inherit;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+      ul {
+        list-style: none;
+      }
+      img,
+      svg,
+      canvas {
+        display: block;
+        max-width: 100%;
+      }
+      ::selection {
+        background: rgba(255, 143, 208, 0.3);
+        color: #fff;
+      }
+
+      /* ============================================================
+         TOKENS
+         ============================================================ */
+      :root {
+        --base: #0c0a12; /* charcoal-plum nền */
+        --base-2: #100c18;
+        --ink: #f2eef8; /* ink heading */
+        --muted: #9b93a8; /* phụ, mờ */
+        --muted-2: #6f6880;
+
+        /* foil holographic — dùng như một hệ accent */
+        --pink: #ff8fd0;
+        --cyan: #74e7ff;
+        --gold: #ffe08a;
+        --violet: #a98cff;
+
+        --line: rgba(242, 238, 248, 0.1);
+        --line-soft: rgba(242, 238, 248, 0.06);
+
+        --shell: clamp(20px, 5.2vw, 88px);
+        --maxw: 1240px;
+
+        --font-display:
+          "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+        --font-mono: "Space Mono", ui-monospace, "SFMono-Regular", monospace;
+
+        --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+        /* gradient foil tái sử dụng */
+        --foil: linear-gradient(
+          108deg,
+          var(--pink) 0%,
+          var(--violet) 28%,
+          var(--cyan) 55%,
+          var(--gold) 80%,
+          var(--pink) 100%
+        );
+      }
+
+      html,
+      body {
+        background: var(--base);
+        color: var(--ink);
+        font-family: var(--font-display);
+      }
+      body {
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* ============================================================
+         BACKGROUND — base + foil blooms (mờ, trôi chậm) + grid + grain
+         ============================================================ */
+      .bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+        background:
+          radial-gradient(
+            130% 90% at 78% 12%,
+            rgba(22, 16, 32, 0.9),
+            transparent 60%
+          ),
+          linear-gradient(180deg, var(--base-2), var(--base) 60%);
+      }
+      .bloom {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(90px);
+        opacity: 0.5;
+        mix-blend-mode: screen;
+        will-change: transform;
+      }
+      .bloom--pink {
+        width: 56vw;
+        height: 56vw;
+        left: -10vw;
+        top: -16vw;
+        background: radial-gradient(
+          circle at 50% 50%,
+          rgba(255, 143, 208, 0.55),
+          transparent 66%
+        );
+        animation: drift-a 26s var(--ease) infinite;
+      }
+      .bloom--cyan {
+        width: 48vw;
+        height: 48vw;
+        right: -8vw;
+        top: 4vw;
+        background: radial-gradient(
+          circle at 50% 50%,
+          rgba(116, 231, 255, 0.45),
+          transparent 64%
+        );
+        animation: drift-b 32s var(--ease) infinite;
+      }
+      .bloom--gold {
+        width: 44vw;
+        height: 44vw;
+        left: 32vw;
+        bottom: -22vw;
+        background: radial-gradient(
+          circle at 50% 50%,
+          rgba(255, 224, 138, 0.34),
+          transparent 64%
+        );
+        animation: drift-c 38s var(--ease) infinite;
+      }
+
+      /* lưới rất mờ — chỉ để có cấu trúc */
+      .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(242, 238, 248, 0.026) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            rgba(242, 238, 248, 0.026) 1px,
+            transparent 1px
+          );
+        background-size: 64px 64px;
+        mask-image: radial-gradient(
+          110% 90% at 50% 30%,
+          #000 30%,
+          transparent 80%
+        );
+      }
+
+      /* film grain analog — phủ nặng, mịn, hơi nhấp nháy */
+      .grain {
+        position: fixed;
+        inset: -50%;
+        z-index: 60;
+        pointer-events: none;
+        opacity: 0.19;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        animation: grain 1.1s steps(4) infinite;
+      }
+
+      /* ============================================================
+         SHELL / NAV
+         ============================================================ */
+      .stage {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding: clamp(22px, 3.4vw, 38px) var(--shell) clamp(46px, 6.5vh, 66px);
+      }
+
+      .nav {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+      .brand {
+        font-weight: 800;
+        font-size: 1.32rem;
+        letter-spacing: -0.03em;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand .mark {
+        width: 26px;
+        height: 26px;
+        border-radius: 9px;
+        background: var(--foil);
+        background-size: 220% 220%;
+        box-shadow: 0 0 22px rgba(255, 143, 208, 0.35);
+        animation: holo-pos 9s linear infinite;
+      }
+      .nav__links {
+        display: flex;
+        gap: clamp(20px, 2.4vw, 38px);
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+      .nav__links a {
+        position: relative;
+        padding: 4px 0;
+        transition: color 0.3s var(--ease);
+      }
+      .nav__links a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 100%;
+        height: 1px;
+        background: var(--foil);
+        background-size: 200% 100%;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s var(--ease);
+      }
+      .nav__links a:hover {
+        color: var(--ink);
+      }
+      .nav__links a:hover::after {
+        transform: scaleX(1);
+      }
+
+      /* nút de-stock — viền foil, hover sweep + arrow trượt */
+      .btn {
+        position: relative;
+        overflow: hidden;
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        letter-spacing: 0.04em;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        isolation: isolate;
+      }
+      .btn--ghost {
+        padding: 11px 20px;
+        border-radius: 999px;
+        color: var(--ink);
+        background: rgba(242, 238, 248, 0.04);
+        border: 1px solid var(--line);
+        transition:
+          border-color 0.4s var(--ease),
+          background 0.4s var(--ease),
+          transform 0.4s var(--ease);
+      }
+      .btn--ghost::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: var(--foil);
+        background-size: 220% 100%;
+        opacity: 0;
+        transition: opacity 0.45s var(--ease);
+        animation: holo-pos 7s linear infinite;
+      }
+      .btn--ghost:hover {
+        color: var(--base);
+        border-color: transparent;
+        transform: translateY(-1px);
+      }
+      .btn--ghost:hover::before {
+        opacity: 1;
+      }
+
+      /* ============================================================
+         HERO
+         ============================================================ */
+      .hero {
+        width: 100%;
+        max-width: var(--maxw);
+        margin: 0 auto;
+        flex: 1 1 auto;
+        min-height: clamp(460px, 60vh, 780px);
+        display: grid;
+        grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+        align-items: center;
+        gap: clamp(24px, 4vw, 70px);
+        padding: clamp(32px, 5vh, 76px) 0 clamp(28px, 4vh, 48px);
+      }
+
+      .copy {
+        position: relative;
+        z-index: 2;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 11px;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 7px 15px 7px 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(242, 238, 248, 0.03);
+      }
+      .tag .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--foil);
+        background-size: 220% 220%;
+        box-shadow: 0 0 12px rgba(116, 231, 255, 0.6);
+        animation: holo-pos 6s linear infinite;
+      }
+
+      h1 {
+        margin-top: 26px;
+        font-weight: 800;
+        font-size: clamp(2.9rem, 7.4vw, 5.8rem);
+        line-height: 0.98;
+        letter-spacing: -0.035em;
+        max-width: 13ch;
+      }
+      /* dòng 2 nhận lớp foil fill chuyển động nhẹ */
+      h1 .foil-text {
+        background: var(--foil);
+        background-size: 280% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        filter: saturate(1.05) brightness(1.08);
+        animation: holo-pos 11s linear infinite;
+      }
+      h1 .ln {
+        display: block;
+      }
+
+      .sub {
+        margin-top: 26px;
+        max-width: 46ch;
+        color: var(--muted);
+        font-size: clamp(1rem, 1.3vw, 1.12rem);
+        font-weight: 400;
+        line-height: 1.62;
+      }
+
+      .cta {
+        margin-top: 38px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+      /* primary — foil fill + sweep + arrow slide */
+      .btn--primary {
+        padding: 15px 26px;
+        border-radius: 999px;
+        color: var(--base);
+        font-weight: 700;
+        background: var(--foil);
+        background-size: 220% 100%;
+        box-shadow:
+          0 10px 30px -12px rgba(255, 143, 208, 0.6),
+          0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+        transition:
+          transform 0.4s var(--ease),
+          box-shadow 0.4s var(--ease);
+        animation: holo-pos 8s linear infinite;
+      }
+      .btn--primary::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(
+          110deg,
+          transparent 20%,
+          rgba(255, 255, 255, 0.85) 50%,
+          transparent 80%
+        );
+        transform: translateX(-130%);
+        transition: transform 0.7s var(--ease);
+      }
+      .btn--primary:hover {
+        transform: translateY(-2px);
+        box-shadow:
+          0 18px 44px -14px rgba(169, 140, 255, 0.7),
+          0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+      }
+      .btn--primary:hover::before {
+        transform: translateX(130%);
+      }
+      .btn--primary .arrow {
+        transition: transform 0.4s var(--ease);
+      }
+      .btn--primary:hover .arrow {
+        transform: translateX(5px);
+      }
+
+      /* secondary — hairline ghost, gạch chân foil khi hover */
+      .btn--link {
+        color: var(--ink);
+        font-size: 0.86rem;
+        padding: 13px 4px;
+      }
+      .btn--link::after {
+        content: "";
+        position: absolute;
+        left: 4px;
+        right: 4px;
+        bottom: 8px;
+        height: 1px;
+        background: var(--foil);
+        background-size: 200% 100%;
+        transform: scaleX(0.18);
+        opacity: 0.5;
+        transform-origin: left;
+        transition:
+          transform 0.4s var(--ease),
+          opacity 0.4s var(--ease);
+      }
+      .btn--link:hover::after {
+        transform: scaleX(1);
+        opacity: 1;
+      }
+
+      /* ============================================================
+         FOCAL — màng foil holographic (2D canvas) + glow + nhãn lệch trục
+         ============================================================ */
+      .focal {
+        position: relative;
+        height: 100%;
+        min-height: clamp(420px, 60vh, 720px);
+        display: grid;
+        place-items: center;
+      }
+      .focal__art {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform: rotate(-5deg);
+        will-change: transform;
+        animation: float 9s ease-in-out infinite;
+      }
+      /* quầng sáng foil sau màng */
+      .focal__art::before {
+        content: "";
+        position: absolute;
+        inset: 6% 4%;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle at 52% 46%,
+          rgba(169, 140, 255, 0.42),
+          rgba(116, 231, 255, 0.18) 42%,
+          transparent 70%
+        );
+        filter: blur(38px);
+        z-index: 0;
+      }
+      #membrane {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        filter: blur(0.3px) saturate(1.08);
+      }
+      /* nhãn nhỏ off-axis quanh focal */
+      .pin {
+        position: absolute;
+        font-family: var(--font-mono);
+        font-size: 0.64rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+      }
+      .pin::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--cyan);
+        box-shadow: 0 0 8px var(--cyan);
+      }
+      .pin--tl {
+        top: 8%;
+        left: 0;
+        transform: rotate(-3deg);
+      }
+      .pin--br {
+        bottom: 9%;
+        right: 2%;
+        transform: rotate(2deg);
+      }
+      .pin--br::before {
+        background: var(--pink);
+        box-shadow: 0 0 8px var(--pink);
+      }
+
+      /* ============================================================
+         STATS LEDGER — hàng hairline mềm
+         ============================================================ */
+      .ledger {
+        max-width: var(--maxw);
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line-soft);
+      }
+      .stat {
+        padding: 26px clamp(14px, 2vw, 30px) 28px;
+        position: relative;
+      }
+      .stat + .stat::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 22%;
+        height: 56%;
+        width: 1px;
+        background: var(--line-soft);
+      }
+      .stat__num {
+        font-weight: 700;
+        font-size: clamp(1.7rem, 2.8vw, 2.5rem);
+        letter-spacing: -0.03em;
+        line-height: 1;
+      }
+      /* một stat dùng foil — accent là hệ thống */
+      .stat__num.is-foil {
+        background: var(--foil);
+        background-size: 240% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        filter: brightness(1.1);
+        animation: holo-pos 10s linear infinite;
+      }
+      .stat__label {
+        margin-top: 12px;
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      /* badge cố định góc dưới trái */
+      .badge {
+        position: fixed;
+        left: 16px;
+        bottom: 14px;
+        z-index: 70;
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.1em;
+        color: var(--muted-2);
+        opacity: 0.8;
+      }
+
+      /* ============================================================
+         MOTION — entrance staggered
+         ============================================================ */
+      .rise {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: rise 1s var(--ease) forwards;
+      }
+      .d1 {
+        animation-delay: 0.05s;
+      }
+      .d2 {
+        animation-delay: 0.16s;
+      }
+      .d3 {
+        animation-delay: 0.28s;
+      }
+      .d4 {
+        animation-delay: 0.4s;
+      }
+      .d5 {
+        animation-delay: 0.52s;
+      }
+      .d6 {
+        animation-delay: 0.66s;
+      }
+
+      @keyframes rise {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes holo-pos {
+        to {
+          background-position: 280% 0;
+        }
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: rotate(-5deg) translateY(-10px);
+        }
+        50% {
+          transform: rotate(-4deg) translateY(12px);
+        }
+      }
+      @keyframes grain {
+        0% {
+          transform: translate(0, 0);
+        }
+        25% {
+          transform: translate(-6%, 4%);
+        }
+        50% {
+          transform: translate(5%, -5%);
+        }
+        75% {
+          transform: translate(-3%, -3%);
+        }
+        100% {
+          transform: translate(4%, 5%);
+        }
+      }
+      @keyframes drift-a {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(7vw, 5vw) scale(1.12);
+        }
+      }
+      @keyframes drift-b {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(-6vw, 8vw) scale(1.08);
+        }
+      }
+      @keyframes drift-c {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(-5vw, -7vw) scale(1.14);
+        }
+      }
+
+      /* ============================================================
+         RESPONSIVE — ≤720px tái dựng (không bóp méo)
+         ============================================================ */
+      @media (max-width: 720px) {
+        .nav__links {
+          display: none;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          min-height: 0;
+          gap: 8px;
+          padding-top: clamp(28px, 8vh, 56px);
+          text-align: left;
+        }
+        .focal {
+          order: 2;
+          min-height: 340px;
+          height: 340px;
+          margin-top: 18px;
+        }
+        h1 {
+          font-size: clamp(2.7rem, 13vw, 4rem);
+          max-width: 14ch;
+        }
+        .sub {
+          max-width: 100%;
+        }
+        .pin--tl {
+          top: 2%;
+        }
+        .pin--br {
+          bottom: 2%;
+        }
+        .ledger {
+          grid-template-columns: 1fr 1fr;
+          margin-top: 30px;
+        }
+        .stat:nth-child(3)::before,
+        .stat:nth-child(odd)::before {
+          display: none;
+        }
+        .stat:nth-child(even)::before {
+          display: block;
+        }
+        .stat:nth-child(3),
+        .stat:nth-child(4) {
+          border-top: 1px solid var(--line-soft);
+        }
+      }
+
+      /* ============================================================
+         REDUCED MOTION — tắt mọi chuyển động
+         ============================================================ */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+        .rise {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- nền nhiều lớp -->
+    <div class="bg" aria-hidden="true">
+      <div class="bloom bloom--pink"></div>
+      <div class="bloom bloom--cyan"></div>
+      <div class="bloom bloom--gold"></div>
+      <div class="grid"></div>
+    </div>
+
+    <div class="stage">
+      <!-- NAV -->
+      <header class="nav rise d1">
+        <a class="brand" href="#"><span class="mark"></span>Strata</a>
+        <nav class="nav__links">
+          <a href="#">Protocol</a>
+          <a href="#">Operators</a>
+          <a href="#">Yield</a>
+          <a href="#">Docs</a>
+        </nav>
+        <button class="btn btn--ghost">Launch app</button>
+      </header>
+
+      <!-- HERO -->
+      <main class="hero">
+        <div class="copy">
+          <span class="tag rise d2"
+            ><span class="dot"></span>Liquid restaking protocol</span
+          >
+          <h1 class="rise d3">
+            <span class="ln">Stake once.</span>
+            <span class="ln foil-text">Secure everything.</span>
+          </h1>
+          <p class="sub rise d4">
+            Restake your assets to extend trust across every network, validator,
+            and service — fully liquid, never locked. One position, compounding
+            security and yield.
+          </p>
+          <div class="cta rise d5">
+            <button class="btn btn--primary">
+              Start restaking <span class="arrow">→</span>
+            </button>
+            <button class="btn btn--link">Read the docs</button>
+          </div>
+        </div>
+
+        <div class="focal rise d4" aria-hidden="true">
+          <span class="pin pin--tl">Foil membrane</span>
+          <div class="focal__art">
+            <canvas id="membrane"></canvas>
+          </div>
+          <span class="pin pin--br">Restaked trust · live</span>
+        </div>
+      </main>
+
+      <!-- STATS LEDGER -->
+      <section class="ledger rise d6">
+        <div class="stat">
+          <div class="stat__num">$4.2B</div>
+          <div class="stat__label">Total value restaked</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num">62</div>
+          <div class="stat__label">AVS secured</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num">310</div>
+          <div class="stat__label">Active operators</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num is-foil">5.8%</div>
+          <div class="stat__label">Avg. restaking APR</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- grain phủ toàn màn -->
+    <div class="grain" aria-hidden="true"></div>
+
+    <!-- badge cố định -->
+    <div class="badge">Direction D — Holographic Membrane · gu specimen</div>
+
+    <script>
+      // ============================================================
+      // FOCAL: màng foil holographic vẽ bằng 2D canvas
+      //  - blob hữu cơ (không cạnh sắc), đổ gradient foil cuộn phase
+      //  - nếp gấp bắt sáng undulate + specular trôi → tấm foil đang chảy
+      // ============================================================
+      (function () {
+        const canvas = document.getElementById("membrane");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        const reduce = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+
+        // bảng màu foil — pink → violet → cyan → gold (lặp vòng)
+        const holo = [
+          [255, 143, 208],
+          [169, 140, 255],
+          [116, 231, 255],
+          [255, 224, 138],
+        ];
+        const lerp = (a, b, f) => a + (b - a) * f;
+        function holoAt(t) {
+          t = ((t % 1) + 1) % 1;
+          const seg = t * holo.length;
+          const i = Math.floor(seg);
+          const f = seg - i;
+          const a = holo[i % holo.length];
+          const b = holo[(i + 1) % holo.length];
+          return (
+            "rgb(" +
+            Math.round(lerp(a[0], b[0], f)) +
+            "," +
+            Math.round(lerp(a[1], b[1], f)) +
+            "," +
+            Math.round(lerp(a[2], b[2], f)) +
+            ")"
+          );
+        }
+
+        let W = 0,
+          H = 0,
+          dpr = 1;
+        function resize() {
+          const r = canvas.getBoundingClientRect();
+          dpr = Math.min(window.devicePixelRatio || 1, 2);
+          W = r.width || 520;
+          H = r.height || 640;
+          canvas.width = Math.round(W * dpr);
+          canvas.height = Math.round(H * dpr);
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        // sinh điểm viền blob hữu cơ (radius biến thiên theo góc + thời gian)
+        function blobPoints(cx, cy, rx, ry, t) {
+          const N = 16;
+          const pts = [];
+          for (let i = 0; i < N; i++) {
+            const a = (i / N) * Math.PI * 2;
+            const w =
+              1 +
+              0.09 * Math.sin(a * 3 + t * 0.5) +
+              0.05 * Math.sin(a * 5 - t * 0.35) +
+              0.04 * Math.sin(a * 2 + t * 0.2);
+            pts.push([cx + Math.cos(a) * rx * w, cy + Math.sin(a) * ry * w]);
+          }
+          return pts;
+        }
+        // nối điểm thành đường cong khép kín mượt (quadratic qua trung điểm)
+        function tracePath(pts) {
+          const n = pts.length;
+          ctx.beginPath();
+          const m0 = [
+            (pts[n - 1][0] + pts[0][0]) / 2,
+            (pts[n - 1][1] + pts[0][1]) / 2,
+          ];
+          ctx.moveTo(m0[0], m0[1]);
+          for (let i = 0; i < n; i++) {
+            const p1 = pts[i];
+            const p2 = pts[(i + 1) % n];
+            const m = [(p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2];
+            ctx.quadraticCurveTo(p1[0], p1[1], m[0], m[1]);
+          }
+          ctx.closePath();
+        }
+
+        function draw(timeMs) {
+          const t = timeMs * 0.0006;
+          ctx.clearRect(0, 0, W, H);
+
+          const cx = W * 0.52;
+          const cy = H * 0.5;
+          const rx = Math.min(W, H) * 0.4;
+          const ry = Math.min(W, H) * 0.46;
+          const phase = t * 0.12;
+
+          const pts = blobPoints(cx, cy, rx, ry, t);
+
+          ctx.save();
+          tracePath(pts);
+          ctx.clip();
+
+          // 1) nền foil — gradient chéo, phase cuộn → đổi sắc óng ánh
+          const g = ctx.createLinearGradient(
+            cx - rx,
+            cy - ry,
+            cx + rx,
+            cy + ry,
+          );
+          const S = 8;
+          for (let k = 0; k <= S; k++) {
+            g.addColorStop(k / S, holoAt(k / S + phase));
+          }
+          ctx.globalAlpha = 0.92;
+          ctx.fillStyle = g;
+          ctx.fillRect(0, 0, W, H);
+          ctx.globalAlpha = 1;
+
+          // 2) vignette mềm phía rìa → mép màng tan dần (soft, không chamfer)
+          const vg = ctx.createRadialGradient(
+            cx,
+            cy,
+            rx * 0.2,
+            cx,
+            cy,
+            rx * 1.18,
+          );
+          vg.addColorStop(0, "rgba(12,10,18,0)");
+          vg.addColorStop(0.68, "rgba(12,10,18,0)");
+          vg.addColorStop(1, "rgba(12,10,18,0.9)");
+          ctx.fillStyle = vg;
+          ctx.fillRect(0, 0, W, H);
+
+          // 3) nếp gấp bắt sáng — các dải sin undulate, blur, cộng sáng
+          ctx.globalCompositeOperation = "lighter";
+          const bands = 7;
+          for (let j = 0; j < bands; j++) {
+            const yy = cy + (j - (bands - 1) / 2) * (ry * 0.27);
+            ctx.beginPath();
+            const x0 = cx - rx * 1.25;
+            const x1 = cx + rx * 1.25;
+            for (let x = x0; x <= x1; x += 6) {
+              const wave =
+                Math.sin(x * 0.012 + t * 1.1 + j * 0.9) * ry * 0.1 +
+                Math.sin(x * 0.03 - t * 0.7 + j * 1.7) * ry * 0.04;
+              const y = yy + wave;
+              if (x === x0) ctx.moveTo(x, y);
+              else ctx.lineTo(x, y);
+            }
+            const col = holoAt(0.1 * j + phase * 2 + 0.15);
+            ctx.strokeStyle = col;
+            ctx.globalAlpha = 0.16;
+            ctx.lineWidth = ry * 0.13;
+            ctx.shadowColor = col;
+            ctx.shadowBlur = 26;
+            ctx.stroke();
+          }
+          ctx.shadowBlur = 0;
+          ctx.globalAlpha = 1;
+
+          // 4) specular trôi theo quỹ đạo Lissajous → ánh sáng lướt trên foil
+          const sx = cx + Math.cos(t * 0.6) * rx * 0.5;
+          const sy = cy + Math.sin(t * 0.8) * ry * 0.42;
+          const sg = ctx.createRadialGradient(sx, sy, 0, sx, sy, rx * 0.72);
+          sg.addColorStop(0, "rgba(255,255,255,0.46)");
+          sg.addColorStop(0.4, "rgba(255,255,255,0.1)");
+          sg.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.fillStyle = sg;
+          ctx.fillRect(0, 0, W, H);
+
+          ctx.globalCompositeOperation = "source-over";
+          ctx.restore();
+
+          // 5) viền sheen mảnh quanh màng (blur nhẹ) → ánh foil ở mép
+          ctx.save();
+          tracePath(blobPoints(cx, cy, rx, ry, t));
+          const rim = holoAt(phase + 0.5);
+          ctx.strokeStyle = rim;
+          ctx.globalAlpha = 0.5;
+          ctx.lineWidth = 1.4;
+          ctx.shadowColor = rim;
+          ctx.shadowBlur = 18;
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        let raf = 0;
+        function loop(ts) {
+          draw(ts);
+          raf = requestAnimationFrame(loop);
+        }
+        function start() {
+          resize();
+          if (reduce) {
+            draw(4200); // 1 frame tĩnh — hoạ tiết đã phát triển
+          } else {
+            cancelAnimationFrame(raf);
+            raf = requestAnimationFrame(loop);
+          }
+        }
+        window.addEventListener("resize", () => {
+          resize();
+          if (reduce) draw(4200);
+        });
+        start();
+      })();
+    </script>
+  </body>
+</html>

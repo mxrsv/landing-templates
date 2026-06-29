@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Strata · Lane C — token draft v2 (Liquid Caustics)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ============================================================
+       LANE C — "Liquid Caustics" · TOKEN DRAFT v2
+       Áp các fix từ review (uiReviewer + brandReviewer + inline).
+       Values vẫn SOFT; cấu trúc là contract.
+       ============================================================ */
+      :root {
+        /* ---- Surfaces (reconciled với demo) ---- */
+        --c-void: #010a0e; /* deepest / vignette (reconciled)   */
+        --c-surface-0: #03141a; /* page base                         */
+        --c-surface-1: #06222b; /* raised panel                      */
+        --c-surface-2: #0a2e39; /* card                              */
+        --c-surface-3: #103a47; /* elevated / hover                  */
+        /* panel wash mang chất caustic — surface không còn phẳng chết  */
+        --c-surface-grad:
+          radial-gradient(
+            120% 140% at 80% -20%,
+            rgba(54, 162, 255, 0.1),
+            transparent 55%
+          ),
+          radial-gradient(
+            90% 120% at 0% 120%,
+            rgba(47, 247, 224, 0.06),
+            transparent 60%
+          );
+
+        /* ---- Ink (ink-3 FIXED 3.4:1 → ~5.4:1) ---- */
+        --c-ink-0: #e6fbf7;
+        --c-ink-1: #b8d4ce;
+        --c-ink-2: #7fa6a0;
+        --c-ink-3: #6b918a; /* was #4e6e69 — nay đọc được cho label  */
+
+        /* ---- Accent ---- */
+        --c-accent: #2ff7e0; /* aqua gốc (utility: focus + 1 status dot) */
+        --c-accent-nudge: #33ecc9; /* ĐỀ XUẤT nudge khỏi tron-cyan (so sánh ↓) */
+        --c-accent-2: #36a2ff; /* electric blue            */
+        --c-accent-3: #8a5cff; /* violet (reconciled #8a5cff) */
+        --c-accent-ink: #021014; /* ink ON accent (reconciled) */
+        --c-accent-soft: rgba(47, 247, 224, 0.12); /* chip/active/hover bg */
+        /* THE mark = refraction gradient; flat cyan bị giáng xuống utility */
+        --c-grad-text: linear-gradient(
+          104deg,
+          #2ff7e0 0%,
+          #36a2ff 52%,
+          #8a5cff 100%
+        ); /* headline 3-stop */
+        --c-grad-fill: linear-gradient(
+          120deg,
+          #2ff7e0 0%,
+          #36a2ff 100%
+        ); /* nút 2-stop      */
+
+        /* ---- Lines ---- */
+        --c-line: rgba(230, 251, 247, 0.1);
+        --c-line-soft: rgba(230, 251, 247, 0.06);
+        --c-line-accent: rgba(47, 247, 224, 0.22);
+
+        /* ---- Type ---- */
+        --c-font-display: "General Sans", "Manrope", system-ui, sans-serif;
+        --c-font-mono: "Space Mono", ui-monospace, monospace;
+        --c-tracking-display: 0.004em; /* mở nhẹ (khớp demo) */
+        --c-tracking-tight: -0.01em;
+        --c-tracking-label: 0.2em;
+        --c-lh-tight: 1;
+        --c-lh-snug: 1.15;
+        --c-lh-body: 1.65;
+        --c-measure: 64ch;
+
+        /* ---- Spacing ---- */
+        --c-s1: 4px;
+        --c-s2: 8px;
+        --c-s3: 12px;
+        --c-s4: 16px;
+        --c-s5: 24px;
+        --c-s6: 32px;
+        --c-s7: 48px;
+        --c-s8: 64px;
+        --c-s9: 96px;
+        --c-s10: 128px;
+        --c-gutter: clamp(20px, 5.2vw, 88px);
+        --c-section-y: clamp(80px, 12vh, 160px);
+        --c-maxw: 1240px;
+
+        /* ---- Edge / radius (organic system) ---- */
+        --c-r-control: 12px; /* nút / input             */
+        --c-r-card: 14px; /* card / panel            */
+        --c-r-lg: 24px;
+        --c-r-pill: 999px;
+        --c-r-fluid: 42% 58% 55% 45% / 50% 45% 55% 50%; /* blob A */
+        --c-r-fluid-2: 60% 40% 38% 62% / 45% 58% 42% 55%; /* blob B */
+        --c-r-organic-card: 14px 14px 14px 30px; /* card góc bất đối xứng */
+        --c-control-h: 50px;
+        --c-control-pad: 16px 26px;
+
+        /* ---- Elevation ---- */
+        --c-shadow-1: 0 2px 22px rgba(1, 10, 14, 0.5); /* tint thay đen thuần */
+        --c-shadow-2: 0 16px 50px rgba(1, 10, 14, 0.6);
+        --c-glow: 0 0 60px rgba(47, 247, 224, 0.35); /* halo focal */
+        --c-glow-lift: 0 14px 40px -12px rgba(47, 247, 224, 0.5); /* CTA/card nhấc */
+
+        /* ---- States / a11y / system ---- */
+        --c-focus: 0 0 0 2px var(--c-surface-0), 0 0 0 4px var(--c-accent);
+        --c-select-bg: rgba(47, 247, 224, 0.26);
+        --c-glass-bg: rgba(3, 20, 26, 0.55);
+        --c-glass-blur: blur(8px);
+        --c-positive: #45e0a0;
+        --c-warning: #ffb454;
+        --c-danger: #ff6b7a;
+        --c-z-base: 1;
+        --c-z-nav: 30;
+        --c-z-overlay: 100;
+        --c-z-toast: 200;
+
+        /* ---- Motion ---- */
+        --c-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+        --c-ease-fluid: cubic-bezier(0.65, 0.05, 0.36, 1);
+        --c-dur-fast: 0.25s;
+        --c-dur: 0.45s;
+        --c-dur-slow: 0.9s;
+
+        /* ---- Caustic primitive (signature systematized) ---- */
+        --c-caustic-1: rgba(47, 247, 224, 0.16);
+        --c-caustic-2: rgba(54, 162, 255, 0.14);
+        --c-caustic-3: rgba(138, 92, 255, 0.1);
+      }
+
+      ::selection {
+        background: var(--c-select-bg);
+        color: var(--c-ink-0);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--c-surface-grad), var(--c-surface-0);
+        color: var(--c-ink-1);
+        font-family: var(--c-font-display);
+        -webkit-font-smoothing: antialiased;
+        padding: var(--c-gutter);
+        min-height: 100vh;
+      }
+      .wrap {
+        max-width: var(--c-maxw);
+        margin: 0 auto;
+      }
+
+      .doc-head {
+        margin-bottom: var(--c-s9);
+      }
+      .doc-eyebrow {
+        font-family: var(--c-font-mono);
+        font-size: 0.72rem;
+        letter-spacing: var(--c-tracking-label);
+        text-transform: uppercase;
+        color: var(--c-accent);
+        display: inline-flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .doc-eyebrow::before {
+        content: "";
+        width: 28px;
+        height: 1px;
+        background: var(--c-accent);
+      }
+      .doc-title {
+        font-size: clamp(2rem, 4.4vw, 3.2rem);
+        font-weight: 600;
+        letter-spacing: var(--c-tracking-tight);
+        color: var(--c-ink-0);
+        margin-top: var(--c-s4);
+        line-height: var(--c-lh-tight);
+      }
+      .doc-note {
+        color: var(--c-ink-2);
+        margin-top: var(--c-s4);
+        max-width: var(--c-measure);
+        line-height: 1.6;
+        font-size: 0.98rem;
+      }
+      .pill-tag {
+        display: inline-block;
+        margin-top: var(--c-s4);
+        font-family: var(--c-font-mono);
+        font-size: 0.66rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--c-accent);
+        background: var(--c-accent-soft);
+        border: 1px solid var(--c-line-accent);
+        border-radius: var(--c-r-pill);
+        padding: 5px 12px;
+      }
+
+      .sec {
+        margin-bottom: var(--c-s9);
+      }
+      .sec__h {
+        font-family: var(--c-font-mono);
+        font-size: 0.76rem;
+        letter-spacing: var(--c-tracking-label);
+        text-transform: uppercase;
+        color: var(--c-ink-2);
+        padding-bottom: var(--c-s3);
+        margin-bottom: var(--c-s6);
+        border-bottom: 1px solid var(--c-line);
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+      .sec__h b {
+        color: var(--c-ink-0);
+        font-weight: 600;
+      }
+      .fix {
+        color: var(--c-positive);
+        font-family: var(--c-font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.1em;
+      }
+
+      /* swatches */
+      .swatches {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: var(--c-s4);
+      }
+      .sw {
+        border-radius: var(--c-r-card);
+        overflow: hidden;
+        border: 1px solid var(--c-line);
+      }
+      .sw__chip {
+        height: 84px;
+      }
+      .sw__meta {
+        padding: 10px 12px;
+        background: var(--c-surface-1);
+      }
+      .sw__name {
+        font-family: var(--c-font-mono);
+        font-size: 0.72rem;
+        color: var(--c-ink-1);
+      }
+      .sw__val {
+        font-family: var(--c-font-mono);
+        font-size: 0.66rem;
+        color: var(--c-ink-3);
+        margin-top: 2px;
+      }
+
+      /* accent compare */
+      .compare {
+        display: flex;
+        gap: var(--c-s5);
+        flex-wrap: wrap;
+        margin-top: var(--c-s5);
+      }
+      .compare > div {
+        flex: 1;
+        min-width: 220px;
+        border: 1px solid var(--c-line);
+        border-radius: var(--c-r-card);
+        overflow: hidden;
+      }
+      .compare .bar {
+        height: 64px;
+      }
+      .compare .cap {
+        padding: 10px 14px;
+        background: var(--c-surface-1);
+        font-family: var(--c-font-mono);
+        font-size: 0.7rem;
+        color: var(--c-ink-2);
+      }
+      .compare .cap b {
+        color: var(--c-ink-0);
+      }
+
+      /* type scale */
+      .type-row {
+        display: grid;
+        grid-template-columns: 170px 1fr;
+        gap: var(--c-s5);
+        align-items: baseline;
+        padding: var(--c-s4) 0;
+        border-bottom: 1px dashed var(--c-line-soft);
+      }
+      .type-tag {
+        font-family: var(--c-font-mono);
+        font-size: 0.66rem;
+        color: var(--c-ink-3);
+        letter-spacing: 0.06em;
+      }
+      .t-display {
+        font-size: clamp(2.9rem, 6.6vw, 5.7rem);
+        font-weight: 600;
+        letter-spacing: var(--c-tracking-display);
+        line-height: var(--c-lh-tight);
+        color: var(--c-ink-0);
+      }
+      .t-h2 {
+        font-size: clamp(2rem, 3.6vw, 3rem);
+        font-weight: 600;
+        letter-spacing: var(--c-tracking-tight);
+        line-height: var(--c-lh-snug);
+        color: var(--c-ink-0);
+      }
+      .t-h3 {
+        font-size: clamp(1.3rem, 2vw, 1.6rem);
+        font-weight: 600;
+        color: var(--c-ink-0);
+      }
+      .t-body-lg {
+        font-size: clamp(1rem, 1.3vw, 1.12rem);
+        font-weight: 400;
+        line-height: 1.6;
+        color: var(--c-ink-1);
+      }
+      .t-body {
+        font-size: 1rem;
+        line-height: var(--c-lh-body);
+        color: var(--c-ink-1);
+        max-width: var(--c-measure);
+      }
+      .t-eyebrow {
+        font-family: var(--c-font-mono);
+        font-size: 0.75rem;
+        letter-spacing: var(--c-tracking-label);
+        text-transform: uppercase;
+        color: var(--c-accent);
+      }
+      /* stat = General Sans + tabular (KHÔNG mono — khớp demo) */
+      .t-stat {
+        font-family: var(--c-font-display);
+        font-weight: 600;
+        font-size: clamp(1.8rem, 3vw, 2.6rem);
+        color: var(--c-ink-0);
+        font-variant-numeric: tabular-nums;
+        font-feature-settings: "tnum", "zero";
+      }
+
+      /* edges + elevation */
+      .tiles {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: var(--c-s5);
+      }
+      .tile {
+        background: var(--c-surface-2);
+        border: 1px solid var(--c-line);
+        height: 120px;
+        display: grid;
+        place-items: center;
+        text-align: center;
+      }
+      .tile span {
+        font-family: var(--c-font-mono);
+        font-size: 0.66rem;
+        color: var(--c-ink-2);
+        padding: 0 8px;
+      }
+      .r-control {
+        border-radius: var(--c-r-control);
+      }
+      .r-card {
+        border-radius: var(--c-r-card);
+      }
+      .r-lg {
+        border-radius: var(--c-r-lg);
+      }
+      .r-pill {
+        border-radius: var(--c-r-pill);
+      }
+      .r-fluid {
+        border-radius: var(--c-r-fluid);
+        background: var(--c-grad-fill);
+      }
+      .r-fluid2 {
+        border-radius: var(--c-r-fluid-2);
+        background: var(--c-grad-text);
+      }
+      .r-org {
+        border-radius: var(--c-r-organic-card);
+      }
+      .e-1 {
+        box-shadow: var(--c-shadow-1);
+      }
+      .e-2 {
+        box-shadow: var(--c-shadow-2);
+      }
+      .e-glow {
+        box-shadow: var(--c-glow);
+        border-color: var(--c-line-accent);
+      }
+      .e-lift {
+        box-shadow: var(--c-glow-lift);
+        border-color: var(--c-line-accent);
+      }
+
+      /* buttons — KHỚP demo: primary soft-rect General Sans sentence-case, secondary underline link */
+      .btns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--c-s5);
+        align-items: center;
+      }
+      .btn-primary {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--c-font-display);
+        font-weight: 600;
+        font-size: 1rem;
+        letter-spacing: 0;
+        cursor: pointer;
+        color: var(--c-accent-ink);
+        background: var(--c-grad-fill);
+        border: 0;
+        padding: var(--c-control-pad);
+        border-radius: var(--c-r-control);
+        transition:
+          transform var(--c-dur) var(--c-ease),
+          box-shadow var(--c-dur) var(--c-ease);
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--c-glow-lift);
+      }
+      .btn-primary .ar {
+        transition: transform var(--c-dur) var(--c-ease);
+      }
+      .btn-primary:hover .ar {
+        transform: translateX(5px);
+      }
+      .btn-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        background: none;
+        border: 0;
+        font-family: var(--c-font-display);
+        font-weight: 500;
+        font-size: 1rem;
+        color: var(--c-ink-0);
+        padding: 6px 2px;
+        position: relative;
+      }
+      .btn-link::after {
+        content: "";
+        position: absolute;
+        left: 2px;
+        right: 2px;
+        bottom: 0;
+        height: 1px;
+        background: var(--c-accent);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform var(--c-dur) var(--c-ease);
+      }
+      .btn-link:hover::after {
+        transform: scaleX(1);
+      }
+      .btn-focusdemo {
+        font-family: var(--c-font-mono);
+        font-size: 0.74rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--c-ink-1);
+        background: var(--c-surface-2);
+        border: 1px solid var(--c-line);
+        border-radius: var(--c-r-control);
+        padding: 14px 20px;
+        box-shadow: var(--c-focus);
+      }
+
+      /* motion easings */
+      .ease-row {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: var(--c-s5);
+        align-items: center;
+        padding: var(--c-s4) 0;
+      }
+      .ease-tag {
+        font-family: var(--c-font-mono);
+        font-size: 0.7rem;
+        color: var(--c-ink-2);
+      }
+      .track {
+        height: 14px;
+        background: var(--c-surface-1);
+        border-radius: var(--c-r-pill);
+        position: relative;
+        overflow: hidden;
+      }
+      .dot {
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--c-accent);
+        box-shadow: var(--c-glow);
+      }
+      @keyframes slideStd {
+        0% {
+          left: 1px;
+        }
+        50% {
+          left: calc(100% - 13px);
+        }
+        100% {
+          left: 1px;
+        }
+      }
+      .dot.std {
+        animation: slideStd 2.4s var(--c-ease) infinite;
+      }
+      .dot.fluid {
+        animation: slideStd 2.4s var(--c-ease-fluid) infinite;
+      }
+
+      /* SIGNATURE — caustic field primitive + refraction split */
+      .sig {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--c-s5);
+      }
+      @media (max-width: 720px) {
+        .sig {
+          grid-template-columns: 1fr;
+        }
+      }
+      .caustic-field {
+        position: relative;
+        height: 220px;
+        border-radius: var(--c-r-card);
+        overflow: hidden;
+        border: 1px solid var(--c-line-accent);
+        background: var(--c-surface-1);
+      }
+      .caustic-field::before,
+      .caustic-field::after {
+        content: "";
+        position: absolute;
+        inset: -30%;
+        background:
+          radial-gradient(
+            28% 22% at 30% 35%,
+            var(--c-caustic-1),
+            transparent 60%
+          ),
+          radial-gradient(
+            24% 20% at 70% 55%,
+            var(--c-caustic-2),
+            transparent 60%
+          ),
+          radial-gradient(
+            30% 24% at 50% 80%,
+            var(--c-caustic-3),
+            transparent 60%
+          );
+        filter: blur(18px);
+        animation: drift 12s var(--c-ease-fluid) infinite alternate;
+      }
+      .caustic-field::after {
+        animation-duration: 9s;
+        animation-direction: alternate-reverse;
+        opacity: 0.7;
+      }
+      .caustic-field span {
+        position: absolute;
+        left: 16px;
+        bottom: 14px;
+        z-index: 2;
+        font-family: var(--c-font-mono);
+        font-size: 0.64rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--c-ink-2);
+      }
+      @keyframes drift {
+        0% {
+          transform: translate(-4%, -2%) scale(1);
+        }
+        100% {
+          transform: translate(5%, 3%) scale(1.12);
+        }
+      }
+      .refract {
+        display: grid;
+        place-items: center;
+        height: 220px;
+        border-radius: var(--c-r-card);
+        border: 1px solid var(--c-line);
+        background: var(--c-surface-1);
+        position: relative;
+        overflow: hidden;
+      }
+      .refract h4 {
+        font-size: clamp(1.6rem, 3vw, 2.4rem);
+        font-weight: 600;
+        letter-spacing: var(--c-tracking-tight);
+        background: var(--c-grad-text);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .refract small {
+        position: absolute;
+        bottom: 14px;
+        left: 16px;
+        font-family: var(--c-font-mono);
+        font-size: 0.64rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--c-ink-3);
+      }
+
+      /* system tokens demo */
+      .sys {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--c-s5);
+        align-items: center;
+      }
+      .chip {
+        font-family: var(--c-font-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        color: var(--c-accent);
+        background: var(--c-accent-soft);
+        border: 1px solid var(--c-line-accent);
+        border-radius: var(--c-r-pill);
+        padding: 7px 14px;
+      }
+      .glass {
+        background: var(--c-glass-bg);
+        -webkit-backdrop-filter: var(--c-glass-blur);
+        backdrop-filter: var(--c-glass-blur);
+        border: 1px solid var(--c-line);
+        border-radius: var(--c-r-control);
+        padding: 12px 18px;
+        font-size: 0.85rem;
+        color: var(--c-ink-1);
+      }
+      .state {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--c-font-mono);
+        font-size: 0.72rem;
+        color: var(--c-ink-2);
+      }
+      .state i {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+        }
+      }
+      @media (max-width: 720px) {
+        .type-row,
+        .ease-row {
+          grid-template-columns: 1fr;
+          gap: var(--c-s2);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="doc-head">
+        <span class="doc-eyebrow">Phase 1 · token draft v2</span>
+        <h1 class="doc-title">Lane C — Liquid Caustics</h1>
+        <p class="doc-note">
+          Đã áp các fix từ review: a11y, reconcile drift với demo, khớp ngôn ngữ
+          nút/stat, tách gradient, thêm token hệ thống, và
+          <b style="color: var(--c-ink-1)">systematize caustics + refraction</b>
+          thành primitive. Giá trị màu/accent vẫn soft.
+        </p>
+        <span class="pill-tag">v2 · applied review</span>
+      </header>
+
+      <!-- ACCENT DECISION -->
+      <section class="sec">
+        <div class="sec__h">
+          <b>00 — Accent decision</b><span>brand: thoát "tron-cyan"</span>
+        </div>
+        <p class="doc-note" style="margin-top: 0">
+          Chọn 1 trong 2 cho
+          <code style="color: var(--c-accent)">--c-accent</code>. Dù chọn cái
+          nào,
+          <b style="color: var(--c-ink-1)">flat cyan bị giáng xuống utility</b>
+          (focus ring + 1 status dot); mọi brand moment dùng gradient
+          refraction.
+        </p>
+        <div class="compare">
+          <div>
+            <div class="bar" style="background: #2ff7e0"></div>
+            <div class="cap">
+              <b>A · giữ gốc</b> · #2ff7e0 (aqua neon, sát tron-cyan)
+            </div>
+          </div>
+          <div>
+            <div class="bar" style="background: #33ecc9"></div>
+            <div class="cap">
+              <b>B · nudge (đề xuất)</b> · #33ecc9 (ngả teal-jade, bớt neon)
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PALETTE -->
+      <section class="sec">
+        <div class="sec__h">
+          <b>01 — Palette</b
+          ><span
+            >surfaces · ink · accent <span class="fix">ink-3 FIXED</span></span
+          >
+        </div>
+        <div class="swatches">
+          <div class="sw">
+            <div class="sw__chip" style="background: var(--c-void)"></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-void</div>
+              <div class="sw__val">#010a0e</div>
+            </div>
+          </div>
+          <div class="sw">
+            <div class="sw__chip" style="background: var(--c-surface-0)"></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-surface-0</div>
+              <div class="sw__val">#03141a · base</div>
+            </div>
+          </div>
+          <div class="sw">
+            <div class="sw__chip" style="background: var(--c-surface-1)"></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-surface-1</div>
+              <div class="sw__val">#06222b</div>
+            </div>
+          </div>
+          <div class="sw">
+            <div class="sw__chip" style="background: var(--c-surface-2)"></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-surface-2</div>
+              <div class="sw__val">#0a2e39</div>
+            </div>
+          </div>
+          <div class="sw">
+            <div class="sw__chip" style="background: var(--c-surface-3)"></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-surface-3</div>
+              <div class="sw__val">#103a47</div>
+            </div>
+          </div>
+          <div class="sw">
+            <div class="sw__chip" style="background: var(--c-ink-0)"></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-ink-0</div>
+              <div class="sw__val">#e6fbf7 · head</div>
+            </div>
+          </div>
+          <div class="sw">
+            <div class="sw__chip" style="background: var(--c-ink-1)"></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-ink-1</div>
+              <div class="sw__val">#b8d4ce · body</div>
+            </div>
+          </div>
+          <div class="sw">
+            <div class="sw__chip" style="background: var(--c-ink-2)"></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-ink-2</div>
+              <div class="sw__val">#7fa6a0 · muted</div>
+            </div>
+          </div>
+          <div class="sw">
+            <div class="sw__chip" style="background: var(--c-ink-3)"></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-ink-3</div>
+              <div class="sw__val">#6b918a · label 5.4:1</div>
+            </div>
+          </div>
+          <div class="sw">
+            <div class="sw__chip" style="background: var(--c-accent)"></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-accent</div>
+              <div class="sw__val">#2ff7e0 · utility</div>
+            </div>
+          </div>
+          <div class="sw">
+            <div class="sw__chip" style="background: var(--c-accent-2)"></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-accent-2</div>
+              <div class="sw__val">#36a2ff</div>
+            </div>
+          </div>
+          <div class="sw">
+            <div class="sw__chip" style="background: var(--c-accent-3)"></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-accent-3</div>
+              <div class="sw__val">#8a5cff · violet</div>
+            </div>
+          </div>
+          <div class="sw">
+            <div class="sw__chip" style="background: var(--c-grad-text)"></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-grad-text</div>
+              <div class="sw__val">3-stop · headline</div>
+            </div>
+          </div>
+          <div class="sw">
+            <div class="sw__chip" style="background: var(--c-grad-fill)"></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-grad-fill</div>
+              <div class="sw__val">2-stop · nút</div>
+            </div>
+          </div>
+          <div class="sw">
+            <div
+              class="sw__chip"
+              style="background: var(--c-accent-soft)"
+            ></div>
+            <div class="sw__meta">
+              <div class="sw__name">--c-accent-soft</div>
+              <div class="sw__val">tint · chip/active</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TYPE -->
+      <section class="sec">
+        <div class="sec__h">
+          <b>02 — Typography</b
+          ><span
+            >General Sans · Space Mono
+            <span class="fix">tracking/stat KHỚP demo</span></span
+          >
+        </div>
+        <div class="type-row">
+          <div class="type-tag">display / H1<br />600 · +.004em (mở)</div>
+          <div class="t-display">Stake once.</div>
+        </div>
+        <div class="type-row">
+          <div class="type-tag">H2 · section<br />600 · -.01em</div>
+          <div class="t-h2">Secure everything</div>
+        </div>
+        <div class="type-row">
+          <div class="type-tag">H3<br />600</div>
+          <div class="t-h3">Restake, never locked</div>
+        </div>
+        <div class="type-row">
+          <div class="type-tag">body-lg · sub<br />fluid · 1.6</div>
+          <div class="t-body-lg">
+            Extend trust across every network, validator, and service — fully
+            liquid.
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="type-tag">body<br />400 · 1.65 · 64ch</div>
+          <div class="t-body">
+            One position, compounding security and yield across the whole stack.
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="type-tag">eyebrow · mono<br />.2em · upper</div>
+          <div class="t-eyebrow">Liquid restaking protocol</div>
+        </div>
+        <div class="type-row">
+          <div class="type-tag">
+            stat · General Sans<br />600 · tabular-nums
+          </div>
+          <div class="t-stat">
+            $4.2B&nbsp;&nbsp;62&nbsp;&nbsp;310&nbsp;&nbsp;5.8%
+          </div>
+        </div>
+      </section>
+
+      <!-- EDGES + ELEVATION -->
+      <section class="sec">
+        <div class="sec__h">
+          <b>03 — Edge &amp; elevation</b
+          ><span
+            >organic system · glow-lift
+            <span class="fix">+r-card/control, glow-lift</span></span
+          >
+        </div>
+        <div class="tiles">
+          <div class="tile r-control"><span>r-control · 12</span></div>
+          <div class="tile r-card"><span>r-card · 14</span></div>
+          <div class="tile r-org"><span>r-organic-card</span></div>
+          <div class="tile r-lg"><span>r-lg · 24</span></div>
+          <div class="tile r-pill"><span>r-pill</span></div>
+          <div class="tile r-fluid">
+            <span style="color: var(--c-accent-ink)">r-fluid A</span>
+          </div>
+          <div class="tile r-fluid2">
+            <span style="color: var(--c-accent-ink)">r-fluid B</span>
+          </div>
+          <div class="tile e-1"><span>shadow-1 (tint)</span></div>
+          <div class="tile e-glow"><span>glow (halo)</span></div>
+          <div class="tile e-lift"><span>glow-lift (CTA)</span></div>
+        </div>
+      </section>
+
+      <!-- BUTTONS -->
+      <section class="sec">
+        <div class="sec__h">
+          <b>04 — Buttons &amp; states</b
+          ><span
+            >khớp gu demo + focus ring <span class="fix">reconciled</span></span
+          >
+        </div>
+        <div class="btns">
+          <button class="btn-primary">
+            Start restaking <span class="ar">→</span>
+          </button>
+          <button class="btn-link">Read the docs →</button>
+          <button class="btn-focusdemo">Focus ring</button>
+        </div>
+      </section>
+
+      <!-- SIGNATURE -->
+      <section class="sec">
+        <div class="sec__h">
+          <b>05 — Signature systematized</b
+          ><span>caustic field + refraction split</span>
+        </div>
+        <div class="sig">
+          <div class="caustic-field">
+            <span>.caustic-field — token primitive, mọi section thừa kế</span>
+          </div>
+          <div class="refract">
+            <h4>Secure everything.</h4>
+            <small>refraction cyan→violet = THE mark (không flat cyan)</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- SYSTEM TOKENS -->
+      <section class="sec">
+        <div class="sec__h">
+          <b>06 — System tokens</b
+          ><span
+            >chip · glass · states · focus
+            <span class="fix">+ z-index, measure</span></span
+          >
+        </div>
+        <div class="sys">
+          <span class="chip">accent-soft chip</span>
+          <span class="chip">Restaking ✦</span>
+          <div class="glass">glass-bg + blur — sticky nav / overlay</div>
+          <span class="state"
+            ><i style="background: var(--c-positive)"></i>positive</span
+          >
+          <span class="state"
+            ><i style="background: var(--c-warning)"></i>warning</span
+          >
+          <span class="state"
+            ><i style="background: var(--c-danger)"></i>danger</span
+          >
+        </div>
+      </section>
+
+      <!-- MOTION -->
+      <section class="sec">
+        <div class="sec__h">
+          <b>07 — Motion easing</b><span>named curves</span>
+        </div>
+        <div class="ease-row">
+          <div class="ease-tag">--c-ease<br />cubic-bezier(.22,.61,.36,1)</div>
+          <div class="track"><div class="dot std"></div></div>
+        </div>
+        <div class="ease-row">
+          <div class="ease-tag">
+            --c-ease-fluid<br />cubic-bezier(.65,.05,.36,1)
+          </div>
+          <div class="track"><div class="dot fluid"></div></div>
+        </div>
+        <p class="doc-note" style="margin-top: var(--c-s5)">
+          Durations: fast .25s · base .45s · slow .9s. Focal morph ~8s ·
+          caustics drift ~12s.
+        </p>
+      </section>
+    </div>
+  </body>
+</html>

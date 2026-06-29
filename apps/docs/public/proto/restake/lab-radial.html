@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Strata — LAB: radial mapping (no center object)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --p-bg: #06060f;
+        --p-bg-deep: #030208;
+        --p-surface: #110f1e;
+        --p-ink: #eef0ff;
+        --p-ink-muted: #8f93b8;
+        --p-caustic: #8f7bff;
+        --p-caustic-2: #5b8cff;
+        --p-accent: #7d5cff;
+        --p-split-a: #7a5cff;
+        --p-split-b: #5b8cff;
+        --p-glow: rgba(125, 92, 255, 0.42);
+        --p-iris-pink: #ff5cf0;
+        --p-chrome: #dfe3ff;
+        --p-tick: rgba(143, 123, 255, 0.5);
+        --font-display: "General Sans", "Manrope", system-ui, sans-serif;
+        --font-mono: "Space Mono", ui-monospace, monospace;
+        --font-body: "Manrope", system-ui, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: var(--font-body);
+        background:
+          radial-gradient(
+            60% 50% at 50% 0%,
+            rgba(125, 92, 255, 0.1),
+            transparent 70%
+          ),
+          linear-gradient(180deg, var(--p-bg), var(--p-bg-deep));
+        color: var(--p-ink-muted);
+        min-height: 100vh;
+        padding: clamp(24px, 5vw, 64px);
+        -webkit-font-smoothing: antialiased;
+      }
+      .head {
+        max-width: 1200px;
+        margin: 0 auto clamp(24px, 4vh, 44px);
+      }
+      .eyebrow {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+        color: var(--p-caustic);
+      }
+      .eyebrow .slash {
+        color: var(--p-accent);
+      }
+      .title {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        color: var(--p-ink);
+        letter-spacing: -0.02em;
+        margin-top: 10px;
+      }
+      .note {
+        margin-top: 10px;
+        max-width: 70ch;
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+      .grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+        gap: clamp(18px, 2.5vw, 28px);
+      }
+      .cell {
+        position: relative;
+        border: 1px solid rgba(238, 240, 255, 0.08);
+        background:
+          radial-gradient(
+            80% 60% at 50% 46%,
+            rgba(125, 92, 255, 0.06),
+            transparent 72%
+          ),
+          var(--p-bg-deep);
+        clip-path: polygon(
+          12px 0,
+          100% 0,
+          100% calc(100% - 12px),
+          calc(100% - 12px) 100%,
+          0 100%,
+          0 12px
+        );
+        padding: 14px 14px 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .cell canvas {
+        width: 100%;
+        height: 400px;
+        display: block;
+      }
+      .meta {
+        align-self: stretch;
+        margin-top: 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .label {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 0.78rem;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: var(--p-ink);
+      }
+      .label::before {
+        content: "[ ";
+        color: var(--p-accent);
+      }
+      .label::after {
+        content: " ]";
+        color: var(--p-accent);
+      }
+      .desc {
+        font-size: 0.82rem;
+        line-height: 1.5;
+        color: var(--p-ink-muted);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="head">
+      <p class="eyebrow">
+        <span class="slash">/</span> Strata · review surface
+      </p>
+      <h1 class="title">Radial mapping — no center object</h1>
+      <p class="note">
+        Bỏ khối 2D ở giữa. Một <b>tâm sáng</b> (= 1 lần stake) ánh xạ/bắn ra các
+        <b>field</b> quanh vòng tròn. 3 cách đọc — chọn cái đúng ý bạn (hoặc bảo
+        tôi chỉnh). Field hiện là placeholder.
+      </p>
+    </div>
+    <div class="grid">
+      <div class="cell">
+        <canvas data-take="hub"></canvas>
+        <div class="meta">
+          <span class="label">R1 · Radial hub (360°)</span>
+          <span class="desc"
+            >Tâm sáng giữa vòng tròn đồng tâm, 6 field rải đều quanh 360°;
+            particle chạy từ tâm ra từng field (ánh xạ). Cân, centered.</span
+          >
+        </div>
+      </div>
+      <div class="cell">
+        <canvas data-take="radar"></canvas>
+        <div class="meta">
+          <span class="label">R2 · Radar sweep</span>
+          <span class="desc"
+            >Cùng tâm + vòng, thêm tia quét xoay; field nào bị quét trúng thì
+            bừng sáng. Kinetic, cảm giác "đang bảo vệ liên tục".</span
+          >
+        </div>
+      </div>
+      <div class="cell">
+        <canvas data-take="fan"></canvas>
+        <div class="meta">
+          <span class="label">R3 · Half-fan (copy-left)</span>
+          <span class="desc"
+            >Tâm lệch trái, field xòe thành cung bên phải; giữ được bố cục
+            text-trái / diagram-phải của landing.</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        "use strict";
+        const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const cssVar = (n) =>
+          getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+        function parseColor(s) {
+          s = s.trim();
+          if (s[0] === "#") {
+            let h = s.slice(1);
+            if (h.length === 3)
+              h = h
+                .split("")
+                .map((c) => c + c)
+                .join("");
+            const n = parseInt(h, 16);
+            return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+          }
+          const m = s.match(/rgba?\(([^)]+)\)/);
+          if (m) {
+            const p = m[1].split(",").map(parseFloat);
+            return { r: p[0], g: p[1], b: p[2] };
+          }
+          return { r: 255, g: 255, b: 255 };
+        }
+        const rgba = (c, a) => `rgba(${c.r | 0},${c.g | 0},${c.b | 0},${a})`;
+        const lerp = (a, b, t) => ({
+          r: a.r + (b.r - a.r) * t,
+          g: a.g + (b.g - a.g) * t,
+          b: a.b + (b.b - a.b) * t,
+        });
+        const COL = {
+          caustic: parseColor(cssVar("--p-caustic")),
+          caustic2: parseColor(cssVar("--p-caustic-2")),
+          accent: parseColor(cssVar("--p-accent")),
+          glow: parseColor(cssVar("--p-glow")),
+          ink: parseColor(cssVar("--p-ink")),
+          pink: parseColor(cssVar("--p-iris-pink")),
+          chrome: parseColor(cssVar("--p-chrome")),
+          tick: parseColor(cssVar("--p-tick")),
+        };
+        const FIELDS6 = [
+          "NETWORK",
+          "ROLLUP",
+          "AVS",
+          "OPERATOR",
+          "VALIDATOR",
+          "SEQUENCER",
+        ];
+        const FIELDS4 = ["NETWORK", "ROLLUP", "OPERATOR", "AVS"];
+
+        function setMono(ctx, px) {
+          ctx.font = `700 ${px}px "Space Mono",ui-monospace,monospace`;
+        }
+        // màu theo góc (xanh→tím→hồng quanh vòng) cho cảm giác phổ khúc xạ
+        function hueAt(frac) {
+          return frac < 0.5
+            ? lerp(COL.caustic2, COL.caustic, frac * 2)
+            : lerp(COL.caustic, COL.pink, (frac - 0.5) * 2);
+        }
+
+        function center(ctx, cx, cy, r, t) {
+          const pulse = 0.85 + 0.15 * Math.sin(t * 1.6);
+          const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * pulse);
+          g.addColorStop(0, rgba(COL.chrome, 0.95));
+          g.addColorStop(0.25, rgba(COL.caustic2, 0.7));
+          g.addColorStop(0.6, rgba(COL.caustic, 0.28));
+          g.addColorStop(1, rgba(COL.caustic, 0));
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(cx, cy, r * pulse, 0, 7);
+          ctx.fill();
+          // diamond lõi
+          ctx.fillStyle = rgba(COL.chrome, 0.95);
+          const d = 5;
+          ctx.beginPath();
+          ctx.moveTo(cx, cy - d);
+          ctx.lineTo(cx + d, cy);
+          ctx.lineTo(cx, cy + d);
+          ctx.lineTo(cx - d, cy);
+          ctx.closePath();
+          ctx.fill();
+        }
+        function rings(ctx, cx, cy, R) {
+          for (let i = 1; i <= 3; i++) {
+            ctx.strokeStyle = rgba(COL.tick, i === 2 ? 0.34 : 0.2);
+            ctx.lineWidth = 1;
+            ctx.setLineDash(i === 3 ? [2, 6] : []);
+            ctx.beginPath();
+            ctx.arc(cx, cy, (R * i) / 3, 0, 7);
+            ctx.stroke();
+          }
+          ctx.setLineDash([]);
+        }
+        function fieldNode(ctx, x, y, ang, name, col, hot) {
+          // diamond marker
+          const d = hot ? 7 : 5;
+          ctx.save();
+          ctx.shadowBlur = hot ? 14 : 6;
+          ctx.shadowColor = rgba(col, 1);
+          ctx.fillStyle = rgba(hot ? COL.chrome : col, hot ? 1 : 0.92);
+          ctx.beginPath();
+          ctx.moveTo(x, y - d);
+          ctx.lineTo(x + d, y);
+          ctx.lineTo(x, y + d);
+          ctx.lineTo(x - d, y);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+          // nhãn mono, đặt phía ngoài theo hướng góc
+          const left = Math.cos(ang) >= 0;
+          ctx.textAlign = left ? "left" : "right";
+          ctx.textBaseline = "middle";
+          setMono(ctx, 11);
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = rgba(COL.accent, hot ? 1 : 0.85);
+          const br = left ? "[ " : "";
+          const bl = left ? "" : " ]";
+          const tx = x + (left ? 12 : -12);
+          ctx.fillStyle = rgba(hot ? COL.ink : COL.ink, hot ? 1 : 0.82);
+          ctx.fillText((left ? "[ " : "") + name + (left ? " ]" : ""), tx, y);
+          if (!left) {
+            /* canh phải: vẽ nguyên chuỗi đã đảo, đơn giản giữ "[ NAME ]" */
+          }
+        }
+        // particle chạy tâm→field
+        function spoke(ctx, cx, cy, x, y, col, t, spd, ph, hot) {
+          // đường mảnh
+          ctx.strokeStyle = rgba(col, hot ? 0.5 : 0.16);
+          ctx.lineWidth = hot ? 1.6 : 1;
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.lineTo(x, y);
+          ctx.stroke();
+          // 2 particle
+          for (let k = 0; k < 2; k++) {
+            let p = (t * spd + ph + k * 0.5) % 1;
+            const px = cx + (x - cx) * p,
+              py = cy + (y - cy) * p;
+            const a = (1 - p) * (hot ? 1 : 0.8);
+            ctx.save();
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = rgba(col, 1);
+            ctx.fillStyle = rgba(hot ? COL.chrome : col, a);
+            ctx.beginPath();
+            ctx.arc(px, py, hot ? 2.6 : 1.8, 0, 7);
+            ctx.fill();
+            ctx.restore();
+          }
+        }
+
+        const TAKES = {
+          hub(ctx, g, t) {
+            const { cx, cy, R } = g;
+            rings(ctx, cx, cy, R);
+            const n = FIELDS6.length;
+            for (let i = 0; i < n; i++) {
+              const ang = -Math.PI / 2 + (i * 2 * Math.PI) / n;
+              const x = cx + Math.cos(ang) * R,
+                y = cy + Math.sin(ang) * R;
+              const col = hueAt(i / n);
+              spoke(ctx, cx, cy, x, y, col, t, 0.45, i * 0.37, false);
+              fieldNode(ctx, x, y, ang, FIELDS6[i], col, false);
+            }
+            center(ctx, cx, cy, R * 0.34, t);
+          },
+          radar(ctx, g, t) {
+            const { cx, cy, R } = g;
+            rings(ctx, cx, cy, R);
+            const sweep = (t * 0.6) % (2 * Math.PI);
+            // wedge quét
+            ctx.save();
+            const wg = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
+            wg.addColorStop(0, rgba(COL.caustic2, 0.0));
+            wg.addColorStop(1, rgba(COL.caustic2, 0.22));
+            ctx.fillStyle = wg;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, R, sweep - 0.4, sweep);
+            ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = rgba(COL.chrome, 0.5);
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(cx + Math.cos(sweep) * R, cy + Math.sin(sweep) * R);
+            ctx.stroke();
+            ctx.restore();
+            const n = FIELDS6.length;
+            for (let i = 0; i < n; i++) {
+              const ang = -Math.PI / 2 + (i * 2 * Math.PI) / n;
+              const x = cx + Math.cos(ang) * R,
+                y = cy + Math.sin(ang) * R;
+              const col = hueAt(i / n);
+              // hot nếu sweep gần góc field
+              let da = Math.abs(
+                ((ang - sweep + Math.PI * 3) % (2 * Math.PI)) - Math.PI,
+              );
+              da = Math.min(da, 2 * Math.PI - da);
+              const hot = da < 0.5;
+              spoke(ctx, cx, cy, x, y, col, t, 0.4, i * 0.3, hot);
+              fieldNode(ctx, x, y, ang, FIELDS6[i], col, hot);
+            }
+            center(ctx, cx, cy, R * 0.32, t);
+          },
+          fan(ctx, g, t) {
+            const cx = g.cx0,
+              cy = g.cy,
+              R = g.R * 1.25;
+            // vòng cung tham chiếu
+            ctx.strokeStyle = rgba(COL.tick, 0.22);
+            ctx.lineWidth = 1;
+            ctx.setLineDash([2, 6]);
+            ctx.beginPath();
+            ctx.arc(cx, cy, R, -0.85, 0.85);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            const n = FIELDS4.length,
+              span = 1.5;
+            for (let i = 0; i < n; i++) {
+              const ang = -span / 2 + (n === 1 ? 0 : (i * span) / (n - 1));
+              const x = cx + Math.cos(ang) * R,
+                y = cy + Math.sin(ang) * R;
+              const col = hueAt(i / (n - 1));
+              spoke(ctx, cx, cy, x, y, col, t, 0.5, i * 0.4, false);
+              fieldNode(ctx, x, y, ang, FIELDS4[i], col, false);
+            }
+            center(ctx, cx, cy, g.R * 0.3, t);
+          },
+        };
+
+        const cells = [...document.querySelectorAll("canvas[data-take]")].map(
+          (cv) => ({
+            cv,
+            ctx: cv.getContext("2d"),
+            take: TAKES[cv.dataset.take],
+            g: null,
+          }),
+        );
+        function layout(c) {
+          const rect = c.cv.getBoundingClientRect();
+          const dpr = Math.min(devicePixelRatio || 1, 2);
+          c.cv.width = Math.round(rect.width * dpr);
+          c.cv.height = Math.round(rect.height * dpr);
+          c.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          const W = rect.width,
+            H = rect.height;
+          c.g = {
+            cx: W / 2,
+            cy: H / 2,
+            cx0: W * 0.16,
+            R: Math.min(W, H) * 0.34,
+            w: W,
+            h: H,
+          };
+        }
+        function render(c, t) {
+          c.ctx.clearRect(0, 0, c.g.w, c.g.h);
+          c.take(c.ctx, c.g, t);
+        }
+        let raf = 0,
+          t0 = null;
+        function frame(ts) {
+          if (t0 === null) t0 = ts;
+          const t = (ts - t0) / 1000;
+          for (const c of cells) render(c, t);
+          raf = requestAnimationFrame(frame);
+        }
+        function start() {
+          cells.forEach(layout);
+          for (const c of cells) render(c, 1.2);
+          if (!reduce) {
+            cancelAnimationFrame(raf);
+            t0 = null;
+            raf = requestAnimationFrame(frame);
+          }
+        }
+        let rt;
+        addEventListener("resize", () => {
+          clearTimeout(rt);
+          rt = setTimeout(start, 120);
+        });
+        if (document.readyState === "complete") start();
+        else addEventListener("load", start);
+      })();
+    </script>
+  </body>
+</html>

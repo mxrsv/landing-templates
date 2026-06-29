@@ -1,0 +1,201 @@
+/* PROTOTYPE greybox — Phase 2a composition (helix below-hero stack).
+   Block-level only, KHÔNG content/style thật (medium-free, chỉ boxes + nhãn).
+   3 archetype phân kỳ để user chọn 1 lane bằng mắt. Xoá sau khi chốt. */
+.helix-gbx {
+  --gb-line: #34344a;
+  background: #0a0a11;
+  color: #c9c9dc;
+  min-height: 100dvh;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  padding-bottom: 96px;
+}
+.gbx-variant {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.gbx-variant--c {
+  max-width: none;
+  padding: 0;
+}
+.gbx-variant--c > .gbx-h,
+.gbx-variant--c > .gbx-sub {
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+.gbx-h {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #9a9ab2;
+  border-bottom: 1px solid var(--gb-line);
+  padding: 56px 0 10px;
+}
+.gbx-sub {
+  color: #6e6e86;
+  font-size: 12.5px;
+  line-height: 1.55;
+  margin: 12px 0 28px;
+  max-width: 74ch;
+}
+
+.gb {
+  border: 1px dashed #3c3c54;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7c7c96;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.012);
+  text-align: center;
+  padding: 8px;
+}
+.gb--focal {
+  border-style: solid;
+  border-color: #5c5c7e;
+  color: #aaaacb;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.035) 0 7px,
+    transparent 7px 15px
+  );
+}
+.h-sm {
+  min-height: 56px;
+}
+.h-md {
+  min-height: 116px;
+}
+.h-lg {
+  min-height: 208px;
+}
+
+/* Variant A — threaded spine (through-line + zig-zag) */
+.vA {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-left: 44px;
+}
+.vA__spine {
+  position: absolute;
+  left: 13px;
+  top: 6px;
+  bottom: 78px;
+  width: 2px;
+  background: linear-gradient(#6a6a8c, #6a6a8c 72%, transparent);
+}
+.vA__row {
+  width: 60%;
+  position: relative;
+}
+.vA__row--r {
+  margin-left: auto;
+}
+.vA__node::before {
+  content: "";
+  position: absolute;
+  left: -36px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 11px;
+  height: 11px;
+  border: 2px solid #7a7a9c;
+  border-radius: 50%;
+  background: #0a0a11;
+}
+
+/* Variant B — swiss ledger grid (grid is the ornament) */
+.vB {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 14px;
+}
+.col-2 {
+  grid-column: span 2;
+}
+.col-4 {
+  grid-column: span 4;
+}
+.col-8 {
+  grid-column: span 8;
+}
+.col-12 {
+  grid-column: span 12;
+}
+.vB .gb {
+  position: relative;
+}
+.vB__idx::after {
+  content: attr(data-i);
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-size: 22px;
+  color: #4a4a62;
+}
+
+/* Variant C — full-bleed alternating (contained ↔ released) */
+.vC {
+  display: flex;
+  flex-direction: column;
+}
+.vC__inset {
+  max-width: 1180px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 26px 32px;
+}
+.vC__bleed {
+  width: 100%;
+  padding: 26px 0;
+  border-top: 1px solid var(--gb-line);
+  border-bottom: 1px solid var(--gb-line);
+  background: rgba(255, 255, 255, 0.02);
+}
+.vC__bleedl {
+  color: #6e6e86;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0 32px 12px;
+}
+.vC__hscroll {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding: 0 32px;
+}
+.vC__hscroll .gb {
+  min-width: 190px;
+  flex: 0 0 auto;
+}
+.vC__split {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 18px;
+}
+
+@media (max-width: 720px) {
+  .vA__row,
+  .vA__row--r {
+    width: 100%;
+    margin-left: 0;
+  }
+  .vB .col-4,
+  .vB .col-8 {
+    grid-column: span 12;
+  }
+  .vB .col-2 {
+    grid-column: span 6;
+  }
+  .vC__split {
+    grid-template-columns: 1fr;
+  }
+}

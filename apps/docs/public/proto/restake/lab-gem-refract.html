@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Strata — LAB: focal shape × refract</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --p-bg: #06060f;
+        --p-bg-deep: #030208;
+        --p-surface: #110f1e;
+        --p-ink: #eef0ff;
+        --p-ink-muted: #8f93b8;
+        --p-caustic: #8f7bff;
+        --p-caustic-2: #5b8cff;
+        --p-accent: #7d5cff;
+        --p-split-a: #7a5cff;
+        --p-split-b: #5b8cff;
+        --p-glow: rgba(125, 92, 255, 0.42);
+        --p-iris-pink: #ff5cf0;
+        --p-chrome: #dfe3ff;
+        --p-tick: rgba(143, 123, 255, 0.5);
+        --font-display: "General Sans", "Manrope", system-ui, sans-serif;
+        --font-mono: "Space Mono", ui-monospace, monospace;
+        --font-body: "Manrope", system-ui, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: var(--font-body);
+        background:
+          radial-gradient(
+            60% 50% at 50% 0%,
+            rgba(125, 92, 255, 0.1),
+            transparent 70%
+          ),
+          linear-gradient(180deg, var(--p-bg), var(--p-bg-deep));
+        color: var(--p-ink-muted);
+        min-height: 100vh;
+        padding: clamp(24px, 5vw, 64px);
+        -webkit-font-smoothing: antialiased;
+      }
+      .lab-head {
+        max-width: 1200px;
+        margin: 0 auto clamp(28px, 5vh, 56px);
+      }
+      .lab-eyebrow {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+        color: var(--p-caustic);
+      }
+      .lab-eyebrow .slash {
+        color: var(--p-accent);
+      }
+      .lab-title {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        color: var(--p-ink);
+        letter-spacing: -0.02em;
+        margin-top: 10px;
+      }
+      .lab-note {
+        margin-top: 10px;
+        max-width: 66ch;
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .section {
+        max-width: 1200px;
+        margin: 0 auto clamp(40px, 8vh, 88px);
+      }
+      .section-tag {
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--p-tick);
+        padding-bottom: 14px;
+        margin-bottom: 26px;
+        border-bottom: 1px solid rgba(238, 240, 255, 0.1);
+      }
+      .section-tag b {
+        color: var(--p-ink);
+        font-weight: 700;
+      }
+
+      .shape-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: clamp(18px, 2.5vw, 28px);
+      }
+      .shape-cell {
+        position: relative;
+        border: 1px solid rgba(238, 240, 255, 0.08);
+        background:
+          radial-gradient(
+            80% 60% at 50% 42%,
+            rgba(125, 92, 255, 0.06),
+            transparent 72%
+          ),
+          var(--p-bg-deep);
+        clip-path: polygon(
+          12px 0,
+          100% 0,
+          100% calc(100% - 12px),
+          calc(100% - 12px) 100%,
+          0 100%,
+          0 12px
+        );
+        padding: 14px 14px 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .shape-cell canvas {
+        width: 100%;
+        height: 360px;
+        display: block;
+      }
+      .shape-meta {
+        align-self: stretch;
+        margin-top: 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .shape-label {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 0.78rem;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: var(--p-ink);
+      }
+      .shape-label::before {
+        content: "[ ";
+        color: var(--p-accent);
+      }
+      .shape-label::after {
+        content: " ]";
+        color: var(--p-accent);
+      }
+      .shape-desc {
+        font-size: 0.82rem;
+        line-height: 1.5;
+        color: var(--p-ink-muted);
+      }
+
+      /* ── refract variants ── */
+      .rx-list {
+        display: flex;
+        flex-direction: column;
+        gap: clamp(14px, 3vh, 26px);
+      }
+      .rx-row {
+        position: relative;
+        border: 1px solid rgba(238, 240, 255, 0.08);
+        background:
+          radial-gradient(
+            70% 120% at 78% 50%,
+            rgba(125, 92, 255, 0.07),
+            transparent 70%
+          ),
+          var(--p-bg-deep);
+        clip-path: polygon(
+          12px 0,
+          100% 0,
+          100% calc(100% - 12px),
+          calc(100% - 12px) 100%,
+          0 100%,
+          0 12px
+        );
+        padding: clamp(20px, 3vw, 36px) clamp(22px, 4vw, 52px);
+        display: flex;
+        align-items: center;
+        gap: clamp(18px, 3vw, 44px);
+        flex-wrap: wrap;
+      }
+      .rx-badge {
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 0.78rem;
+        letter-spacing: 0.14em;
+        color: var(--p-tick);
+        min-width: 56px;
+      }
+      .rx-headline {
+        flex: 1 1 400px;
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: clamp(1.9rem, 4.4vw, 3.2rem);
+        line-height: 1.04;
+        letter-spacing: -0.022em;
+        color: var(--p-ink);
+      }
+      .rx-caption {
+        flex: 0 0 210px;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        color: var(--p-ink-muted);
+      }
+
+      .split {
+        position: relative;
+        display: inline-block;
+        isolation: isolate;
+        color: var(--p-ink);
+      }
+      .split::before,
+      .split::after {
+        content: attr(data-text);
+        position: absolute;
+        left: 0;
+        top: 0;
+        pointer-events: none;
+        mix-blend-mode: screen;
+        will-change: transform;
+      }
+      .rx-a .split::before {
+        color: var(--p-split-a);
+        transform: translate(-0.03em, 0.006em);
+      }
+      .rx-a .split::after {
+        color: var(--p-split-b);
+        transform: translate(0.03em, -0.006em);
+      }
+      .rx-b .split {
+        background: linear-gradient(
+          96deg,
+          var(--p-caustic-2) 6%,
+          var(--p-caustic) 48%,
+          var(--p-iris-pink) 96%
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        background-size: 200% 100%;
+        animation: rxShift 7s ease-in-out infinite;
+        filter: drop-shadow(0 0 0.4em var(--p-glow));
+      }
+      .rx-b .split::before,
+      .rx-b .split::after {
+        content: none;
+      }
+      @keyframes rxShift {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+      .rx-c .split {
+        text-shadow: -0.045em 0.02em 0
+          color-mix(in srgb, var(--p-split-a) 80%, transparent);
+        animation: rxSway 5.2s ease-in-out infinite;
+      }
+      .rx-c .split::before {
+        color: var(--p-iris-pink);
+        transform: translate(-0.052em, 0.022em);
+      }
+      .rx-c .split::after {
+        color: var(--p-split-b);
+        transform: translate(0.052em, -0.022em);
+      }
+      @keyframes rxSway {
+        0%,
+        100% {
+          text-shadow: -0.045em 0.02em 0
+            color-mix(in srgb, var(--p-split-a) 80%, transparent);
+        }
+        50% {
+          text-shadow: -0.06em 0.006em 0
+            color-mix(in srgb, var(--p-split-a) 80%, transparent);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="lab-head">
+      <p class="lab-eyebrow">
+        <span class="slash">/</span> Strata · review surface
+      </p>
+      <h1 class="lab-title">Focal shape &amp; refract — lab</h1>
+      <p class="lab-note">
+        6 hướng <b>dáng focal</b> khác nhau (clean swap-test: cùng palette +
+        treatment, chỉ đổi silhouette). Chọn 1 dáng → tôi sẽ polish kỹ dáng đó.
+        Bên dưới là 3 kiểu highlight chữ "refract". Skeleton nhanh, chọn xong
+        tôi port vào <b>pivot-violet.html</b>.
+      </p>
+    </div>
+
+    <!-- ════════════ SHAPES ════════════ -->
+    <section class="section">
+      <p class="section-tag"><b>02</b> · Focal shape — 6 directions</p>
+      <div class="shape-grid">
+        <div class="shape-cell">
+          <canvas data-shape="prism"></canvas>
+          <div class="shape-meta">
+            <span class="shape-label">S1 · Prism</span>
+            <span class="shape-desc"
+              >Lăng kính tam giác — biểu tượng khúc xạ kinh điển: beam trắng
+              vào, tách phổ xanh/tím/hồng ra. On-concept nhất với
+              "refract".</span
+            >
+          </div>
+        </div>
+        <div class="shape-cell">
+          <canvas data-shape="diamond"></canvas>
+          <div class="shape-meta">
+            <span class="shape-label">S2 · Cut diamond</span>
+            <span class="shape-desc"
+              >Kim cương brilliant-cut, bè ngang: table đỉnh + crown + pavilion
+              nhọn đáy. Premium, "đá quý" rõ.</span
+            >
+          </div>
+        </div>
+        <div class="shape-cell">
+          <canvas data-shape="octa"></canvas>
+          <div class="shape-meta">
+            <span class="shape-label">S3 · Octahedron</span>
+            <span class="shape-desc"
+              >Bát diện 3D isometric — 4 mặt thấy được, ridge dọc + equator.
+              Khối tinh thể có chiều sâu.</span
+            >
+          </div>
+        </div>
+        <div class="shape-cell">
+          <canvas data-shape="lens"></canvas>
+          <div class="shape-meta">
+            <span class="shape-label">S4 · Convex lens</span>
+            <span class="shape-desc"
+              >Thấu kính lồi thật (vesica) — tia song song hội tụ về tiêu điểm
+              rồi toả. Khớp nhãn [ LENS · 01 ].</span
+            >
+          </div>
+        </div>
+        <div class="shape-cell">
+          <canvas data-shape="strata"></canvas>
+          <div class="shape-meta">
+            <span class="shape-label">S5 · Strata slab</span>
+            <span class="shape-desc"
+              >Phiến phân tầng (chơi chữ "Strata") — ánh sáng bẻ gãy khi xuyên
+              từng lớp. Gắn brand + cơ chế.</span
+            >
+          </div>
+        </div>
+        <div class="shape-cell">
+          <canvas data-shape="aperture"></canvas>
+          <div class="shape-meta">
+            <span class="shape-label">S6 · Aperture / iris</span>
+            <span class="shape-desc"
+              >Khẩu độ ống kính nhiều cánh, sáng dồn ở tâm. Cơ khí/quang học,
+              hợp lane "engineered substrate".</span
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ REFRACT ════════════ -->
+    <section class="section">
+      <p class="section-tag"><b>03</b> · "refract" highlight — 3 variants</p>
+      <div class="rx-list">
+        <div class="rx-row rx-a">
+          <span class="rx-badge">A</span>
+          <div class="rx-headline">
+            Watch it
+            <span class="split" data-text="refract">refract</span> everywhere.
+          </div>
+          <p class="rx-caption">
+            Refined — offset nhỏ, không blur, vẫn trắng. Tinh tế.
+          </p>
+        </div>
+        <div class="rx-row rx-b">
+          <span class="rx-badge">B</span>
+          <div class="rx-headline">
+            Watch it
+            <span class="split" data-text="refract">refract</span> everywhere.
+          </div>
+          <p class="rx-caption">
+            Spectrum fill — chữ ăn dải chromatic xanh→tím→hồng, trôi nhẹ.
+          </p>
+        </div>
+        <div class="rx-row rx-c">
+          <span class="rx-badge">C</span>
+          <div class="rx-headline">
+            Watch it
+            <span class="split" data-text="refract">refract</span> everywhere.
+          </div>
+          <p class="rx-caption">
+            Bold prismatic — 3 bản lệch sắc nét, đậm, prism rõ.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      (() => {
+        "use strict";
+        const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const cssVar = (n) =>
+          getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+        function parseColor(str) {
+          str = str.trim();
+          if (str[0] === "#") {
+            let h = str.slice(1);
+            if (h.length === 3)
+              h = h
+                .split("")
+                .map((c) => c + c)
+                .join("");
+            const n = parseInt(h, 16);
+            return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+          }
+          const m = str.match(/rgba?\(([^)]+)\)/);
+          if (m) {
+            const p = m[1].split(",").map(parseFloat);
+            return { r: p[0], g: p[1], b: p[2] };
+          }
+          return { r: 255, g: 255, b: 255 };
+        }
+        const rgba = (c, a) => `rgba(${c.r | 0},${c.g | 0},${c.b | 0},${a})`;
+        const lerp = (a, b, t) => ({
+          r: a.r + (b.r - a.r) * t,
+          g: a.g + (b.g - a.g) * t,
+          b: a.b + (b.b - a.b) * t,
+        });
+        const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+        const COL = {
+          caustic: parseColor(cssVar("--p-caustic")),
+          caustic2: parseColor(cssVar("--p-caustic-2")),
+          accent: parseColor(cssVar("--p-accent")),
+          glow: parseColor(cssVar("--p-glow")),
+          ink: parseColor(cssVar("--p-ink")),
+          deep: parseColor(cssVar("--p-bg-deep")),
+          splitA: parseColor(cssVar("--p-split-a")),
+          splitB: parseColor(cssVar("--p-split-b")),
+          pink: parseColor(cssVar("--p-iris-pink")),
+          chrome: parseColor(cssVar("--p-chrome")),
+        };
+        const L = { x: -0.5, y: -0.86 }; // hướng đèn chung: trên-trái
+
+        // ── helpers ──
+        function fillPoly(ctx, pts, style) {
+          ctx.beginPath();
+          ctx.moveTo(pts[0][0], pts[0][1]);
+          for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+          ctx.closePath();
+          ctx.fillStyle = style;
+          ctx.fill();
+        }
+        function seg(ctx, a, b, style, w) {
+          ctx.strokeStyle = style;
+          ctx.lineWidth = w || 1;
+          ctx.beginPath();
+          ctx.moveTo(a[0], a[1]);
+          ctx.lineTo(b[0], b[1]);
+          ctx.stroke();
+        }
+        function shade(cx, cy, ce, S) {
+          let dx = ce[0] - cx,
+            dy = ce[1] - cy;
+          const dl = Math.hypot(dx, dy) || 1;
+          dx /= dl;
+          dy /= dl;
+          const br = clamp(
+            0.2 + 0.8 * (0.5 + 0.5 * (dx * L.x + dy * L.y)),
+            0.12,
+            1,
+          );
+          const tt = clamp((ce[0] - (cx - S)) / (2 * S), 0, 1);
+          const col =
+            tt < 0.5
+              ? lerp(COL.caustic2, COL.caustic, tt * 2)
+              : lerp(COL.caustic, COL.pink, (tt - 0.5) * 2);
+          return rgba(col, 0.28 + 0.46 * br);
+        }
+        function centroid(pts) {
+          let x = 0,
+            y = 0;
+          for (const p of pts) {
+            x += p[0];
+            y += p[1];
+          }
+          return [x / pts.length, y / pts.length];
+        }
+        function backGlow(ctx, g) {
+          const { cx, cy, S } = g;
+          const rg = ctx.createRadialGradient(cx, cy, 0, cx, cy, S * 1.7);
+          rg.addColorStop(0, rgba(COL.glow, 0.5));
+          rg.addColorStop(0.5, rgba(COL.glow, 0.14));
+          rg.addColorStop(1, rgba(COL.glow, 0));
+          ctx.fillStyle = rg;
+          ctx.beginPath();
+          ctx.arc(cx, cy, S * 1.7, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // ── shape defs ──
+        const SHAPES = {
+          prism: {
+            verts(g) {
+              const { cx, cy, S } = g;
+              return [
+                [cx, cy - S * 1.05],
+                [cx + S * 0.92, cy + S * 0.78],
+                [cx - S * 0.92, cy + S * 0.78],
+              ];
+            },
+            body(ctx, g) {
+              const { cx, cy, S } = g;
+              const v = this.verts(g);
+              const gf = ctx.createLinearGradient(cx, cy - S, cx, cy + S);
+              gf.addColorStop(0, rgba(COL.caustic2, 0.5));
+              gf.addColorStop(0.55, rgba(COL.caustic, 0.4));
+              gf.addColorStop(1, rgba(COL.pink, 0.52));
+              ctx.fillStyle = gf;
+              ctx.fillRect(cx - S, cy - S * 1.2, S * 2, S * 2.4);
+              fillPoly(
+                ctx,
+                [v[0], [cx, v[1][1]], v[2]],
+                rgba(COL.caustic2, 0.16),
+              );
+              fillPoly(ctx, [v[0], v[1], [cx, v[1][1]]], rgba(COL.pink, 0.14));
+              seg(ctx, v[0], [cx, v[1][1]], rgba(COL.chrome, 0.2), 1);
+            },
+            extras(ctx, g) {
+              const { cx, cy, S } = g;
+              ctx.save();
+              ctx.globalCompositeOperation = "lighter";
+              ctx.lineCap = "round";
+              const hit = { x: cx - S * 0.3, y: cy - S * 0.02 };
+              ctx.shadowBlur = 10;
+              ctx.shadowColor = rgba(COL.glow, 1);
+              ctx.strokeStyle = rgba(COL.chrome, 0.75);
+              ctx.lineWidth = 2.2;
+              ctx.beginPath();
+              ctx.moveTo(hit.x - S * 0.95, hit.y - S * 0.45);
+              ctx.lineTo(hit.x, hit.y);
+              ctx.stroke();
+              const ex = { x: cx + S * 0.22, y: cy + S * 0.2 };
+              const cols = [COL.caustic2, COL.caustic, COL.pink];
+              const angs = [-0.16, 0.04, 0.24];
+              for (let i = 0; i < 3; i++) {
+                ctx.strokeStyle = rgba(cols[i], 0.82);
+                ctx.lineWidth = 2.1;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = rgba(cols[i], 0.8);
+                ctx.beginPath();
+                ctx.moveTo(ex.x, ex.y);
+                ctx.lineTo(
+                  ex.x + Math.cos(angs[i]) * S * 0.85,
+                  ex.y + Math.sin(angs[i]) * S * 0.85,
+                );
+                ctx.stroke();
+              }
+              ctx.restore();
+            },
+          },
+
+          diamond: {
+            verts(g) {
+              const { cx, cy, S } = g;
+              return [
+                [cx - S * 0.42, cy - S * 0.72],
+                [cx + S * 0.42, cy - S * 0.72],
+                [cx + S * 0.95, cy - S * 0.16],
+                [cx, cy + S * 1.0],
+                [cx - S * 0.95, cy - S * 0.16],
+              ];
+            },
+            body(ctx, g) {
+              const { cx, cy, S } = g;
+              const v = this.verts(g);
+              const gf = ctx.createLinearGradient(cx, cy - S, cx, cy + S);
+              gf.addColorStop(0, rgba(COL.caustic2, 0.5));
+              gf.addColorStop(0.4, rgba(COL.caustic, 0.44));
+              gf.addColorStop(1, rgba(COL.pink, 0.56));
+              ctx.fillStyle = gf;
+              ctx.fillRect(cx - S, cy - S * 1.2, S * 2, S * 2.4);
+              const tableMid = [cx, cy - S * 0.3];
+              fillPoly(ctx, [v[0], v[1], tableMid], rgba(COL.chrome, 0.2));
+              ctx.lineWidth = 1;
+              ctx.strokeStyle = rgba(COL.chrome, 0.18);
+              [
+                [v[0], v[3]],
+                [v[1], v[3]],
+                [v[2], tableMid],
+                [v[4], tableMid],
+                [v[0], v[4]],
+                [v[1], v[2]],
+                [tableMid, v[3]],
+              ].forEach(([a, b]) => seg(ctx, a, b, rgba(COL.chrome, 0.18), 1));
+            },
+          },
+
+          octa: {
+            verts(g) {
+              const { cx, cy, S } = g;
+              return [
+                [cx, cy - S * 1.0],
+                [cx + S * 0.72, cy],
+                [cx, cy + S * 1.0],
+                [cx - S * 0.72, cy],
+              ];
+            },
+            body(ctx, g) {
+              const { cx, cy, S } = g;
+              const v = this.verts(g);
+              const C = [cx, cy];
+              const faces = [
+                [v[0], v[1], C],
+                [v[1], v[2], C],
+                [v[2], v[3], C],
+                [v[3], v[0], C],
+              ];
+              for (const f of faces)
+                fillPoly(ctx, f, shade(cx, cy, centroid(f), S));
+              seg(ctx, v[0], v[2], rgba(COL.chrome, 0.22), 1);
+              seg(ctx, v[3], v[1], rgba(COL.chrome, 0.16), 1);
+            },
+          },
+
+          lens: {
+            verts() {
+              return null;
+            },
+            trace(ctx, g) {
+              const { cx, cy, S } = g;
+              ctx.beginPath();
+              ctx.moveTo(cx, cy - S * 1.05);
+              ctx.quadraticCurveTo(cx + S * 0.6, cy, cx, cy + S * 1.05);
+              ctx.quadraticCurveTo(cx - S * 0.6, cy, cx, cy - S * 1.05);
+              ctx.closePath();
+            },
+            body(ctx, g) {
+              const { cx, cy, S } = g;
+              const gf = ctx.createLinearGradient(
+                cx - S * 0.6,
+                cy,
+                cx + S * 0.6,
+                cy,
+              );
+              gf.addColorStop(0, rgba(COL.caustic2, 0.5));
+              gf.addColorStop(
+                0.5,
+                rgba(lerp(COL.caustic2, COL.ink, 0.4), 0.18),
+              );
+              gf.addColorStop(1, rgba(COL.pink, 0.5));
+              ctx.fillStyle = gf;
+              ctx.fillRect(cx - S, cy - S * 1.2, S * 2, S * 2.4);
+              const rg = ctx.createRadialGradient(
+                cx,
+                cy,
+                S * 0.1,
+                cx,
+                cy,
+                S * 1.05,
+              );
+              rg.addColorStop(0, rgba(COL.caustic2, 0));
+              rg.addColorStop(0.8, rgba(COL.caustic, 0.06));
+              rg.addColorStop(1, rgba(COL.chrome, 0.42));
+              ctx.fillStyle = rg;
+              ctx.fillRect(cx - S, cy - S * 1.2, S * 2, S * 2.4);
+            },
+            extras(ctx, g) {
+              const { cx, cy, S } = g;
+              ctx.save();
+              ctx.globalCompositeOperation = "lighter";
+              ctx.lineCap = "round";
+              const foc = { x: cx, y: cy };
+              for (let i = -1; i <= 1; i++) {
+                const y0 = cy + i * S * 0.46;
+                ctx.shadowBlur = 6;
+                ctx.shadowColor = rgba(COL.glow, 1);
+                ctx.strokeStyle = rgba(COL.caustic2, 0.5);
+                ctx.lineWidth = 1.3;
+                ctx.beginPath();
+                ctx.moveTo(cx - S * 1.5, y0);
+                ctx.lineTo(foc.x, foc.y);
+                ctx.stroke();
+                ctx.strokeStyle = rgba(COL.pink, 0.42);
+                ctx.beginPath();
+                ctx.moveTo(foc.x, foc.y);
+                ctx.lineTo(cx + S * 1.5, cy + i * S * 0.55);
+                ctx.stroke();
+              }
+              ctx.shadowBlur = 12;
+              ctx.shadowColor = rgba(COL.caustic2, 1);
+              ctx.fillStyle = rgba(COL.chrome, 0.95);
+              ctx.beginPath();
+              ctx.arc(foc.x, foc.y, 3.2, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.restore();
+            },
+          },
+
+          strata: {
+            verts(g) {
+              const { cx, cy, S } = g;
+              const x0 = cx - S * 0.55,
+                x1 = cx + S * 0.55,
+                y0 = cy - S * 0.95,
+                y1 = cy + S * 0.95,
+                ch = S * 0.13;
+              return [
+                [x0 + ch, y0],
+                [x1, y0],
+                [x1, y1 - ch],
+                [x1 - ch, y1],
+                [x0, y1],
+                [x0, y0 + ch],
+              ];
+            },
+            body(ctx, g) {
+              const { cx, cy, S } = g;
+              const x0 = cx - S * 0.55,
+                x1 = cx + S * 0.55,
+                y0 = cy - S * 0.95,
+                y1 = cy + S * 0.95;
+              const N = 5;
+              const cols = [
+                COL.caustic2,
+                lerp(COL.caustic2, COL.caustic, 0.5),
+                COL.caustic,
+                lerp(COL.caustic, COL.pink, 0.5),
+                COL.pink,
+              ];
+              for (let i = 0; i < N; i++) {
+                const ya = y0 + ((y1 - y0) * i) / N,
+                  yb = y0 + ((y1 - y0) * (i + 1)) / N;
+                ctx.fillStyle = rgba(cols[i], 0.32 + 0.05 * i);
+                ctx.fillRect(x0 - 2, ya, x1 - x0 + 4, yb - ya);
+                seg(ctx, [x0, yb], [x1, yb], rgba(COL.chrome, 0.16), 1);
+              }
+              ctx.save();
+              ctx.globalCompositeOperation = "lighter";
+              ctx.shadowBlur = 6;
+              ctx.shadowColor = rgba(COL.caustic2, 0.8);
+              ctx.strokeStyle = rgba(COL.chrome, 0.6);
+              ctx.lineWidth = 1.6;
+              ctx.lineCap = "round";
+              let x = cx - S * 0.18;
+              ctx.beginPath();
+              ctx.moveTo(x, y0);
+              for (let i = 1; i <= N; i++) {
+                const yb = y0 + ((y1 - y0) * i) / N;
+                x += (i % 2 ? 1 : -1) * S * 0.17;
+                ctx.lineTo(x, yb);
+              }
+              ctx.stroke();
+              ctx.restore();
+            },
+          },
+
+          aperture: {
+            _O: null,
+            _I: null,
+            verts(g) {
+              const { cx, cy, S } = g;
+              const R = S * 1.0;
+              const O = [];
+              for (let i = 0; i < 6; i++) {
+                const a = -Math.PI / 2 + (i * Math.PI) / 3;
+                O.push([cx + Math.cos(a) * R, cy + Math.sin(a) * R]);
+              }
+              return O;
+            },
+            body(ctx, g) {
+              const { cx, cy, S } = g;
+              const R = S * 1.0,
+                rh = S * 0.42,
+                rot = 0.5;
+              const O = [],
+                I = [];
+              for (let i = 0; i < 6; i++) {
+                const a = -Math.PI / 2 + (i * Math.PI) / 3;
+                O.push([cx + Math.cos(a) * R, cy + Math.sin(a) * R]);
+                I.push([
+                  cx + Math.cos(a + rot) * rh,
+                  cy + Math.sin(a + rot) * rh,
+                ]);
+              }
+              for (let i = 0; i < 6; i++) {
+                const j = (i + 1) % 6;
+                const blade = [O[i], O[j], I[j], I[i]];
+                fillPoly(ctx, blade, shade(cx, cy, centroid(blade), S));
+                seg(ctx, I[i], O[i], rgba(COL.chrome, 0.18), 1);
+              }
+              ctx.strokeStyle = rgba(COL.chrome, 0.5);
+              ctx.lineWidth = 1.4;
+              ctx.beginPath();
+              for (let i = 0; i < 6; i++) {
+                const p = I[i];
+                i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]);
+              }
+              ctx.closePath();
+              ctx.stroke();
+              const cg = ctx.createRadialGradient(cx, cy, 0, cx, cy, rh);
+              cg.addColorStop(0, rgba(COL.chrome, 0.9));
+              cg.addColorStop(0.4, rgba(COL.caustic2, 0.5));
+              cg.addColorStop(1, rgba(COL.caustic2, 0));
+              ctx.fillStyle = cg;
+              ctx.beginPath();
+              ctx.arc(cx, cy, rh, 0, Math.PI * 2);
+              ctx.fill();
+            },
+          },
+        };
+
+        // trace mặc định cho shape có verts() (polygon)
+        function traceVerts(ctx, shape, g) {
+          const v = shape.verts(g);
+          ctx.beginPath();
+          ctx.moveTo(v[0][0], v[0][1]);
+          for (let i = 1; i < v.length; i++) ctx.lineTo(v[i][0], v[i][1]);
+          ctx.closePath();
+        }
+        function trace(ctx, shape, g) {
+          if (shape.trace) shape.trace(ctx, g);
+          else traceVerts(ctx, shape, g);
+        }
+
+        function paintShape(ctx, shape, g, t) {
+          backGlow(ctx, g);
+          ctx.save();
+          trace(ctx, shape, g);
+          ctx.clip();
+          shape.body(ctx, g, t);
+          ctx.restore();
+          // chromatic fringe (translate path)
+          ctx.save();
+          ctx.globalCompositeOperation = "lighter";
+          ctx.lineWidth = 1.6;
+          ctx.shadowBlur = 4;
+          const fr = [
+            [3.4, 2.2, COL.pink, 0.5],
+            [1.8, 1.1, COL.splitB, 0.62],
+            [-1.8, -1.1, COL.splitA, 0.62],
+          ];
+          for (const [ox, oy, c, a] of fr) {
+            ctx.save();
+            ctx.translate(ox, oy);
+            ctx.strokeStyle = rgba(c, a);
+            trace(ctx, shape, g);
+            ctx.stroke();
+            ctx.restore();
+          }
+          ctx.restore();
+          // rim
+          ctx.save();
+          ctx.shadowBlur = 16;
+          ctx.shadowColor = rgba(COL.glow, 1);
+          ctx.strokeStyle = rgba(COL.accent, 1);
+          ctx.lineWidth = 2.4;
+          trace(ctx, shape, g);
+          ctx.stroke();
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = rgba(COL.chrome, 0.7);
+          ctx.strokeStyle = rgba(COL.chrome, 0.85);
+          ctx.lineWidth = 1;
+          trace(ctx, shape, g);
+          ctx.stroke();
+          ctx.restore();
+          if (shape.extras) shape.extras(ctx, g, t);
+        }
+
+        const cells = [...document.querySelectorAll("canvas[data-shape]")].map(
+          (cv) => ({
+            cv,
+            ctx: cv.getContext("2d"),
+            shape: SHAPES[cv.dataset.shape],
+            g: null,
+          }),
+        );
+
+        function layoutCell(c) {
+          const rect = c.cv.getBoundingClientRect();
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          c.cv.width = Math.round(rect.width * dpr);
+          c.cv.height = Math.round(rect.height * dpr);
+          c.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          const W = rect.width,
+            H = rect.height;
+          const S = Math.min(W * 0.4, H * 0.38, 150);
+          c.g = { cx: W / 2, cy: H * 0.5, S, w: W, h: H };
+        }
+        function renderCell(c, t) {
+          c.ctx.clearRect(0, 0, c.g.w, c.g.h);
+          paintShape(c.ctx, c.shape, c.g, t);
+        }
+
+        let raf = 0,
+          t0 = null;
+        function frame(ts) {
+          if (t0 === null) t0 = ts;
+          const t = (ts - t0) / 1000;
+          for (const c of cells) renderCell(c, t);
+          raf = requestAnimationFrame(frame);
+        }
+        function start() {
+          cells.forEach(layoutCell);
+          for (const c of cells) renderCell(c, 1.4);
+          if (!reduce) {
+            cancelAnimationFrame(raf);
+            t0 = null;
+            raf = requestAnimationFrame(frame);
+          }
+        }
+        let rt;
+        addEventListener("resize", () => {
+          clearTimeout(rt);
+          rt = setTimeout(start, 120);
+        });
+        if (document.readyState === "complete") start();
+        else addEventListener("load", start);
+      })();
+    </script>
+  </body>
+</html>

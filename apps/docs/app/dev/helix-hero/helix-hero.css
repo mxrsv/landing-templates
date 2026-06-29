@@ -48,7 +48,77 @@
 .hx-nav__right {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 12px;
+}
+.hx-nav__links a:focus-visible {
+  outline: 2px solid var(--hx-violet-bright);
+  outline-offset: 4px;
+  border-radius: 2px;
+  color: var(--hx-ink);
+}
+
+/* ── hamburger + mobile menu (desktop: ẩn) ──────────────────────────── */
+.hx-nav__toggle {
+  display: none;
+  position: relative;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  cursor: pointer;
+  background: var(--hx-line);
+  clip-path: var(--hx-clip-sm);
+}
+.hx-nav__toggle::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: var(--hx-s1);
+  clip-path: var(--hx-clip-sm);
+}
+.hx-nav__toggle:focus-visible {
+  outline: none;
+}
+.hx-nav__toggle:focus-visible::before {
+  box-shadow: inset 0 0 0 2px var(--hx-violet-bright);
+}
+.hx-nav__bars {
+  position: relative;
+  z-index: 1;
+  width: 18px;
+  height: 12px;
+}
+.hx-nav__bars > span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--hx-ink);
+  transition:
+    transform var(--hx-fast) var(--hx-ease),
+    opacity var(--hx-fast) var(--hx-ease);
+}
+.hx-nav__bars > span:nth-child(1) {
+  top: 0;
+}
+.hx-nav__bars > span:nth-child(2) {
+  top: 5px;
+}
+.hx-nav__bars > span:nth-child(3) {
+  top: 10px;
+}
+.hx-nav__bars[data-open="true"] > span:nth-child(1) {
+  transform: translateY(5px) rotate(45deg);
+}
+.hx-nav__bars[data-open="true"] > span:nth-child(2) {
+  opacity: 0;
+}
+.hx-nav__bars[data-open="true"] > span:nth-child(3) {
+  transform: translateY(-5px) rotate(-45deg);
+}
+.hx-nav__menu {
+  display: none;
 }
 
 /* ── hero ───────────────────────────────────────────────────────────── */
@@ -111,19 +181,6 @@
   clip-path: polygon(50% 0, 100% 38%, 50% 56%, 0 38%);
   background: rgba(255, 255, 255, 0.18);
 }
-.hx-focal__note {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  font-size: var(--hx-eyebrow);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--hx-ink-3);
-  white-space: nowrap;
-}
-
 /* WebGL canvas (Focal track) — đè proxy; proxy ẩn khi knot ready */
 .hx-focal__canvas {
   position: absolute;
@@ -151,7 +208,68 @@
     order: -1;
     min-height: 300px;
   }
-  .hx-nav__links {
+  .hx-nav__links,
+  .hx-nav__cta {
     display: none;
+  }
+  .hx-nav__toggle {
+    display: inline-flex;
+  }
+  .hx-nav__menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 6px var(--hx-gutter) 22px;
+    background: color-mix(in srgb, var(--hx-void) 94%, transparent);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--hx-line);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition:
+      opacity var(--hx-base) var(--hx-ease),
+      transform var(--hx-base) var(--hx-ease),
+      visibility 0s linear var(--hx-base);
+  }
+  .hx-nav__menu[data-open="true"] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+    transition:
+      opacity var(--hx-base) var(--hx-ease),
+      transform var(--hx-base) var(--hx-ease),
+      visibility 0s;
+  }
+  .hx-nav__menu a {
+    padding: 14px 2px;
+    font-size: 0.95rem;
+    color: var(--hx-ink-2);
+    text-decoration: none;
+    border-bottom: 1px solid var(--hx-line-soft);
+    transition: color var(--hx-fast) var(--hx-ease);
+  }
+  .hx-nav__menu a:hover {
+    color: var(--hx-ink);
+  }
+  .hx-nav__menu a:focus-visible {
+    outline: 2px solid var(--hx-violet-bright);
+    outline-offset: 2px;
+    color: var(--hx-ink);
+  }
+  .hx-nav__menu-cta {
+    align-self: flex-start;
+    margin-top: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hx-nav__menu,
+  .hx-nav__bars > span {
+    transition: none;
   }
 }

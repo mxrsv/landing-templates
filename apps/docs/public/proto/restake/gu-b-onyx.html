@@ -1,0 +1,1206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Strata — Liquid restaking protocol</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ============================================================
+   RESET — strip every default browser skin
+   ============================================================ */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+      body {
+        min-height: 100vh;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button {
+        font: inherit;
+        color: inherit;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+      ul {
+        list-style: none;
+      }
+      img,
+      svg {
+        display: block;
+        max-width: 100%;
+      }
+      ::selection {
+        background: rgba(200, 169, 106, 0.22);
+        color: #f3f1ec;
+      }
+
+      /* ============================================================
+   TOKENS — Onyx Bullion: institutional, warm metal on black
+   ============================================================ */
+      :root {
+        --onyx-0: #0a0a0c; /* deepest base */
+        --onyx-1: #0d0d10; /* panel base */
+        --gold: #c8a96a; /* champagne gold accent */
+        --gold-soft: #d8bc84; /* lifted gold */
+        --gold-deep: #8a6f3e; /* shadow gold */
+        --plat: #e8e4da; /* platinum highlight */
+        --ink: #f3f1ec; /* headline ink */
+        --muted: #9a968c; /* muted warm grey */
+        --hair: rgba(200, 169, 106, 0.18); /* gold hairline */
+        --hair-soft: rgba(243, 241, 236, 0.07); /* neutral hairline */
+
+        --shell: clamp(22px, 5.4vw, 92px);
+        --font-display: "Hanken Grotesk", system-ui, sans-serif;
+        --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+        --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+      }
+
+      html,
+      body {
+        background: var(--onyx-0);
+        color: var(--ink);
+        font-family: var(--font-display);
+      }
+      body {
+        overflow-x: hidden;
+      }
+
+      /* ============================================================
+   LAYERED BACKGROUND — base · center glow · vignette · grain
+   fixed, fills viewport, carries a calm expensive mood
+   ============================================================ */
+      .bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      /* base: faint warmth toward upper-right where the metal is lit */
+      .bg__base {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          130% 100% at 72% 8%,
+          #111014 0%,
+          var(--onyx-1) 46%,
+          var(--onyx-0) 100%
+        );
+      }
+      /* a single, very low vertical glow — bullion-vault light, slow breathe */
+      .bg__glow {
+        position: absolute;
+        left: 68%;
+        top: -18vh;
+        transform: translateX(-50%);
+        width: 60vw;
+        height: 120vh;
+        background: radial-gradient(
+          42% 40% at 50% 30%,
+          rgba(200, 169, 106, 0.16) 0%,
+          rgba(200, 169, 106, 0.05) 40%,
+          transparent 72%
+        );
+        filter: blur(40px);
+        opacity: 0.85;
+        animation: glowBreathe 13s var(--ease) infinite;
+      }
+      /* top vignette + bottom seat */
+      .bg__vignette {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(10, 10, 12, 0.7) 0%,
+          transparent 16%,
+          transparent 74%,
+          rgba(10, 10, 12, 0.9) 100%
+        );
+      }
+      /* fine film grain — SVG feTurbulence, very low */
+      .bg__grain {
+        position: absolute;
+        inset: -50%;
+        width: 200%;
+        height: 200%;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        opacity: 0.045;
+        mix-blend-mode: overlay;
+        animation: grainShift 7s steps(5) infinite;
+      }
+
+      /* ============================================================
+   SHELL + drafted margin note (far right edge)
+   ============================================================ */
+      .page {
+        position: relative;
+        z-index: 1;
+        padding-bottom: clamp(44px, 6vh, 72px);
+      }
+      .margin-note {
+        position: fixed;
+        z-index: 5;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%) rotate(90deg);
+        transform-origin: right center;
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.42em;
+        text-transform: uppercase;
+        color: rgba(154, 150, 140, 0.4);
+        white-space: nowrap;
+        pointer-events: none;
+      }
+
+      /* ---- NAV ---------------------------------------------------- */
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 22px var(--shell);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        background: linear-gradient(
+          180deg,
+          rgba(10, 10, 12, 0.74) 0%,
+          rgba(10, 10, 12, 0.12) 100%
+        );
+        border-bottom: 1px solid var(--hair-soft);
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand__mark svg {
+        width: 21px;
+        height: 21px;
+        overflow: visible;
+      }
+      .brand__name {
+        font-weight: 700;
+        font-size: 1.18rem;
+        letter-spacing: 0.06em;
+        color: var(--ink);
+      }
+      .nav__links {
+        display: flex;
+        align-items: center;
+        gap: 34px;
+      }
+      .nav__link {
+        position: relative;
+        font-family: var(--font-display);
+        font-weight: 500;
+        font-size: 0.82rem;
+        letter-spacing: 0.04em;
+        color: var(--muted);
+        padding: 4px 0;
+        transition: color 0.35s var(--ease);
+      }
+      .nav__link::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -3px;
+        height: 1px;
+        width: 100%;
+        background: var(--gold);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s var(--ease);
+      }
+      .nav__link:hover {
+        color: var(--ink);
+      }
+      .nav__link:hover::after {
+        transform: scaleX(1);
+      }
+      /* Launch app — quiet outlined button with a gold fill-sweep */
+      .btn-launch {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--gold);
+        padding: 11px 20px;
+        border: 1px solid var(--hair);
+        background: transparent;
+        transition:
+          color 0.4s var(--ease),
+          border-color 0.4s var(--ease);
+      }
+      .btn-launch::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(100deg, var(--gold), var(--gold-soft));
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.45s var(--ease);
+      }
+      .btn-launch:hover {
+        color: var(--onyx-0);
+        border-color: transparent;
+      }
+      .btn-launch:hover::before {
+        transform: scaleX(1);
+      }
+      .nav__burger {
+        display: none;
+      }
+
+      /* ---- HERO -------------------------------------------------- */
+      .hero {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding: 0 var(--shell);
+      }
+      /* asymmetric stage: copy lower-left, focal upper-right, big empty field.
+         stage fills the first viewport; ledger sits just below the fold. */
+      .hero__stage {
+        position: relative;
+        min-height: calc(100vh - 66px);
+        display: grid;
+        grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+        align-items: stretch;
+        gap: clamp(24px, 4vw, 72px);
+      }
+      /* hairline registration rule across the top of the stage — draws in */
+      .reg-rule {
+        position: absolute;
+        top: clamp(24px, 5vh, 56px);
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--hair) 12%,
+          var(--hair) 88%,
+          transparent
+        );
+        transform: scaleX(0);
+        transform-origin: left;
+        animation: ruleDraw 1.6s var(--ease) 0.25s forwards;
+      }
+
+      /* COPY block — anchored lower-left */
+      .copy {
+        align-self: end;
+        max-width: min(640px, 50vw);
+        padding-bottom: clamp(28px, 7vh, 84px);
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: clamp(22px, 3.4vh, 34px);
+      }
+      .eyebrow__tick {
+        width: 26px;
+        height: 1px;
+        background: var(--gold);
+      }
+      .headline {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(2.9rem, 6.6vw, 5.1rem);
+        line-height: 0.98;
+        letter-spacing: -0.028em;
+        color: var(--ink); /* fallback if background-clip:text unsupported */
+      }
+      /* embossed platinum metal text — applied on the text-bearing lines so
+         the gradient reliably clips to the glyphs */
+      .headline .l {
+        display: block;
+        color: #f6f4ee;
+        -webkit-text-fill-color: #f6f4ee;
+        /* embossed platinum: top highlight + bottom shade (robust everywhere) */
+        text-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.22),
+          0 -1px 0 rgba(0, 0, 0, 0.35);
+      }
+      /* keep the diamond glued to the final word so it never orphans */
+      .headline .nowrap {
+        white-space: nowrap;
+      }
+      /* full-stop as a small gold diamond — echoes the octahedron focal and
+         ties the headline into the accent system */
+      .headline .dot {
+        display: inline-block;
+        width: 0.13em;
+        height: 0.13em;
+        margin-left: 0.1em;
+        background: linear-gradient(135deg, var(--gold-soft), var(--gold-deep));
+        transform: rotate(45deg);
+        vertical-align: 0.06em;
+      }
+      .sub {
+        margin-top: clamp(22px, 3.2vh, 32px);
+        max-width: 44ch;
+        color: var(--muted);
+        font-size: clamp(0.98rem, 1.1vw, 1.1rem);
+        line-height: 1.66;
+        font-weight: 400;
+      }
+      .cta {
+        display: flex;
+        align-items: center;
+        gap: clamp(18px, 2.6vw, 32px);
+        margin-top: clamp(30px, 4.4vh, 44px);
+        flex-wrap: wrap;
+      }
+      /* primary CTA — gold fill sweep + arrow slide */
+      .btn-primary {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        font-family: var(--font-mono);
+        font-weight: 500;
+        font-size: 0.78rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--gold);
+        padding: 16px 26px;
+        border: 1px solid var(--gold);
+        background: transparent;
+        transition:
+          color 0.42s var(--ease),
+          box-shadow 0.45s var(--ease);
+      }
+      .btn-primary::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(
+          100deg,
+          var(--gold-deep) 0%,
+          var(--gold) 48%,
+          var(--gold-soft) 100%
+        );
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.5s var(--ease);
+      }
+      /* slow sheen that wipes across once the fill lands */
+      .btn-primary::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -60%;
+        width: 40%;
+        height: 100%;
+        background: linear-gradient(
+          100deg,
+          transparent,
+          rgba(255, 252, 244, 0.5),
+          transparent
+        );
+        transform: skewX(-18deg);
+        opacity: 0;
+        transition: none;
+      }
+      .btn-primary .arrow {
+        transition: transform 0.42s var(--ease);
+      }
+      .btn-primary:hover {
+        color: var(--onyx-0);
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+      }
+      .btn-primary:hover::before {
+        transform: scaleX(1);
+      }
+      .btn-primary:hover::after {
+        animation: sheen 0.9s var(--ease) 0.18s;
+      }
+      .btn-primary:hover .arrow {
+        transform: translateX(6px);
+      }
+      /* secondary CTA — text + arrow, gold underline grows */
+      .btn-ghost {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 6px 2px;
+        transition: color 0.35s var(--ease);
+      }
+      .btn-ghost .arrow {
+        transition: transform 0.4s var(--ease);
+      }
+      .btn-ghost::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -1px;
+        height: 1px;
+        width: 100%;
+        background: var(--gold);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s var(--ease);
+      }
+      .btn-ghost:hover {
+        color: var(--ink);
+      }
+      .btn-ghost:hover::after {
+        transform: scaleX(1);
+      }
+      .btn-ghost:hover .arrow {
+        transform: translateX(4px);
+      }
+
+      /* FOCAL — minted octahedron, upper-right, with drafted annotations */
+      .focal {
+        position: relative;
+        align-self: start;
+        justify-self: center;
+        width: clamp(280px, 32vw, 460px);
+        margin-top: clamp(40px, 9vh, 110px);
+        opacity: 0;
+        animation: focalIn 1.6s var(--ease) 0.35s forwards;
+      }
+      .focal__art {
+        position: relative;
+        animation: float 8s ease-in-out infinite;
+      }
+      .focal__svg {
+        width: 100%;
+        height: auto;
+        overflow: visible;
+        filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.6));
+      }
+      /* specular streak that sweeps slowly across the metal */
+      .specband {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: sweep 7s linear infinite;
+      }
+      /* halo behind the solid — gentle breathe */
+      .halo {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: haloPulse 9s var(--ease) infinite;
+      }
+
+      /* drafted annotation ticks anchored around the focal */
+      .anno {
+        position: absolute;
+        font-family: var(--font-mono);
+        font-size: 0.64rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--gold);
+        white-space: nowrap;
+      }
+      .anno--top {
+        top: 2%;
+        right: -2%;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .anno--top .lead {
+        width: 30px;
+        height: 1px;
+        background: var(--hair);
+      }
+      .anno--spec {
+        bottom: 4%;
+        left: -4%;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .anno--spec b {
+        display: block;
+        color: var(--gold);
+        font-weight: 500;
+      }
+
+      /* ---- STATS LEDGER — restrained hairline-divided row ----------- */
+      .ledger {
+        position: relative;
+        z-index: 3;
+        margin: clamp(24px, 5vh, 56px) calc(var(--shell) * -1) 0;
+        padding: 0 var(--shell);
+        border-top: 1px solid var(--hair);
+      }
+      .ledger__cap {
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: clamp(16px, 2.4vh, 22px) 0 0;
+      }
+      .ledger__cap span {
+        color: var(--gold);
+      }
+      .ledger__row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .stat {
+        position: relative;
+        padding: clamp(18px, 2.6vh, 28px) clamp(16px, 2vw, 30px)
+          clamp(26px, 3.4vh, 38px) 0;
+        transition: background 0.45s var(--ease);
+      }
+      .stat + .stat {
+        padding-left: clamp(18px, 2vw, 32px);
+        border-left: 1px solid var(--hair-soft);
+      }
+      /* gold tick that grows on hover */
+      .stat::before {
+        content: "";
+        position: absolute;
+        top: -1px;
+        left: 0;
+        height: 1px;
+        width: 22px;
+        background: var(--gold);
+        transition: width 0.5s var(--ease);
+      }
+      .stat:hover::before {
+        width: 100%;
+      }
+      .stat__num {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: clamp(1.7rem, 2.9vw, 2.5rem);
+        letter-spacing: -0.02em;
+        line-height: 1;
+        color: var(--ink);
+      }
+      .stat--accent .stat__num {
+        color: var(--gold);
+      }
+      .stat__label {
+        margin-top: 13px;
+        font-family: var(--font-mono);
+        font-size: 0.66rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        transition: color 0.35s var(--ease);
+      }
+      .stat:hover .stat__label {
+        color: var(--ink);
+      }
+
+      /* ---- CORNER BADGE ----------------------------------------- */
+      .badge {
+        position: fixed;
+        z-index: 40;
+        left: 22px;
+        bottom: 16px;
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.12em;
+        color: rgba(154, 150, 140, 0.6);
+        pointer-events: none;
+      }
+      .badge b {
+        color: rgba(200, 169, 106, 0.72);
+        font-weight: 400;
+      }
+
+      /* ============================================================
+   ENTRANCE — staggered fade / slide-up
+   ============================================================ */
+      .rise {
+        opacity: 0;
+        transform: translateY(18px);
+        animation: rise 0.9s var(--ease) forwards;
+      }
+      .d1 {
+        animation-delay: 0.05s;
+      }
+      .d2 {
+        animation-delay: 0.16s;
+      }
+      .d3 {
+        animation-delay: 0.28s;
+      }
+      .d4 {
+        animation-delay: 0.42s;
+      }
+      .d5 {
+        animation-delay: 0.56s;
+      }
+      .d6 {
+        animation-delay: 0.7s;
+      }
+      .d7 {
+        animation-delay: 0.84s;
+      }
+      .d8 {
+        animation-delay: 0.98s;
+      }
+
+      /* ============================================================
+   KEYFRAMES
+   ============================================================ */
+      @keyframes rise {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes focalIn {
+        from {
+          opacity: 0;
+          transform: scale(0.94);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      @keyframes ruleDraw {
+        to {
+          transform: scaleX(1);
+        }
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      /* specular streak crosses the clipped octahedron, fading at the ends */
+      @keyframes sweep {
+        0% {
+          transform: rotate(16deg) translateX(-220px);
+          opacity: 0;
+        }
+        14% {
+          transform: rotate(16deg) translateX(-110px);
+          opacity: 0.9;
+        }
+        48% {
+          transform: rotate(16deg) translateX(170px);
+          opacity: 0.9;
+        }
+        66% {
+          transform: rotate(16deg) translateX(330px);
+          opacity: 0;
+        }
+        100% {
+          transform: rotate(16deg) translateX(560px);
+          opacity: 0;
+        }
+      }
+      @keyframes haloPulse {
+        0%,
+        100% {
+          opacity: 0.6;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.92;
+          transform: scale(1.06);
+        }
+      }
+      @keyframes glowBreathe {
+        0%,
+        100% {
+          opacity: 0.7;
+          transform: translateX(-50%) scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: translateX(-50%) scale(1.05);
+        }
+      }
+      @keyframes grainShift {
+        0% {
+          transform: translate(0, 0);
+        }
+        20% {
+          transform: translate(-3%, 2%);
+        }
+        40% {
+          transform: translate(2%, -3%);
+        }
+        60% {
+          transform: translate(-2%, 1%);
+        }
+        80% {
+          transform: translate(2%, 3%);
+        }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
+      @keyframes sheen {
+        0% {
+          left: -60%;
+          opacity: 0;
+        }
+        20% {
+          opacity: 1;
+        }
+        100% {
+          left: 130%;
+          opacity: 0;
+        }
+      }
+
+      /* ============================================================
+   RESPONSIVE — recompose for tablet / mobile
+   ============================================================ */
+      @media (max-width: 940px) {
+        .hero__stage {
+          gap: clamp(16px, 3vw, 40px);
+        }
+        .focal {
+          width: clamp(240px, 36vw, 380px);
+          margin-top: clamp(28px, 6vh, 72px);
+        }
+        .margin-note {
+          display: none;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .nav {
+          padding: 16px var(--shell);
+        }
+        .nav__links,
+        .btn-launch {
+          display: none;
+        }
+        .nav__burger {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 42px;
+          height: 42px;
+          border: 1px solid var(--hair);
+          color: var(--gold);
+        }
+
+        .hero {
+          padding-top: clamp(24px, 5vh, 44px);
+        }
+        /* re-stack: focal on top (smaller, centered), copy below */
+        .hero__stage {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto auto;
+        }
+        .reg-rule {
+          top: 8px;
+        }
+        .focal {
+          order: -1;
+          width: min(70vw, 320px);
+          justify-self: center;
+          margin: 14px auto clamp(20px, 4vh, 36px);
+        }
+        .anno--top {
+          right: 2%;
+        }
+        .anno--spec {
+          left: 0;
+        }
+        .copy {
+          align-self: start;
+          max-width: 100%;
+          padding-bottom: clamp(22px, 4vh, 40px);
+        }
+        .headline {
+          font-size: clamp(2.6rem, 11vw, 3.8rem);
+        }
+        .sub {
+          max-width: 100%;
+        }
+        .btn-primary {
+          flex: 1 1 auto;
+          justify-content: center;
+        }
+
+        .ledger__row {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .stat:nth-child(3),
+        .stat:nth-child(4) {
+          border-top: 1px solid var(--hair-soft);
+        }
+        .stat:nth-child(3) {
+          border-left: none;
+          padding-left: 0;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .stat__num {
+          font-size: clamp(1.5rem, 8vw, 2rem);
+        }
+      }
+
+      /* ============================================================
+   REDUCED MOTION — kill all motion, reveal everything
+   ============================================================ */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+        .rise,
+        .focal {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        .reg-rule {
+          transform: scaleX(1) !important;
+        }
+        .bg__glow {
+          transform: translateX(-50%) !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- LAYERED BACKGROUND -->
+    <div class="bg" aria-hidden="true">
+      <div class="bg__base"></div>
+      <div class="bg__glow"></div>
+      <div class="bg__vignette"></div>
+      <div class="bg__grain"></div>
+    </div>
+
+    <!-- drafted margin note running up the right edge -->
+    <div class="margin-note" aria-hidden="true">
+      Strata · Liquid restaking · spec rev. 0
+    </div>
+
+    <div class="page">
+      <!-- NAV -->
+      <nav class="nav">
+        <a class="brand rise d1" href="#" aria-label="Strata home">
+          <span class="brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 21 21" fill="none">
+              <path
+                d="M10.5 1 20 10.5 10.5 20 1 10.5 10.5 1Z"
+                stroke="#C8A96A"
+                stroke-width="1.1"
+                stroke-linejoin="round"
+                opacity=".5"
+              />
+              <path
+                d="M10.5 1 10.5 20M1 10.5 20 10.5"
+                stroke="#C8A96A"
+                stroke-width="1.1"
+                opacity=".5"
+              />
+              <path
+                d="M10.5 1 14 10.5 10.5 20 7 10.5 10.5 1Z"
+                fill="#C8A96A"
+                opacity=".22"
+              />
+            </svg>
+          </span>
+          <span class="brand__name">Strata</span>
+        </a>
+
+        <ul class="nav__links rise d2">
+          <li><a class="nav__link" href="#">Protocol</a></li>
+          <li><a class="nav__link" href="#">Operators</a></li>
+          <li><a class="nav__link" href="#">Yield</a></li>
+          <li><a class="nav__link" href="#">Docs</a></li>
+        </ul>
+
+        <button class="btn-launch rise d3" type="button">Launch app</button>
+        <button class="nav__burger rise d3" type="button" aria-label="Menu">
+          <svg width="18" height="12" viewBox="0 0 18 12" fill="none">
+            <path
+              d="M0 1h18M0 6h18M0 11h18"
+              stroke="currentColor"
+              stroke-width="1.3"
+            />
+          </svg>
+        </button>
+      </nav>
+
+      <!-- HERO -->
+      <header class="hero">
+        <div class="hero__stage">
+          <span class="reg-rule" aria-hidden="true"></span>
+
+          <!-- COPY — lower-left -->
+          <div class="copy">
+            <p class="eyebrow rise d3">
+              <span class="eyebrow__tick"></span>
+              Liquid restaking protocol
+            </p>
+
+            <h1 class="headline">
+              <span class="l rise d4">Stake once.</span>
+              <span class="l rise d5"
+                >Secure
+                <span class="nowrap"
+                  >everything<span class="dot" aria-hidden="true"></span></span
+              ></span>
+            </h1>
+
+            <p class="sub rise d6">
+              Restake your assets to extend trust across every network,
+              validator, and service — fully liquid, never locked. One position,
+              compounding security and yield.
+            </p>
+
+            <div class="cta rise d7">
+              <a class="btn-primary" href="#">
+                Start restaking
+                <span class="arrow" aria-hidden="true">→</span>
+              </a>
+              <a class="btn-ghost" href="#">
+                Read the docs
+                <span class="arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- FOCAL — minted octahedron, upper-right -->
+          <div class="focal" aria-hidden="true">
+            <div class="focal__art">
+              <svg class="focal__svg" viewBox="0 0 480 540" fill="none">
+                <defs>
+                  <!-- ambient halo behind the solid -->
+                  <radialGradient id="halo" cx="50%" cy="46%" r="50%">
+                    <stop
+                      offset="0%"
+                      stop-color="#C8A96A"
+                      stop-opacity="0.34"
+                    />
+                    <stop
+                      offset="42%"
+                      stop-color="#C8A96A"
+                      stop-opacity="0.1"
+                    />
+                    <stop offset="100%" stop-color="#C8A96A" stop-opacity="0" />
+                  </radialGradient>
+                  <!-- pedestal pool of light -->
+                  <radialGradient id="pool" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#C8A96A" stop-opacity="0.5" />
+                    <stop
+                      offset="55%"
+                      stop-color="#8A6F3E"
+                      stop-opacity="0.14"
+                    />
+                    <stop offset="100%" stop-color="#8A6F3E" stop-opacity="0" />
+                  </radialGradient>
+                  <!-- per-facet metal gradients (light from upper-left) -->
+                  <linearGradient id="fTL" x1="0" y1="0" x2="0.7" y2="1">
+                    <stop offset="0%" stop-color="#F1ECDE" />
+                    <stop offset="48%" stop-color="#D2B679" />
+                    <stop offset="100%" stop-color="#937747" />
+                  </linearGradient>
+                  <linearGradient id="fTR" x1="0.1" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#DEC289" />
+                    <stop offset="55%" stop-color="#A9884F" />
+                    <stop offset="100%" stop-color="#6E5731" />
+                  </linearGradient>
+                  <linearGradient id="fBL" x1="0" y1="0" x2="0.6" y2="1">
+                    <stop offset="0%" stop-color="#A98C55" />
+                    <stop offset="60%" stop-color="#705A33" />
+                    <stop offset="100%" stop-color="#42351E" />
+                  </linearGradient>
+                  <linearGradient id="fBR" x1="0.2" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#7E663A" />
+                    <stop offset="55%" stop-color="#4E3F24" />
+                    <stop offset="100%" stop-color="#2A2114" />
+                  </linearGradient>
+                  <!-- specular streak fill -->
+                  <linearGradient id="spec" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#FFFCF4" stop-opacity="0" />
+                    <stop
+                      offset="50%"
+                      stop-color="#FFFCF4"
+                      stop-opacity="0.92"
+                    />
+                    <stop offset="100%" stop-color="#FFFCF4" stop-opacity="0" />
+                  </linearGradient>
+                  <!-- octahedron silhouette for clipping the streak -->
+                  <clipPath id="octa">
+                    <polygon points="240,72 388,250 240,428 92,250" />
+                  </clipPath>
+                </defs>
+
+                <!-- halo + pedestal pool -->
+                <ellipse
+                  class="halo"
+                  cx="240"
+                  cy="248"
+                  rx="210"
+                  ry="210"
+                  fill="url(#halo)"
+                />
+                <ellipse cx="240" cy="452" rx="150" ry="30" fill="url(#pool)" />
+
+                <!-- octahedron facets -->
+                <polygon points="240,72 92,250 240,302" fill="url(#fTL)" />
+                <polygon points="240,72 388,250 240,302" fill="url(#fTR)" />
+                <polygon points="240,428 92,250 240,302" fill="url(#fBL)" />
+                <polygon points="240,428 388,250 240,302" fill="url(#fBR)" />
+
+                <!-- specular streak sweeping across, clipped to the solid -->
+                <g clip-path="url(#octa)">
+                  <rect
+                    class="specband"
+                    x="-40"
+                    y="-70"
+                    width="86"
+                    height="700"
+                    fill="url(#spec)"
+                  />
+                </g>
+
+                <!-- crisp minted edges -->
+                <g stroke-linejoin="round" fill="none">
+                  <!-- outer silhouette -->
+                  <polygon
+                    points="240,72 388,250 240,428 92,250"
+                    stroke="#221B10"
+                    stroke-width="1.4"
+                  />
+                  <!-- light-catching upper-left ridge (platinum) -->
+                  <path
+                    d="M240,72 92,250"
+                    stroke="#F2EDDF"
+                    stroke-width="1.3"
+                    stroke-opacity="0.85"
+                  />
+                  <!-- upper-right ridge (gold) -->
+                  <path
+                    d="M240,72 388,250"
+                    stroke="#E2C68C"
+                    stroke-width="1.1"
+                    stroke-opacity="0.7"
+                  />
+                  <!-- internal ridges to the front vertex -->
+                  <path
+                    d="M240,72 240,302"
+                    stroke="#F2EDDF"
+                    stroke-width="1"
+                    stroke-opacity="0.55"
+                  />
+                  <path
+                    d="M92,250 240,302"
+                    stroke="#1E1810"
+                    stroke-width="1"
+                    stroke-opacity="0.8"
+                  />
+                  <path
+                    d="M388,250 240,302"
+                    stroke="#1E1810"
+                    stroke-width="1"
+                    stroke-opacity="0.8"
+                  />
+                  <path
+                    d="M240,428 240,302"
+                    stroke="#15110A"
+                    stroke-width="1"
+                    stroke-opacity="0.8"
+                  />
+                </g>
+
+                <!-- apex spark -->
+                <circle cx="240" cy="72" r="2.4" fill="#FFFDF7" />
+              </svg>
+            </div>
+
+            <!-- drafted annotations -->
+            <span class="anno anno--top">
+              <span class="lead"></span>01 / restake
+            </span>
+            <span class="anno anno--spec">
+              <b>Au · 79</b>
+              minted security
+              <b>φ 1.618</b>
+            </span>
+          </div>
+        </div>
+
+        <!-- STATS LEDGER -->
+        <div class="ledger rise d8">
+          <div class="ledger__cap">Network state <span>· live</span></div>
+          <div class="ledger__row">
+            <div class="stat stat--accent">
+              <div class="stat__num">$4.2B</div>
+              <div class="stat__label">Total value restaked</div>
+            </div>
+            <div class="stat">
+              <div class="stat__num">62</div>
+              <div class="stat__label">AVS secured</div>
+            </div>
+            <div class="stat">
+              <div class="stat__num">310</div>
+              <div class="stat__label">Active operators</div>
+            </div>
+            <div class="stat">
+              <div class="stat__num">5.8%</div>
+              <div class="stat__label">Avg. restaking APR</div>
+            </div>
+          </div>
+        </div>
+      </header>
+    </div>
+
+    <!-- CORNER BADGE -->
+    <div class="badge">Direction B — Onyx Bullion <b>·</b> gu specimen</div>
+  </body>
+</html>

@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Strata · liquid restaking — 5 gu directions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #06070a;
+        --panel: #0e0f14;
+        --line: rgba(255, 255, 255, 0.09);
+        --ink: #eef1f4;
+        --muted: #8b929c;
+        --accent: #5bff9f;
+      }
+      html,
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      body {
+        min-height: 100dvh;
+        padding: clamp(28px, 6vw, 80px) clamp(20px, 6vw, 88px) 80px;
+        background:
+          radial-gradient(
+            120% 80% at 50% -10%,
+            rgba(91, 255, 159, 0.1),
+            transparent 60%
+          ),
+          repeating-linear-gradient(
+            0deg,
+            transparent 0 39px,
+            rgba(255, 255, 255, 0.025) 39px 40px
+          ),
+          var(--bg);
+      }
+      header {
+        max-width: 1180px;
+        margin: 0 auto 48px;
+      }
+      .eyebrow {
+        font-family: "Space Mono", monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 18px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .eyebrow::before {
+        content: "";
+        width: 26px;
+        height: 1px;
+        background: var(--accent);
+      }
+      h1 {
+        font-size: clamp(1.9rem, 4.4vw, 3.2rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1.04;
+        max-width: 18ch;
+      }
+      h1 em {
+        font-style: normal;
+        color: var(--muted);
+      }
+      .lede {
+        margin-top: 18px;
+        max-width: 56ch;
+        color: var(--muted);
+        font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+        line-height: 1.6;
+      }
+      .grid {
+        max-width: 1180px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 18px;
+      }
+      a.card {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        text-decoration: none;
+        color: inherit;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.03),
+          rgba(255, 255, 255, 0.008)
+        );
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 22px 22px 20px;
+        position: relative;
+        overflow: hidden;
+        transition:
+          border-color 0.35s ease,
+          transform 0.35s ease,
+          background 0.35s ease;
+      }
+      a.card:hover {
+        border-color: color-mix(
+          in srgb,
+          var(--swatch, var(--accent)) 60%,
+          transparent
+        );
+        transform: translateY(-3px);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.05),
+          rgba(255, 255, 255, 0.01)
+        );
+      }
+      .swatch {
+        height: 86px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        position: relative;
+        overflow: hidden;
+      }
+      .row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .key {
+        font-family: "Space Mono", monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.2em;
+        color: var(--muted);
+      }
+      .name {
+        font-size: 1.18rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .desc {
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+      .open {
+        font-family: "Space Mono", monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--swatch, var(--accent));
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 2px;
+      }
+      .open .arrow {
+        transition: transform 0.3s ease;
+      }
+      a.card:hover .open .arrow {
+        transform: translateX(5px);
+      }
+
+      /* swatches per direction */
+      .sw-a {
+        background:
+          radial-gradient(
+            60% 120% at 50% -10%,
+            rgba(91, 255, 159, 0.55),
+            transparent 60%
+          ),
+          #05060a;
+      }
+      .sw-b {
+        background:
+          radial-gradient(
+            70% 120% at 70% 30%,
+            #c8a96a,
+            #6e5b32 40%,
+            #15130f 75%
+          ),
+          #0a0a0c;
+      }
+      .sw-c {
+        background: radial-gradient(
+          60% 120% at 70% 40%,
+          #2ff7e0,
+          #36a2ff 45%,
+          #03141a 80%
+        );
+      }
+      .sw-d {
+        background: conic-gradient(
+          from 0deg at 60% 40%,
+          #ff8fd0,
+          #74e7ff,
+          #ffe08a,
+          #a98cff,
+          #ff8fd0
+        );
+        filter: saturate(1.05);
+      }
+      .sw-e {
+        background:
+          repeating-linear-gradient(
+            0deg,
+            transparent 0 7px,
+            rgba(198, 255, 0, 0.1) 7px 8px
+          ),
+          #000;
+      }
+      .sw-e::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          40% 60% at 50% 50%,
+          rgba(198, 255, 0, 0.35),
+          transparent 70%
+        );
+      }
+
+      footer {
+        max-width: 1180px;
+        margin: 44px auto 0;
+        color: var(--muted);
+        font-family: "Space Mono", monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <span class="eyebrow">Phase 0 · gu directions</span>
+      <h1>Strata — liquid restaking. <em>Five design lanes, one brief.</em></h1>
+      <p class="lede">
+        Same vertical, same copy ("Stake once. Secure everything."). Only the
+        design language changes. Open each, judge by eye, pick the lane to take
+        into the full build.
+      </p>
+    </header>
+
+    <main class="grid">
+      <a class="card" href="./gu-a-aurora.html" style="--swatch: #5bff9f">
+        <div class="swatch sw-a"></div>
+        <div class="row">
+          <span class="name">Aurora Cathedral</span><span class="key">A</span>
+        </div>
+        <p class="desc">
+          Dark cinematic + neon-green only. Volumetric god-rays, chrome
+          iridescent focal. Your confirmed gu.
+        </p>
+        <span class="open"><span class="arrow">→</span> Open demo</span>
+      </a>
+
+      <a class="card" href="./gu-b-onyx.html" style="--swatch: #c8a96a">
+        <div class="swatch sw-b"></div>
+        <div class="row">
+          <span class="name">Onyx Bullion</span><span class="key">B</span>
+        </div>
+        <p class="desc">
+          Institutional premium. Onyx + champagne gold, minted-metal focal, huge
+          negative space, restraint.
+        </p>
+        <span class="open"><span class="arrow">→</span> Open demo</span>
+      </a>
+
+      <a class="card" href="./gu-c-liquid.html" style="--swatch: #2ff7e0">
+        <div class="swatch sw-c"></div>
+        <div class="row">
+          <span class="name">Liquid Caustics</span><span class="key">C</span>
+        </div>
+        <p class="desc">
+          Plays the literal "liquid". Teal/cyan, refractive liquid-metal blob,
+          underwater caustics, off-canvas bleed.
+        </p>
+        <span class="open"><span class="arrow">→</span> Open demo</span>
+      </a>
+
+      <a class="card" href="./gu-d-holo.html" style="--swatch: #ff8fd0">
+        <div class="swatch sw-d"></div>
+        <div class="row">
+          <span class="name">Holographic Membrane</span
+          ><span class="key">D</span>
+        </div>
+        <p class="desc">
+          Luxe soft iridescent. Plum + holo foil (pink/cyan/gold), flowing
+          membrane, film grain. Soft, not chamfer.
+        </p>
+        <span class="open"><span class="arrow">→</span> Open demo</span>
+      </a>
+
+      <a class="card" href="./gu-e-terminal.html" style="--swatch: #c6ff00">
+        <div class="swatch sw-e"></div>
+        <div class="row">
+          <span class="name">Terminal Brutalist</span><span class="key">E</span>
+        </div>
+        <p class="desc">
+          Cypherpunk. True black + acid lime, blueprint grid, scanlines,
+          wireframe node-mesh, mono everything.
+        </p>
+        <span class="open"><span class="arrow">→</span> Open demo</span>
+      </a>
+    </main>
+
+    <footer>
+      STRATA · liquid restaking protocol — gu specimens · Phase 0 (Direction).
+      Throwaway, not productionized.
+    </footer>
+  </body>
+</html>
