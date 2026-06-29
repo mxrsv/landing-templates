@@ -169,21 +169,6 @@
     --z-modal: 40;
     --z-toast: 50;
 
-    /* --- v2: font family — mono face (2-face flag) ------------ */
-    /* INVARIANT "one font" exception, PENDING owner sign-off: waitlist +
-       ternus already load JetBrains Mono via private vars. This token gives
-       ONE canonical mono with a system fallback stack. The webfont itself is
-       injected by the app/template layout (next/font sets --font-jetbrains-mono),
-       and is NEVER loaded inside design-tokens. Sans stays app-injected
-       (--font-inter); no --font-sans token is added here. */
-    --font-mono: var(
-      --font-jetbrains-mono,
-      ui-monospace,
-      SFMono-Regular,
-      Menlo,
-      monospace
-    );
-
     /* --- palette tokens — DEFAULT = infra mood --------------- */
     /* Story 2.2 overrides these under [data-theme="neon|game|nft"].
        Keep calm/premium infra floor: cyan-dominant on near-black,

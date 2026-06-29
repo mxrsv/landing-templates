@@ -29,15 +29,10 @@ its story.
 | I-9  | **Layout via rhythm tokens** (v2)            | Sections share one container/padding rhythm        | `max-width: 1140px`, `padding: 72px 0`                         | `max-width: var(--container-lg)`, `padding-block: var(--section-pad-y-md)`                  |
 | I-10 | **Text via primitives** (v2)                 | One eyebrow/heading/body/caption look, agent-proof | hand-rolled `text-[…] tracking-[…] uppercase` label string     | `<Eyebrow>` / `<Heading level>` / `<Body>` / `<Caption>` from `@landing/ui/components/text` |
 
-> **Font floor:** the catalog uses **one** text typeface — Inter (`--font-sans`).
-> Text primitives inherit it; never declare a per-Piece `font-family`.
->
-> ⏳ **PENDING (owner sign-off):** a second **mono** face is proposed. `--font-mono`
-> now exists in the floor (system fallback stack only; the JetBrains Mono webfont is
-> injected by the app/template layout via `--font-jetbrains-mono`, never by
-> `@landing/design-tokens`). Rationale: waitlist + ternus already ship mono privately
-> (`--wl-mono`, `--tn-mono`) — this formalizes 1 sans + 1 mono instead of rogue fonts.
-> **Until ratified, Pieces must NOT adopt `--font-mono`; Inter stays the single face.**
+> **Font floor:** the catalog uses **one** typeface — Inter (`--font-sans`). No
+> mono / display second face. Text primitives inherit it; never declare a
+> per-Piece `font-family`. (2-face mono was proposed in the overhaul and
+> **rejected** 2026-06-29 — `--font-mono` removed; keep the single-face floor.)
 
 Allowed token vocabulary (see `base.css` for full list):
 
@@ -46,7 +41,7 @@ Allowed token vocabulary (see `base.css` for full list):
 - tracking `--tracking-tight|normal|label|wide`
 - weight `--weight-regular|medium|semibold`
 - leading `--leading-none|tight|snug|normal`
-- font `--font-sans` (Inter — single text face); `--font-mono` (⏳ pending sign-off — see Font floor)
+- font `--font-sans` (Inter — one face only)
 - motion `--ease-standard|entrance|exit`, `--duration-fast|base|slow`
 - palette `--p-*` (consume via Tailwind utilities: `bg-primary`, `text-ink`, `border-line`, …)
 - radius `--radius-sm|md|lg|xl|pill`, hairline `--line-w`
