@@ -34,11 +34,11 @@
 - [x] **B6** identity = trục **craft/assembly/no-lock-in**, Web3 = beachhead, optionality giữ (chưa khoá Web3-only).
 - **B3** (decision): productionize **Helix** làm flagship restaking duy nhất; **shelve Strata** → xem Phase 4 #3.
 
-### Phase 3 — Technical hardening — **backlog**
+### Phase 3 — Technical hardening — **in-progress**
 
-- [ ] #11 Sửa shell routing drift (`sp.layer`, sidebar dead-branch)
-- [ ] #13 Gallery FILTER theo `status` (ẩn draft/planned); UI-layer giữ planned, KHÔNG register rỗng (B4)
-- [ ] #7 Retrofit Ternus về token floor
+- [x] #11 Sửa shell routing drift — **done** — Explorer đọc `?layer` (spec §6 unified explorer): `/sections`,`/ui`,`/templates` lọc đúng layer; sidebar hiện mọi piece production nhóm theo Layer. Build 19/19.
+- [x] #13 Gallery FILTER theo `status` — **done** — gallery + nav chỉ `status="production"`; gamefi (draft) ẩn khỏi BROWSE nhưng deep-link `/?piece=gamefi` vẫn mở detail.
+- [ ] #7 Retrofit Ternus về token floor (gỡ font/CSS bespoke, dùng primitives)
 - [ ] #10 CI tối thiểu + smoke test `/preview/[slug]`
 
 ### Phase 4 — UI/Design overhaul — **backlog**

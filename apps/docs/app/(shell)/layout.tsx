@@ -6,8 +6,9 @@ import {
 } from "../../components/shell/catalog-sidebar";
 import { allPieces } from "../../lib/catalog";
 
-/** Repo chỉ trưng Templates → sidebar bỏ qua layer UI/Sections. */
-const templates = allPieces.filter((piece) => piece.layer === "template");
+/** Sidebar nav = mọi piece `production`, nhóm theo Layer (B4: sections first-class;
+ *  skeleton draft/planned ẩn). UI-layer planned chưa register nên chưa hiện. */
+const navPieces = allPieces.filter((piece) => piece.status === "production");
 
 /**
  * Shell catalog: sidebar nav cố định trái + content slot phải (master–detail).
@@ -20,8 +21,8 @@ export default function ShellLayout({
   return (
     <div className="mx-auto flex w-full max-w-[var(--container-max)] gap-[var(--space-6)] px-[var(--space-6)]">
       <aside className="sticky top-0 hidden h-screen w-56 shrink-0 overflow-y-auto py-[var(--space-8)] lg:block">
-        <Suspense fallback={<SidebarNavFallback pieces={templates} />}>
-          <CatalogSidebar pieces={templates} />
+        <Suspense fallback={<SidebarNavFallback pieces={navPieces} />}>
+          <CatalogSidebar pieces={navPieces} />
         </Suspense>
       </aside>
       <div className="min-w-0 flex-1">{children}</div>
