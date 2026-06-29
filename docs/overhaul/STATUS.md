@@ -18,12 +18,12 @@
 - [x] `00-baseline.md`, `01-roadmap.md`
 - [x] `STATUS.md` (spine) + chốt harness chủ
 
-### Phase 1 — Foundation fix — **in-progress** (BLOCKER)
+### Phase 1 — Foundation fix — **done**
 
 - [x] **#17 Fix bug token đông cứng** — **done** — `@layer tokens.floor/tokens.theme` + derived block trên `:root,[data-theme]` ở `base.css`; gỡ workaround neon, dọn chrome (giữ 2 token custom). Build 19/19 exit 0, cascade verified game→lime/nft→violet. ⚠️ Shell chrome: `--btn-bg`/badge giờ ăn warm-zinc đúng (cải thiện, nên eye-check khi tiện).
-- [x] #14 Mở rộng token floor — **done** — +17 token (`--shadow/blur/z/radius-xl/font-mono` ở `:root`; `--glow/gradient` ở `:root,[data-theme]`). INVARIANT vocab cập nhật. ⏳ `--font-mono` = quyết định **2-face PENDING owner sign-off**.
-- [x] #15 Nới gate `manifest.ts` — **done** — `EXACT===5`→floor mềm `MIN_TEMPLATES=4`; cap 17→`SOFT=16` (warn) + `HARD=32` (throw runaway); provenance FR-10/Glossary/SM-C1 di trú vào comment + INVARIANT. ⚠️ Catalog hiện 17>16 → warn mềm mỗi build (tín hiệu depth-over-volume).
-- [ ] #18 Rút `_bmad*` — **unblocked** (ràng buộc đã di trú) — chờ user OK vì là thao tác xoá; cần grep refs còn sót trước.
+- [x] #14 Mở rộng token floor — **done** — +16 token (`--shadow/blur/z/radius-xl` ở `:root`; `--glow/gradient` ở `:root,[data-theme]`). INVARIANT vocab cập nhật. ❌ `--font-mono` ĐÃ GỠ (2026-06-29 user reject 2-face → giữ single-face Inter).
+- [x] #15 Nới gate `manifest.ts` — **done** — `EXACT===5`→floor mềm `MIN_TEMPLATES=4`; cap 17→`SOFT=16` (warn) + `HARD=32` (throw runaway); provenance FR-10/Glossary/SM-C1 di trú vào comment + INVARIANT. (Sau Phase 2 catalog=14 → hết warn.)
+- [x] #18 Rút `_bmad*` — **done** (2026-06-29) — `git rm -r _bmad _bmad-output` (59 file); ràng buộc đã di trú vào manifest.ts comment + INVARIANT trước khi xoá.
 
 ### Phase 2 — Business clarity — **done** (ratified 2026-06-29)
 
@@ -39,7 +39,7 @@
 - [x] #11 Sửa shell routing drift — **done** — Explorer đọc `?layer` (spec §6 unified explorer): `/sections`,`/ui`,`/templates` lọc đúng layer; sidebar hiện mọi piece production nhóm theo Layer. Build 19/19.
 - [x] #13 Gallery FILTER theo `status` — **done** — gallery + nav chỉ `status="production"`; gamefi (draft) ẩn khỏi BROWSE nhưng deep-link `/?piece=gamefi` vẫn mở detail.
 - [ ] #7 Retrofit Ternus về token floor (gỡ font/CSS bespoke, dùng primitives)
-- [ ] #10 CI tối thiểu + smoke test `/preview/[slug]`
+- [x] #10 CI tối thiểu — **done** — `.github/workflows/ci.yml`: lint + build (gồm type-coverage + check-types + SSG mọi `/preview/[slug]`) + smoke runtime curl routes. Lint local 8/8 sạch, build 19/19.
 
 ### Phase 4 — UI/Design overhaul — **backlog**
 
