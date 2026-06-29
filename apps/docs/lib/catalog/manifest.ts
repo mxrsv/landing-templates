@@ -5,7 +5,7 @@
  * PLANNED: pieces register dần qua Epic 5–8; slug đăng ký vào aggregator phải
  * nằm trong manifest.
  *
- * ── BUDGET PROVENANCE (di trú từ BMAD — self-contained, `_bmad-output` sắp xoá) ──
+ * ── BUDGET PROVENANCE (di trú từ BMAD — self-contained; `_bmad-output` đã xoá 2026-06-29) ──
  * Kỷ luật catalog = "depth over volume", KHÔNG chase volume. Nguồn gốc:
  * - PRD §4.3 FR-10 "UI catalog expansion": Gallery liệt kê ≥8 UI/sections,
  *   templates đếm RIÊNG → `MIN_UI_SECTIONS` (floor cứng).
